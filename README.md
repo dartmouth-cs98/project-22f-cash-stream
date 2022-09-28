@@ -1,24 +1,54 @@
-# Project Name
+# First Team Meeting Worksheet
 
-![Team Photo](Insert a Team Photo URL here)
-[*how?*](https://help.github.com/articles/about-readmes/#relative-links-and-image-paths-in-readme-files)
+![](https://i.imgur.com/MVzthM5.jpg)
 
-TODO: short project description, some sample screenshots or mockups
+## Team Members Present
 
-## Architecture
+* Sunint
+* Tai Wan
+* Jason
+* Harold
 
-TODO:  descriptions of code organization and tools and libraries used
+## I. Identify a Common Vision
+* Finance-related (DeFi?) crypto project
 
-## Setup
+### Commonalities
+* Econ + CS majors/minors
+* Finance, OS and latency
+* Emerging Technologies
 
-TODO: how to get the project dev environment up and running, npm install etc
+### Inspiration
+* Helping people
+* Impactful technology
+* Learning emerging technology (crypto)
 
-## Deployment
+### Problems of Interest
+* Translation of existing infrastructure to crypto / emerging technology
+* Potential target demographic: Individuals in developing nations lacking access to traditional financial instruments. 
+* DeFi tools for institutional investors 
+* Bloomberg for crypto
+* Social media with your crypto trades -> API through Etherscan 
 
-TODO: how to deploy the project
+### Identify
+*Which of the above is most interesting to all of you?*
+* All are interesting, we need to increase our familiarity and deep dive in the problem to finalize on one 
+* As of now we like institutional/business facing analytics tools
+* Leaning away from front-facing payment gateways
 
-## Authors
+## II. Narrow In
+* Same as above
+* As of now we like institutional/business facing analytics tools
+* Leaning away from front-facing payment gateways
 
-TODO: list of authors
 
-## Acknowledgments
+#### Coolness
+* Leveraging emerging technologies
+* High potential utility 
+* Can find a niche that is not served by an existing product 
+
+#### Challenges
+* limited experience with said emergent technology
+* Possibly limited resources as such
+
+#### Success
+* Create a novel tool that could maybe be useful
