@@ -1,12 +1,12 @@
-# Zk-vote
+# crypto-recurring-payments
 
-Voting application built using zero-knowledge proofs to permit verifiable accuracy, security and anonymity simultaneously.
+Web application to facilitate safe user-to-user recurring payments. Uses smart contracts and publicly available crypto wallet information to monitor risk.
 
 ## Architecture
 
 Front End: React
-Back End: SnarkyJS / Mina (TypeScript)
-Database: NodeJS / MongoDB
+Back End: Solidity
+Database: MongoDB?
 
 ## Setup
 
