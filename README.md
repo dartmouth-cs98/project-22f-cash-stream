@@ -1,23 +1,39 @@
-# crypto-recurring-payments
+# Cash Stream
 
-Web application to facilitate safe user-to-user recurring payments. Uses smart contracts and publicly available crypto wallet information to monitor risk.
+Web application to facilitate real-time crypto payment.
 
 ## Architecture
 
 Front End: React
-Back End: Solidity
-Database: MongoDB?
+
+Back End: Superfluid SDK Core
+
+[Superfluid](https://docs.superfluid.finance/superfluid/) is a smart contract framework on EVM that enables money streaming.
+It provides a [SDK core](https://docs.superfluid.finance/superfluid/developers/sdk-core), a JS/TS wrapper library that enables Front End developers to use Superfluid without prior Solidity experience.
 
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc, all necessary commands needed, environment variables etc
+```
+yarn install
+```
+```
+yarn build
+```
 
 ## Deployment
 
-TODO: how to deploy the project
+
 
 ## Authors
 
 Sunint Bindra, Tai Wan Kim, Harold Than, Jason Wang
 
 ## Acknowledgments
+
+[Superfluid](https://docs.superfluid.finance/superfluid/)
+
+[Superfluid SDK Core](https://docs.superfluid.finance/superfluid/developers/sdk-core)
+
+[Superfluid Front End Examples](https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1)
+
+[Superfluid Monery Router Example](https://github.com/superfluid-finance/super-examples/tree/main/projects/money-streaming-intro)
