@@ -1,3 +1,6 @@
+//The component and functions on this file are from: 
+//https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
+
 import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import "../css/createFlow.css";

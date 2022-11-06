@@ -1,3 +1,6 @@
+//The component and functions on this file are from: 
+//https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
+
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
 import {
