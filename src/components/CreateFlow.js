@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import "../css/createFlow.css";
 import { ethers } from "ethers";
-import Logo from '../src/Cash Stream-logos.jpeg';
+import Logo from 'Cash Stream-logos.jpeg';
 
 //where the Superfluid logic takes place
 async function createNewFlow(recipient, flowRate) {
