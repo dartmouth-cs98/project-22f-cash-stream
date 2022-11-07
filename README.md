@@ -20,6 +20,7 @@ Navigate to repo
 ```
 cd project-22f-zk-vote 
 ```
+Install, build, and run program
 ```
 yarn install
 ```
