@@ -38,6 +38,7 @@ export const ConnectWallet = () => {
     } else {
       console.log("We have the ethereum object", ethereum);
     }
+    
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const chain = await window.ethereum.request({ method: "eth_chainId" });
