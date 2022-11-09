@@ -2,7 +2,6 @@
 //https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 
 import React, { useState } from "react";
-import { Framework } from "@superfluid-finance/sdk-core";
 import {
   Button,
   Form,
@@ -15,17 +14,8 @@ import { ethers } from "ethers";
 
 //where the Superfluid logic takes place
 async function createNewFlow(recipient, flowRate) {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-  const signer = provider.getSigner();
-
-  console.log(signer._address);
-  
-  const chainId = await window.ethereum.request({ method: "eth_chainId" });
-  const sf = await Framework.create({
-    chainId: Number(chainId),
-    provider: provider
-  });
+  signer, sf = await getSfFramework(window);
 
   const DAIxContract = await sf.loadSuperToken("fDAIx");
   const DAIx = DAIxContract.address;
@@ -45,13 +35,13 @@ async function createNewFlow(recipient, flowRate) {
 
     console.log(
       `Congrats - you've just created a money stream!
-    View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
-    Network: Kovan
-    Super Token: DAIx
-    Sender: ${signer._address},
-    Receiver: ${recipient},
-    FlowRate: ${flowRate}
-    `
+      View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+      Network: Kovan
+      Super Token: DAIx
+      Sender: ${signer._address},
+      Receiver: ${recipient},
+      FlowRate: ${flowRate}
+      `
     );
   } catch (error) {
     console.error(error);
