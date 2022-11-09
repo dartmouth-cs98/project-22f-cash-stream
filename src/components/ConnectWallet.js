@@ -62,15 +62,21 @@ export const ConnectWallet = () => {
   }, []);
 
   return(
-  <div>
+  <div >
       {currentAccount === "" ? (
-        <button id="connectWallet" className="button" onClick={connectWallet}>
+        <div id="connectWallet" onClick={connectWallet}>
           Connect Wallet
-        </button>
+        </div>
       ) : (
-        <Card className="connectedWallet">
-          {`${currentAccount.substring(0, 4)}...${currentAccount.substring(38)}`}
-        </Card>
+        <div class="connectedWalletInfo">
+          <div class='identicon'>
+          </div>
+          <div class="walletInfo">
+            {`${currentAccount.substring(0, 4)}...${currentAccount.substring(38)}`}
+          <p>Connected</p>
+          </div>
+         
+        </div>
       )}
   </div>
   );

@@ -133,7 +133,7 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
 ];
 
-export default function CollapsibleTable() {
+export default function Dashboard() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
@@ -142,11 +142,11 @@ export default function CollapsibleTable() {
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  <TableCell>Dessert (100g serving)</TableCell>
-                  <TableCell align="right">Calories</TableCell>
-                  <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                  <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                  <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                  <TableCell>Tokens</TableCell>
+                  <TableCell align="right">Balance</TableCell>
+                  <TableCell align="right">Inflow</TableCell>
+                  <TableCell align="right">Outflow</TableCell>
+                  <TableCell align="right">Placeholder</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
