@@ -54,7 +54,7 @@ async function createNewFlow(recipient, flowRate) {
     `
     );
   } catch (error) {
-    console.error(error);    
+    console.error(error);
     alert("Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address")
   }
 }
