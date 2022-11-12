@@ -2,7 +2,7 @@ export const Framework = require("@superfluid-finance/sdk-core");
 export const ethers = require("ethers");
 
 // Ethers.js provider initialization
-export const url = process.env.GOERLI_URL;
+export const url = process.env.REACT_APP_GOERLI_URL;
 export const customHttpProvider = new ethers.providers.JsonRpcProvider(url);
 
 export const daiABI = [
