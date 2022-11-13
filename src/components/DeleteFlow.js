@@ -1,19 +1,34 @@
 import React, { useState } from "react";
+import { Framework } from "@superfluid-finance/sdk-core";
 import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
 import "../css/createFlow.css";
-import { getSfFramework } from "./Utils"
+import { ethers } from "ethers";
 
 //where the Superfluid logic takes place
 async function deleteFlow(recipient) {
 
-  signer, sf = await getSfFramework(window);
+  console.log(recipient)
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+
+  const sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: provider
+  });
 
   const DAIxContract = await sf.loadSuperToken("fDAIx");
   const DAIx = DAIxContract.address;
 
+  const accounts = await ethereum.request({ method: "eth_accounts" });
+  const account = accounts[0];
+
   try {
+    console.log(signer._address);
     const deleteFlowOperation = sf.cfaV1.deleteFlow({
-      sender: signer._address,
+      sender: account,
       receiver: recipient,
       superToken: DAIx
       // userData?: string
