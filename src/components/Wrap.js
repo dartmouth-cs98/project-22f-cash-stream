@@ -148,7 +148,7 @@ export const Wrap = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <h2>Wrap Token</h2>
       <Form>
         <FormGroup className="mb-3">

@@ -3,6 +3,7 @@ import "./css/styles.css";
 import { CreateFlow } from "./components/CreateFlow";
 import { ConnectWallet } from "./components/ConnectWallet";
 import { Wrap } from "./components/Wrap";
+import { Unwrap } from "./components/Unwrap";
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <ConnectWallet />
       <CreateFlow />
       <Wrap />
+      <Unwrap />
     </div>
   );
 }
