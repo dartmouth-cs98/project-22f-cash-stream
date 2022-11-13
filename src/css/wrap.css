@@ -1,8 +1,4 @@
-.mb-3 {
-  margin-left: 3%;
-  margin-right: 3%;
-}
-
-.container{
+.container {
   margin-top: 3%;
+  border: solid black 1px;
 }

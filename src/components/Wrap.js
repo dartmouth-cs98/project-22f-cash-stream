@@ -3,7 +3,7 @@
 //adjusted to connect to web3 provider (metamask)
 //adjusted to request approval only if the amount is greater than the current allowance on contract
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
@@ -15,8 +15,11 @@ import "../css/wrap.css";
 //Can be found here: https://docs.superfluid.finance/superfluid/developers/networks
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
-
 let allowance = "0";
+
+function convertWeitofDAIx(wei){
+  return wei * Math.pow(10, -18);
+}
 
 //Get allowance (how much the spender has been approved to spend on behalf of the owner)
 async function getAllowance(){
@@ -38,13 +41,11 @@ async function getAllowance(){
       account,
       fDAIx_contract_address,
     ).then((value) => {
-      allowance = value.toString();
+       allowance = convertWeitofDAIx(parseInt(value.toString()));
     });
   } catch (error){
     console.log(error);
   }
-
-  return allowance;
 }
 
 //will be used to approve super token contract to spend DAI
@@ -114,6 +115,17 @@ export const Wrap = () => {
   const [amount, setAmount] = useState("");
   const [isUpgradeButtonLoading, setIsUpgradeButtonLoading] = useState(false);
   const [isApproveButtonLoading, setIsApproveButtonLoading] = useState(false);
+  const [exceedsAllowance, setExceedsAllowance] = useState(false);
+
+  useEffect(() => {
+    getAllowance();
+    if(amount > allowance){
+      setExceedsAllowance(true);
+    }
+    else{
+      setExceedsAllowance(false);
+    }
+  });
 
   function UpgradeButton({ isLoading, children, ...props }) {
     return (
@@ -132,47 +144,50 @@ export const Wrap = () => {
   }
 
   const handleAmountChange = (e) => {
-    getAllowance();
     setAmount(() => ([e.target.name] = e.target.value));
   };
 
   return (
     <div className="container">
       <h2>Wrap Token</h2>
-      <p>{allowance}</p>
       <Form>
         <FormGroup className="mb-3">
           <FormControl
             name="amount"
             value={amount}
             onChange={handleAmountChange}
-            placeholder="Enter the dollar amount you'd like to upgrade"
+            placeholder="0"
           ></FormControl>
         </FormGroup>
-        <p>
-          <ApproveButton
-            onClick={() => {
-              setIsApproveButtonLoading(true);
-              daiApprove(amount);
-              setTimeout(() => {
-                setIsApproveButtonLoading(false);
-              }, 1000);
-            }}
-          >
-            Click to Approve Token Upgrade
-          </ApproveButton>
-        </p>
-        <UpgradeButton
-          onClick={() => {
-            setIsUpgradeButtonLoading(true);
-            daiUpgrade(amount);
-            setTimeout(() => {
-              setIsUpgradeButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Click to Upgrade Your Tokens
-        </UpgradeButton>
+        {
+          exceedsAllowance ? 
+          <p>
+            <ApproveButton
+              onClick={() => {
+                setIsApproveButtonLoading(true);
+                daiApprove(amount);
+                setTimeout(() => {
+                  setIsApproveButtonLoading(false);
+                }, 1000);
+              }}
+            >
+            Allow Contract to Wrap your fDAI
+            </ApproveButton>
+          </p>: 
+          <p>
+            <UpgradeButton
+              onClick={() => {
+                setIsUpgradeButtonLoading(true);
+                daiUpgrade(amount);
+                setTimeout(() => {
+                  setIsUpgradeButtonLoading(false);
+                }, 1000);
+              }}
+            >
+            Wrap fDAI to fDAIx
+            </UpgradeButton>
+          </p>
+        }
       </Form>
     </div>
   );
