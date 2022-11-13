@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import "../css/createFlow.css";
 import { ethers } from "ethers";
+import Logo from '../Cash Stream-logos.jpeg';
 
 
 
@@ -108,6 +109,7 @@ export const CreateFlow = () => {
 
   return (
     <div>
+      <img src={Logo}></img>
       <h3>Create New Stream</h3>
       <Form>
         <FormGroup className="mb-3">

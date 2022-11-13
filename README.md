@@ -12,12 +12,23 @@ Back End: Superfluid SDK Core
 It provides a [SDK core](https://docs.superfluid.finance/superfluid/developers/sdk-core), a JS/TS wrapper library that enables Front End developers to use Superfluid without prior Solidity experience.
 
 ## Setup
-
+Clone repo with
+```
+git clone --branch fall-demo https://github.com/dartmouth-cs98/project-22f-zk-vote.git
+```
+Navigate to repo
+```
+cd project-22f-zk-vote 
+```
+Install, build, and run program
 ```
 yarn install
 ```
 ```
 yarn build
+```
+```
+yarn start
 ```
 
 ## Deployment

@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
-import "../css/createFlow.css";
+import "../css/connectWallet.css";
 
 export const ConnectWallet = () => {
   const [currentAccount, setCurrentAccount] = useState("");
