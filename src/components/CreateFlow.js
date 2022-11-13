@@ -105,11 +105,6 @@ export const CreateFlow = () => {
 
   return (
     <div>
-      <h3> FDaix Balance</h3>
-      <p>{getFlow}</p>
-
-
-
       <h3>Create New Stream</h3>
       <Form>
         <FormGroup className="mb-3">
