@@ -16,7 +16,7 @@ class FlowInfo extends Component {
       }
     
     async componentDidMount(){
-      // await this.getBlockNumber()
+      //await this.getBlockNumber()
       await this.getFlow()
       this.timerID = setInterval(
         () => this.getFlow(),1000
@@ -63,11 +63,7 @@ class FlowInfo extends Component {
         this.setState({
             fDaixNetflow: accountFlowInfoFormat
         })
-
-
-        
         // ================================================================
-
 
         // Real Time Balance
         const realTimeBalance= await fDAIx.realtimeBalanceOf({

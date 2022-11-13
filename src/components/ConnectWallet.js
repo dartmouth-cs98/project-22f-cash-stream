@@ -68,10 +68,10 @@ export const ConnectWallet = () => {
           Connect Wallet
         </div>
       ) : (
-        <div class="connectedWalletInfo">
-          <div class='identicon'>
+        <div className="connectedWalletInfo">
+          <div className='identicon'>
           </div>
-          <div class="walletInfo">
+          <div className="walletInfo">
             {`${currentAccount.substring(0, 4)}...${currentAccount.substring(38)}`}
           <p>Connected</p>
           </div>

@@ -12,10 +12,7 @@ import {
 } from "react-bootstrap";
 import "../css/createFlow.css";
 import { ethers } from "ethers";
-import Logo from '../Cash Stream-logos.jpeg';
-
-
-
+//import Logo from '../Cash Stream-logos.jpeg';
 
 //where the Superfluid logic takes place
 async function createNewFlow(recipient, flowRate) {
@@ -109,7 +106,6 @@ export const CreateFlow = () => {
 
   return (
     <div>
-      <img src={Logo}></img>
       <h3>Create New Stream</h3>
       <Form>
         <FormGroup className="mb-3">

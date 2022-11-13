@@ -14,13 +14,11 @@ import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
-
 
 function createData(name, calories, fat, carbs, protein, price) {
   return {
@@ -135,11 +133,11 @@ const rows = [
 ];
 
 
-export default function Dashboard() {
+export const Dashboard = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-      <TableContainer component={Paper} class='dashboard'>
+      <TableContainer component={Paper} className='dashboard'>
             <Table aria-label="collapsible table">
               <TableHead>
                   <h3>
@@ -162,6 +160,5 @@ export default function Dashboard() {
             </Table>
       </TableContainer>
     </ThemeProvider>
-    
   );
 }
