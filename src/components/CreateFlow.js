@@ -18,16 +18,17 @@ import { ethers } from "ethers";
 
 //where the Superfluid logic takes place
 async function createNewFlow(recipient, flowRate) {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
   console.log(signer._address);
-  
+
   const chainId = await window.ethereum.request({ method: "eth_chainId" });
+
   const sf = await Framework.create({
-    chainId: Number(chainId),
-    provider: provider
+      chainId: Number(chainId),
+      provider: provider
   });
 
   const DAIxContract = await sf.loadSuperToken("fDAIx");
@@ -48,19 +49,17 @@ async function createNewFlow(recipient, flowRate) {
 
     console.log(
       `Congrats - you've just created a money stream!
-    View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
-    Network: Kovan
-    Super Token: DAIx
-    Sender: ${signer._address},
-    Receiver: ${recipient},
-    FlowRate: ${flowRate}
-    `
+      View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+      Network: Kovan
+      Super Token: DAIx
+      Sender: ${signer._address},
+      Receiver: ${recipient},
+      FlowRate: ${flowRate}
+      `
     );
   } catch (error) {
-    console.log(
-      "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
-    );
     console.error(error);
+    alert("Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address")
   }
 }
 
@@ -98,9 +97,13 @@ export const CreateFlow = () => {
   };
 
   const handleFlowRateChange = (e) => {
-    setFlowRate(() => ([e.target.name] = e.target.value));
-    let newFlowRateDisplay = calculateFlowRate(e.target.value);
-    setFlowRateDisplay(newFlowRateDisplay.toString());
+    try {
+      setFlowRate(() => ([e.target.name] = e.target.value));
+      let newFlowRateDisplay = calculateFlowRate(e.target.value);
+      setFlowRateDisplay(newFlowRateDisplay.toString());
+    } catch {
+      console.error("Flowrate invalid.")
+    }
   };
 
   return (
