@@ -13,6 +13,9 @@ import {
 import "../css/createFlow.css";
 import { ethers } from "ethers";
 
+
+
+
 //where the Superfluid logic takes place
 async function createNewFlow(recipient, flowRate) {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -102,6 +105,11 @@ export const CreateFlow = () => {
 
   return (
     <div>
+      <h3> FDaix Balance</h3>
+      <p>{getFlow}</p>
+
+
+
       <h3>Create New Stream</h3>
       <Form>
         <FormGroup className="mb-3">

@@ -8,6 +8,8 @@ import {BrowserRouter, Routes, Route, NavLink} from 'react-router-dom';
 import { ConnectWallet } from "./ConnectWallet";
 import Dashboard from "./Dashboard";
 import { CreateFlow } from "./CreateFlow";
+import FlowInfo from "./FlowInfo";
+
 class NavBar extends Component {
     render() {
         return (
@@ -15,7 +17,6 @@ class NavBar extends Component {
                 <nav class='nav-bar'>
                     <a class='nav-logo-and-items' href='#hero'>
                         <ConnectWallet class="connectButton"/>
-
                         <div class='nav-items'>
                               
                                 <NavLink to ="/dashboard"> 
@@ -29,8 +30,8 @@ class NavBar extends Component {
                                     <p class='nav-item'> Wrap/Unwrap </p>
                                 </NavLink>
 
-                                <NavLink to ="/transactions"> 
-                                    <p class='nav-item'> Address Book </p>
+                                <NavLink to ="/flow"> 
+                                    <p class='nav-item'> Flow Info </p>
                                 </NavLink>
                     </div>
                     </a>
@@ -41,6 +42,7 @@ class NavBar extends Component {
                 <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/stream" element={<CreateFlow />} />
+                    <Route path="/flow" element={<FlowInfo />} />
 
                 </Routes>
             </BrowserRouter>    

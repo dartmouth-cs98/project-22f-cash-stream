@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -133,6 +134,7 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
 ];
 
+
 export default function Dashboard() {
   return (
     <ThemeProvider theme={darkTheme}>
@@ -140,13 +142,16 @@ export default function Dashboard() {
       <TableContainer component={Paper} class='dashboard'>
             <Table aria-label="collapsible table">
               <TableHead>
+                  <h3>
+                    Goerli Network
+                  </h3>
                 <TableRow>
                   <TableCell />
                   <TableCell>Tokens</TableCell>
                   <TableCell align="right">Balance</TableCell>
                   <TableCell align="right">Inflow</TableCell>
                   <TableCell align="right">Outflow</TableCell>
-                  <TableCell align="right">Placeholder</TableCell>
+                  <TableCell align="right">Netflow</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
