@@ -18,18 +18,17 @@ async function deleteFlow(recipient) {
       provider: provider
   });
 
-  const DAIxContract = await sf.loadSuperToken("fDAIx");
-  const DAIx = DAIxContract.address;
+  const fDAIxContract = await sf.loadSuperToken("fDAIx");
+  const fDAIx = fDAIxContract.address;
 
   const accounts = await ethereum.request({ method: "eth_accounts" });
   const account = accounts[0];
 
   try {
-    console.log(signer._address);
     const deleteFlowOperation = sf.cfaV1.deleteFlow({
       sender: account,
       receiver: recipient,
-      superToken: DAIx
+      superToken: fDAIx
       // userData?: string
     });
 
@@ -39,8 +38,8 @@ async function deleteFlow(recipient) {
 
     console.log(
       `Congrats - you've just deleted your money stream!
-       Network: Kovan
-       Super Token: DAIx
+       Network: Goerli
+       Super Token: fDAIx
        Sender: ${signer._address}
        Receiver: ${recipient}
     `
@@ -76,7 +75,7 @@ export const DeleteFlow = () => {
             name="recipient"
             value={recipient}
             onChange={handleRecipientChange}
-            placeholder="Enter your Ethereum address"
+            placeholder="Enter recipient address"
           ></FormControl>
         </FormGroup>
         <DeleteButton
@@ -88,7 +87,7 @@ export const DeleteFlow = () => {
             }, 1000);
           }}
         >
-          Click to Delete Your Stream
+          Delete Stream
         </DeleteButton>
       </Form>
     </div>

@@ -12,15 +12,16 @@ import {
 } from "react-bootstrap";
 import { ethers } from "ethers";
 import "../css/stream.css";
-//import Logo from '../Cash Stream-logos.jpeg';
 
 //where the Superfluid logic takes place
 async function createNewFlow(recipient, flowRate) {
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  console.log(recipient)
 
-  console.log(signer._address);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  console.log(provider);
+  const signer = provider.getSigner();
+  console.log(signer);
 
   const chainId = await window.ethereum.request({ method: "eth_chainId" });
 
@@ -29,28 +30,30 @@ async function createNewFlow(recipient, flowRate) {
       provider: provider
   });
 
-  const DAIxContract = await sf.loadSuperToken("fDAIx");
-  const DAIx = DAIxContract.address;
+  const fDAIxContract = await sf.loadSuperToken("fDAIx");
+  const fDAIx = fDAIxContract.address;
+
+  const accounts = await ethereum.request({ method: "eth_accounts" });
+  const account = accounts[0];
 
   try {
     const createFlowOperation = sf.cfaV1.createFlow({
+      sender: account, 
       receiver: recipient,
       flowRate: flowRate,
-      superToken: DAIx
+      superToken: fDAIx
       // userData?: string
     });
 
     console.log("Creating your stream...");
 
-    const result = await createFlowOperation.exec(signer);
-    console.log(result);
+    await createFlowOperation.exec(signer);
 
     console.log(
       `Congrats - you've just created a money stream!
       View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
-      Network: Kovan
-      Super Token: DAIx
-      Sender: ${signer._address},
+      Network: Goerli
+      Super Token: fDAIx
       Receiver: ${recipient},
       FlowRate: ${flowRate}
       `
@@ -106,7 +109,7 @@ export const CreateFlow = () => {
 
   return (
     <div className="createFlowContainer">
-      <h3>Create New Stream</h3>
+      <h3>Create Stream</h3>
       <Form className="createFlowForm">
         <FormGroup className="mb-3">
           <FormControl
@@ -133,7 +136,7 @@ export const CreateFlow = () => {
             }, 1000);
           }}
         >
-          Click to Create Your Stream
+          Create Stream
         </CreateButton>
       </Form>
 
@@ -142,8 +145,7 @@ export const CreateFlow = () => {
         <p>
           <b>${flowRateDisplay !== " " ? flowRateDisplay : 0}</b> DAIx/month
         </p>
-      </div>
-      
+      </div> 
     </div>
   );
 };
