@@ -105,7 +105,7 @@ export const CreateFlow = () => {
   };
 
   return (
-    <div>
+    <div className="createFlowContainer">
       <h3>Create New Stream</h3>
       <Form>
         <FormGroup className="mb-3">
@@ -137,7 +137,7 @@ export const CreateFlow = () => {
         </CreateButton>
       </Form>
 
-      <div className="calculation">
+      <div className="createFlowCalculation">
         <p>Your flow will be equal to:</p>
         <p>
           <b>${flowRateDisplay !== " " ? flowRateDisplay : 0}</b> DAIx/month

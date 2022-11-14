@@ -1,9 +1,7 @@
 import "./css/styles.css";
-import {Link, Route, Routes, BrowserRouter} from 'react-router-dom';
-
+import {Route, Routes, BrowserRouter} from 'react-router-dom';
 import { CreateFlow } from "./components/CreateFlow";
 import  NavBar from "./components/NavBar";
-import { ConnectWallet } from "./components/ConnectWallet";
 import { Wrap } from "./components/Wrap";
 import { Unwrap } from "./components/Unwrap";
 import { Dashboard } from "./components/Dashboard";

@@ -137,7 +137,7 @@ export const Dashboard = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-      <TableContainer component={Paper} className='dashboard'>
+      <TableContainer component={Paper} class='dashboard'>
             <Table aria-label="collapsible table">
               <TableHead>
                   <h3>

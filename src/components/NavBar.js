@@ -6,21 +6,21 @@ export const NavBar = () => {
   return (
     <nav className='nav-bar'>
       <a className='nav-logo-and-items' href='#hero'>
-        <ConnectWallet className="connectButton"/>
-        <div className='nav-items'>    
+        <ConnectWallet class="connectButton"/>
+        <div class='nav-items'>    
           <NavLink to ="/"> 
-            <p className='nav-item'> Dashboard </p>
+            <p class='nav-item'> Dashboard </p>
           </NavLink>
           <NavLink to ="/stream"> 
-            <p className='nav-item'> Send Stream </p>
+            <p class='nav-item'> Send Stream </p>
           </NavLink>
 
           <NavLink to ="/wrap"> 
-            <p className='nav-item'> Wrap/Unwrap </p>
+            <p class='nav-item'> Wrap/Unwrap </p>
           </NavLink>
 
           <NavLink to ="/flow"> 
-            <p className='nav-item'> Flow Info </p>
+            <p class='nav-item'> Flow Info </p>
           </NavLink>
         </div>
       </a>
