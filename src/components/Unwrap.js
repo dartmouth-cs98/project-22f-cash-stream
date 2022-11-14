@@ -7,7 +7,7 @@ import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
 import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
-import "../css/unwrap.css";
+import "../css/wrapUnwrap.css";
 
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
 
@@ -67,10 +67,10 @@ export const Unwrap = () => {
   };
 
   return (
-    <div>
-      <h2>Unwrap Token</h2>
+    <div className="unwrapContainer">
+      <h3>Unwrap Token</h3>
       <Form>
-        <FormGroup className="mb-3">
+        <FormGroup className="unwrapForm">
           <FormControl
             name="amount"
             value={amount}
@@ -88,7 +88,7 @@ export const Unwrap = () => {
             }, 1000);
           }}
         >
-          Unwrap fDAIX to fDAI
+          Unwrap fDAIx to fDAI
         </DowngradeButton>
       </Form>
     </div>

@@ -9,7 +9,7 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
 import { daiABI } from "../config";
 import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
-import "../css/wrap.css";
+import "../css/wrapUnwrap.css";
 
 //Contract Addresses
 //Can be found here: https://docs.superfluid.finance/superfluid/developers/networks
@@ -148,10 +148,10 @@ export const Wrap = () => {
   };
 
   return (
-    <div>
-      <h2>Wrap Token</h2>
+    <div className="wrapContainer">
+      <h3>Wrap Token</h3>
       <Form>
-        <FormGroup className="mb-3">
+        <FormGroup className="wrapForm">
           <FormControl
             name="amount"
             value={amount}

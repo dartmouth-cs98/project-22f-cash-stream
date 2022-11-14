@@ -2,9 +2,9 @@ import {useState} from "react";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CreateFlow } from "./CreateFlow";
-import { DeleteFlow } from "./DeleteFlow";
-import "../css/stream.css";
+import { Wrap } from "./Wrap";
+import { Unwrap } from "./Unwrap";
+import "../css/wrapUnwrap.css";
 
 const darkTheme = createTheme({
   palette: {
@@ -12,7 +12,7 @@ const darkTheme = createTheme({
   },
 });
 
-export const Stream = () => {
+export const WrapUnwrap = () => {
   const [alignment, setAlignment] = useState('create');
 
   const handleChange = (event, newAlignment) => {
@@ -20,7 +20,7 @@ export const Stream = () => {
   };
 
   return (
-      <div className="streamContainer">
+      <div className="wrapUnwrapContainer">
         <ToggleButtonGroup
           color="standard"
           value={alignment}
@@ -28,13 +28,13 @@ export const Stream = () => {
           onChange={handleChange}
           aria-label="Platform"
         >
-          <ToggleButton value="create">Create</ToggleButton>
-          <ToggleButton value="delete">Delete</ToggleButton>
+          <ToggleButton value="create">Wrap</ToggleButton>
+          <ToggleButton value="delete">Unwrap</ToggleButton>
         </ToggleButtonGroup>
         {
           alignment === "create" ? 
-          <CreateFlow /> :
-          <DeleteFlow />
+          <Wrap /> :
+          <Unwrap />
         }
       </div>
   );
