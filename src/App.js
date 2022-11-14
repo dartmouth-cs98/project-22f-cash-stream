@@ -7,6 +7,7 @@ import { Unwrap } from "./components/Unwrap";
 import { Dashboard } from "./components/Dashboard";
 import { DeleteFlow } from "./components/DeleteFlow";
 import FlowInfo from "./components/FlowInfo";
+import {Stream} from "./components/Stream";
 
 export default function App() {
   return (
@@ -15,7 +16,7 @@ export default function App() {
       <NavBar/>
       <Routes>
         <Route exact path="/" element={<Dashboard />}></Route>
-        <Route exact path="/stream" element={<><CreateFlow /><DeleteFlow /></>}></Route>
+        <Route exact path="/stream" element={<Stream />}></Route>
         <Route exact path="/wrap" element={<><Wrap /><Unwrap /></>}></Route>
         <Route exact path="/flow" element={<FlowInfo />}></Route>
       </Routes>

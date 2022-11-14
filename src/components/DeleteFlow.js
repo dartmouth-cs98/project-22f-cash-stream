@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
-import "../css/createFlow.css";
 import { ethers } from "ethers";
 
 //where the Superfluid logic takes place
@@ -69,9 +68,9 @@ export const DeleteFlow = () => {
   };
 
   return (
-    <div>
-      <h2>Delete a Flow</h2>
-      <Form>
+    <div className="deleteFlowContainer">
+      <h3>Delete Stream</h3>
+      <Form className="deleteFlowForm">
         <FormGroup className="mb-3">
           <FormControl
             name="recipient"

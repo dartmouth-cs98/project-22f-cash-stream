@@ -10,8 +10,8 @@ import {
   FormControl,
   Spinner,
 } from "react-bootstrap";
-import "../css/createFlow.css";
 import { ethers } from "ethers";
+import "../css/stream.css";
 //import Logo from '../Cash Stream-logos.jpeg';
 
 //where the Superfluid logic takes place
@@ -107,7 +107,7 @@ export const CreateFlow = () => {
   return (
     <div className="createFlowContainer">
       <h3>Create New Stream</h3>
-      <Form>
+      <Form className="createFlowForm">
         <FormGroup className="mb-3">
           <FormControl
             name="recipient"

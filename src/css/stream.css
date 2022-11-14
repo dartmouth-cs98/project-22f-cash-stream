@@ -1,10 +1,18 @@
 /* The styling on this file is from: 
  * https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
  */
-.createFlowContainer {
+.streamContainer {
   margin-top: 3%;
   margin-left: 14%;
-  border: solid black 1px;
+  font-family: sans-serif;
+}
+
+.createFlowContainer {
+  margin: 3%;
+}
+
+.createFlowForm{
+  margin: 3%;
 }
 
 .createFlowCalculation {
@@ -14,4 +22,12 @@
   margin-right: 5%;
   margin-top: 2.5%;
   margin-bottom: 2.5%;
+}
+
+.deleteFlowContainer{
+  margin: 3%;
+}
+
+.deleteFlowForm{
+  margin: 3%;
 }
