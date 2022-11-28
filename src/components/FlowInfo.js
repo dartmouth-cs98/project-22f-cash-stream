@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import "../css/flowInfo.css"
 import { ConnectWallet } from './ConnectWallet';
+import { Dashboard } from './Dashboard';
 
 const darkTheme = createTheme({
   palette: {
@@ -87,10 +88,13 @@ class FlowInfo extends Component {
       return (
         <ThemeProvider theme={darkTheme}>
           <CssBaseline/>
-          <div className="flowInfoContainer">
-            <p>Your current fDAIx: {this.state.fDaixBalance}</p>
-            <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
-          </div>
+            <div className="flowInfoContainer">
+              <Dashboard/>
+            </div>
+            <div className="flowInfoContainer">
+              <p>Your current fDAIx: {this.state.fDaixBalance}</p>
+              <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
+            </div>
         </ThemeProvider>
       );
     }
