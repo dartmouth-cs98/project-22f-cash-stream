@@ -24,8 +24,9 @@ a {
   height: 50px;
   border-radius: 12px ;
   border: solid white 2px;
-  background-color: black;
+  /* background-color: black; */
 }
+
 .walletInfo *{
   color: greenyellow;
   margin: auto;
@@ -94,13 +95,13 @@ a {
   margin-top: 50px;
   margin: auto;
   align-items: center;
-  padding: 30px;
+  /* padding: 30px; */
   display: flex;
   width: 70%;
   color: white;
-  border-radius: 12px;
-  border: solid white 2px;
-  background-color: rgba(40, 52, 82, 0.763);
+  border-radius: 8px;
+  border: solid white 1px;
+  background-color: rgba(26, 36, 61, 0.763);
 }
 
 .MuiTableHead-root{
