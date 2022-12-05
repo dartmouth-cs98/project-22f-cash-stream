@@ -8,6 +8,30 @@
   margin-bottom: 3%;
 }
 
+.connectedWalletInfo{
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  justify-content: space-around;
+}
+
+
+.connectedWalletInfo:hover{
+  transition: 0.2s ease-in;
+  background-color: black;
+  border: solid white 1px;
+  display: flex;
+}
+
+.identicon{
+  object-fit: cover;
+  border: solid white 2px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
 #connectWallet {
   margin-left: 40%;
   margin-right: 40%;

@@ -63,7 +63,7 @@ export const ConnectWallet = () => {
     const identicon = require('identicon')
 
     // Synchronous API
-    const identiconImageBuffer = identicon.generateSync({ id: 'put wallet address here', size: 45})  
+    const identiconImageBuffer = identicon.generateSync({ id: 'put wallet address here', size: 50})  
     return identiconImageBuffer;
   };
   
@@ -80,9 +80,8 @@ export const ConnectWallet = () => {
           </div>
         ) : (
           <div class="connectedWalletInfo">
-            <div class='identicon'>
-              <img src = {generateIdenticon()}></img>
-            </div>
+              <img src = {generateIdenticon()} class='identicon'>
+              </img>
 
             <div class="walletInfo">
               {`${currentAccount.substring(0, 4)}...${currentAccount.substring(38)}`}
