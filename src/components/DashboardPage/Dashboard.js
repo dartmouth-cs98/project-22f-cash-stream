@@ -14,31 +14,14 @@ import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 // Watch out for this react-icons path
-import { FiArrowDownCircle, FiArrowUpCircle } from "../../node_modules/react-icons/fi";
-import { BsArrowDownUp } from "../../node_modules/react-icons/bs";
+import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
+import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
-
-function createData(name, balance, inflow, outflow, netflow, price) {
-  return {
-    name,balance,inflow, outflow, netflow, price, history: [
-      {
-        date: '2020-01-05',
-        customerId: '11091700',
-        amount: 3,
-      },
-      {
-        date: '2020-01-02',
-        customerId: 'Anonymous',
-        amount: 1,
-      },
-    ],
-  };
-}
 
 function Row(props) {
   const { row } = props;
@@ -47,7 +30,6 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-      
         <TableCell component="th" scope="row">
           {row.name}
         </TableCell>
@@ -108,6 +90,7 @@ Row.propTypes = {
     balance: PropTypes.number.isRequired,
     outflow: PropTypes.number.isRequired,
     inflow: PropTypes.number.isRequired,
+
     history: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
@@ -115,24 +98,21 @@ Row.propTypes = {
         date: PropTypes.string.isRequired,
       }),
     ).isRequired,
+
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     netflow: PropTypes.number.isRequired,
   }).isRequired,
 };
 
-// Data Container For Tokens Streams Information
-const rows = [
-  createData('Token 1', 159, 6.0, 24, 4.0, 3.99),
-  createData('Token 2', 237, 9.0, 37, 4.3, 4.99),
-];
 
+export const DashboardTable = (rows) => {
 
-export const Dashboard = () => {
   return (
     <ThemeProvider theme={darkTheme}>
         <h4>
-          Goerli Network
+          Goerli Network 
+          {console.log(rows)}
         </h4>
 
       <CssBaseline/>
@@ -151,7 +131,7 @@ export const Dashboard = () => {
               </TableHead>
               <TableBody>
                 {rows.map((row) => (
-                  <Row key={row.name} row={row} />
+                  <Row key={row.name} row={row} /> 
                 ))}
               </TableBody>
             </Table>

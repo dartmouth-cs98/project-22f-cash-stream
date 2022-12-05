@@ -1,8 +1,9 @@
 import "./css/styles.css";
 import {Route, Routes, BrowserRouter} from 'react-router-dom';
 import  NavBar from "./components/NavBar";
-import { Dashboard } from "./components/Dashboard";
-import FlowInfo from "./components/FlowInfo";
+import { Dashboard } from "./components/DashboardPage/Dashboard";
+import FlowInfo from "./components/DashboardPage/FlowInfo";
+
 import { Stream } from "./components/Stream";
 import { WrapUnwrap } from "./components/WrapUnwrap";
 
