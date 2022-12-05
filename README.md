@@ -39,7 +39,7 @@ yarn start
 
 Sunint Bindra, Tai Wan Kim, Harold Than, Jason Wang
 
-## Acknowledgments
+## Acknowledgements
 
 [Superfluid](https://docs.superfluid.finance/superfluid/)
 
