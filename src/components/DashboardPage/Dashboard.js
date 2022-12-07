@@ -14,8 +14,8 @@ import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 // Watch out for this react-icons path
-import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
-import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
+//import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
+//import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 
 const darkTheme = createTheme({
   palette: {
@@ -43,7 +43,7 @@ function Row(props) {
             size="small"
             onClick={() => setOpen(!open)}
           >
-            {open ? <FiArrowUpCircle/> : <FiArrowDownCircle/>}
+            {/*open ? <FiArrowUpCircle/> : <FiArrowDownCircle/>*/}
           </IconButton>
         </TableCell>
       </TableRow>      <TableRow>
@@ -126,7 +126,7 @@ export const DashboardTable = (rows) => {
                   <TableCell align="center">Inflow</TableCell>
                   <TableCell align="center">Outflow</TableCell>
                   <TableCell align="center">Netflow</TableCell>
-                  <TableCell align="center"><BsArrowDownUp/></TableCell> {/* Spacer for the Expand/Collapse Arrow */}
+                  <TableCell align="center">{/*<BsArrowDownUp/>*/}</TableCell> {/* Spacer for the Expand/Collapse Arrow */}
                 </TableRow>
               </TableHead>
               <TableBody>

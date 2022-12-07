@@ -35,7 +35,7 @@ async function getAllowance(){
 
   const accounts = await ethereum.request({ method: "eth_accounts" });
   const account = accounts[0];
-
+  
   try{
     await fDAI.allowance(
       account,
