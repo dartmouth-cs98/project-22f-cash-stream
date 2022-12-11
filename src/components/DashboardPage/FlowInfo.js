@@ -38,7 +38,7 @@ class FlowInfo extends Component {
     })
   }
 
-  getTokensInfo(){
+  async getTokensInfo(){
      // GraphQL Query
       const TOKENS_QUERY =
        `
@@ -61,15 +61,42 @@ class FlowInfo extends Component {
        }
        `
 
-      axios({
+      // axios({
+      //   url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
+      //   method: 'post',
+      //   data: {
+      //     query: TOKENS_QUERY
+      //   }
+      // }).then((result) => {
+      //   console.log("TOKENS DATAAAAAAAAAAAAAAAAAA:",result.data.data.accounts[0].accountTokenSnapshots)
+      // });
+      const queryResult = await axios({
         url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
         method: 'post',
         data: {
           query: TOKENS_QUERY
         }
-      }).then((result) => {
-        console.log("TOKENS DATAAAAAAAAAAAAAAAAAA:",result.data.data.accounts[0].accountTokenSnapshots)
-      });
+      })
+      // Get Subgraph Schema by running the Query in this playground
+      // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
+      const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
+      const tokensInfo = []
+      // Add Tokens Info to Array
+      for (let i=0; i<tokensData.length; i++){
+        const tokenSymbol = tokensData[i].token.symbol
+        const totalInflowRate = tokensData[i].totalInflowRate
+        const totalOutflowRate = tokensData[i].totalOutflowRate
+        const totalNetflowRate = tokensData[i].totalNetFlowRate
+
+        tokensInfo.push({
+            tokenName: tokenSymbol,
+            inflow : totalInflowRate,
+            outflow: totalOutflowRate,
+            netflow: totalNetflowRate
+          })
+      }
+
+      console.log("TOKENS INFO:", tokensInfo)      
   }
 
   async getFlow() {
