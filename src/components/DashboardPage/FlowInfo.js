@@ -6,6 +6,11 @@ import "../../css/flowInfo.css"
 // import { Dashboard } from './Dashboard';
 import { DashboardTable } from './Dashboard';
 
+import { request, gql } from "graphql-request";
+import { useQuery } from 'react-query';
+
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import axios from 'axios';
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
@@ -17,6 +22,7 @@ class FlowInfo extends Component {
 
   async componentDidMount(){
     //await this.getBlockNumber()
+    this.getWalletBalance()
     await this.getFlow()
     this.timerID = setInterval(
       () => this.getFlow(),1000
@@ -32,6 +38,40 @@ class FlowInfo extends Component {
     })
   }
 
+  getTokensInfo(){
+     // GraphQL Query
+      const TOKENS_QUERY =
+       `
+      query {
+         accounts(
+           where: {
+             #enter an address below
+             id: "0xa35a21adcb4490816d26a798394223dd67dab652"
+           }
+         ) {
+           accountTokenSnapshots {
+             token {
+               symbol
+             }
+             totalInflowRate
+             totalOutflowRate
+             totalNetFlowRate
+           }
+         }
+       }
+       `
+
+      axios({
+        url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
+        method: 'post',
+        data: {
+          query: TOKENS_QUERY
+        }
+      }).then((result) => {
+        console.log("TOKENS DATAAAAAAAAAAAAAAAAAA:",result.data.data.accounts[0].accountTokenSnapshots)
+      });
+  }
+
   async getFlow() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -45,16 +85,23 @@ class FlowInfo extends Component {
       });
       const fDAIx = await sf.loadSuperToken("fDAIx");
       const fDAIxAddress= fDAIx.address;
-      // ======= Get Account Flow Info =========
-      const accountFlowInfo = await sf.cfaV1.getNetFlow({
+
+      // ======= Get Account Tokens Info =========
+      const pageResult = await sf.query.listUserInteractedSuperTokens({account:account})
+      const tokensData = pageResult.data
+      const tokensArray = []
+      for (let i=0; i<tokensData.length; i++){
+        tokensArray.push(tokensData[i].token.symbol)
+      }
+
+      // ======= Get Account NetFlow Info =========
+      const accountNetFlowInfo = await sf.cfaV1.getNetFlow({
           superToken: fDAIxAddress,
           account: account,
           providerOrSigner: signer
-        });
+        }); 
       
-      //const accountFlowInfoFormat = ethers.utils.formatEther(accountFlowInfo[0]);
-      console.log(accountFlowInfo);
-      const accountFlowInfoFormat = accountFlowInfo.toString();
+      const accountFlowInfoFormat = accountNetFlowInfo.toString();
       this.setState({
           fDaixNetflow: accountFlowInfoFormat
       })
@@ -74,6 +121,7 @@ class FlowInfo extends Component {
       })
   }
 
+  // ========================== Dashboard Table Data ================================
   testData=  {
     name:'input Test',
     balance:1,
@@ -109,7 +157,9 @@ class FlowInfo extends Component {
             <div className="flowInfoContainer">
               {this.dashboardTable}              
             </div>
-            
+            <button onClick={this.getTokensInfo}>
+              Fetch Tokens Data
+            </button>
             <div className="flowInfoContainer">
               <p>Your current fDAIx: {this.state.fDaixBalance}</p>
               <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>

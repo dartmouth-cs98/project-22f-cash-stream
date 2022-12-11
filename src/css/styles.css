@@ -91,6 +91,9 @@ a {
   z-index: 999;
 }
 
+.activeNavLink {
+  background-color: red;
+}
 .dashboard {
   margin-top: 50px;
   margin: auto;

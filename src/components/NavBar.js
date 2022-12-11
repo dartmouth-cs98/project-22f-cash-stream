@@ -4,17 +4,21 @@ import { ConnectWallet } from "./ConnectWallet";
 export const NavBar = () => {
   return (
     <nav className='nav-bar'>
-      <a className='nav-logo-and-items' href='#hero'>
+      <a className='nav-logo-and-items'>
         <ConnectWallet class="connectButton"/>
+
+        
         <div class='nav-items'>    
-          <NavLink to ="/"> 
+
+          <NavLink to ="/" activeStyle={{ color:'red' }}> 
             <p class='nav-item'> Dashboard </p>
           </NavLink>
-          <NavLink to ="/stream"> 
+
+          <NavLink to ="/stream" activeStyle={{ color:'red' }}> 
             <p class='nav-item'> Send Stream </p>
           </NavLink>
 
-          <NavLink to ="/wrap"> 
+          <NavLink activeStyle={{ color:'red' }} to ="/wrap"> 
             <p class='nav-item'> Wrap/Unwrap </p>
           </NavLink>
 
