@@ -16,15 +16,15 @@ class FlowInfo extends Component {
     }
 
     this.getTokensInfo = this.getTokensInfo.bind(this)
+    this.getTokenBalance= this.getTokenBalance.bind(this)
   }
 
   async componentDidMount(){
     await this.getWalletBalance()
-    await this.getFlow()
     await this.getTokensInfo()
 
     this.timerID = setInterval(
-      () => this.getFlow(),1000
+      () => this.getTokensInfo(),1000
     );
   };
 
@@ -76,7 +76,7 @@ class FlowInfo extends Component {
       // Add Tokens Info to Array
       for (let i=0; i<tokensData.length; i++){
         const tokenSymbol = tokensData[i].token.symbol
-        const balance = tokensData[i].balanceUntilUpdatedAt
+        const balance = await this.getTokenBalance(tokenSymbol)
         const totalInflowRate = tokensData[i].totalInflowRate
         const totalOutflowRate = tokensData[i].totalOutflowRate
         const totalNetflowRate = tokensData[i].totalNetFlowRate
@@ -100,17 +100,16 @@ class FlowInfo extends Component {
         })
       }
 
-      console.log("TokensINFO:", tokensInfo)
 
+      // console.log("TokenBalance:",tokenBalance)
+      // UPDATE STATE
       this.setState({       
         tokensInfo:tokensInfo     
       }) 
-
-      console.log(this.state.tokensInfo)
       
     }
 
-  async getFlow() {
+  async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const accounts = await ethereum.request({ method: "eth_accounts" });
@@ -122,7 +121,7 @@ class FlowInfo extends Component {
         provider: provider
       });
 
-      const fDAIx = await sf.loadSuperToken("fDAIx");
+      const fDAIx = await sf.loadSuperToken(tokenName);
       const fDAIxAddress= fDAIx.address;
 
       // ================================================================
@@ -134,10 +133,8 @@ class FlowInfo extends Component {
       });
 
       const fDaixBalance = realTimeBalance.availableBalance;
-      const balanceInComa = ethers.utils.formatEther(fDaixBalance);
-      this.setState({            
-          fDaixBalance: balanceInComa.substring(0,30)
-      })
+      const balanceInComa = ethers.utils.formatEther(fDaixBalance).substring(0,30);
+      return balanceInComa
   }
 
   render() {
@@ -150,10 +147,10 @@ class FlowInfo extends Component {
             {/* <button onClick={this.getTokensInfo}>
               Fetch Tokens Data
             </button> */}
-            <div className="flowInfoContainer">
+            {/* <div className="flowInfoContainer">
               <p>Your current fDAIx: {this.state.fDaixBalance}</p>
               <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
-            </div>
+            </div> */}
         </ThemeProvider>
       );
     }
