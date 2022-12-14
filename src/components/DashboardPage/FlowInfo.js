@@ -3,27 +3,27 @@ import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import "../../css/flowInfo.css"
-// import { Dashboard } from './Dashboard';
 import { DashboardTable } from './Dashboard';
-
-import { request, gql } from "graphql-request";
-import { useQuery } from 'react-query';
-
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import axios from 'axios';
+
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
     this.state = {
       fDaixBalance:0,
       account: '',
+      tokensInfo:[]
     }
+
+    this.getTokensInfo = this.getTokensInfo.bind(this)
   }
 
   async componentDidMount(){
     //await this.getBlockNumber()
-    this.getWalletBalance()
     await this.getFlow()
+    await this.getTokensInfo()
+    await this.getWalletBalance()
+
     this.timerID = setInterval(
       () => this.getFlow(),1000
     );
@@ -61,15 +61,6 @@ class FlowInfo extends Component {
        }
        `
 
-      // axios({
-      //   url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
-      //   method: 'post',
-      //   data: {
-      //     query: TOKENS_QUERY
-      //   }
-      // }).then((result) => {
-      //   console.log("TOKENS DATAAAAAAAAAAAAAAAAAA:",result.data.data.accounts[0].accountTokenSnapshots)
-      // });
       const queryResult = await axios({
         url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
         method: 'post',
@@ -77,27 +68,47 @@ class FlowInfo extends Component {
           query: TOKENS_QUERY
         }
       })
+
       // Get Subgraph Schema by running the Query in this playground
       // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
       const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
       const tokensInfo = []
+
       // Add Tokens Info to Array
       for (let i=0; i<tokensData.length; i++){
         const tokenSymbol = tokensData[i].token.symbol
+        const balance = tokensData[i].balanceUntilUpdatedAt
         const totalInflowRate = tokensData[i].totalInflowRate
         const totalOutflowRate = tokensData[i].totalOutflowRate
         const totalNetflowRate = tokensData[i].totalNetFlowRate
-
+        // Add current Token To Array
         tokensInfo.push({
-            tokenName: tokenSymbol,
+            name: tokenSymbol,
+            balance: balance,
             inflow : totalInflowRate,
             outflow: totalOutflowRate,
-            netflow: totalNetflowRate
-          })
+            netflow: totalNetflowRate,
+            history:[ {
+              date: '2020-01-05',
+              customerId: '11091700',
+              amount: 3,
+            },
+            {
+              date: '2020-01-02',
+              customerId: 'Anonymous',
+              amount: 1,
+            },],        })
       }
+      console.log("TokensINFO:", tokensInfo)
 
-      console.log("TOKENS INFO:", tokensInfo)      
-  }
+      this.setState({       
+        tokensInfo:tokensInfo     
+      }) 
+
+      console.log(this.state.tokensInfo)
+      return tokensInfo
+
+    }
 
   async getFlow() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -110,30 +121,11 @@ class FlowInfo extends Component {
         chainId: Number(chainId),
         provider: provider
       });
+
       const fDAIx = await sf.loadSuperToken("fDAIx");
       const fDAIxAddress= fDAIx.address;
 
-      // ======= Get Account Tokens Info =========
-      const pageResult = await sf.query.listUserInteractedSuperTokens({account:account})
-      const tokensData = pageResult.data
-      const tokensArray = []
-      for (let i=0; i<tokensData.length; i++){
-        tokensArray.push(tokensData[i].token.symbol)
-      }
-
-      // ======= Get Account NetFlow Info =========
-      const accountNetFlowInfo = await sf.cfaV1.getNetFlow({
-          superToken: fDAIxAddress,
-          account: account,
-          providerOrSigner: signer
-        }); 
-      
-      const accountFlowInfoFormat = accountNetFlowInfo.toString();
-      this.setState({
-          fDaixNetflow: accountFlowInfoFormat
-      })
       // ================================================================
-
       // Real Time Balance
       const realTimeBalance= await fDAIx.realtimeBalanceOf({
           account: account,
@@ -148,45 +140,16 @@ class FlowInfo extends Component {
       })
   }
 
-  // ========================== Dashboard Table Data ================================
-  testData=  {
-    name:'input Test',
-    balance:1,
-    inflow:1,
-    outflow:1,
-    netflow:1,
-    history:[ {
-      date: '2020-01-05',
-      customerId: '11091700',
-      amount: 3,
-    },
-    {
-      date: '2020-01-02',
-      customerId: 'Anonymous',
-      amount: 1,
-    },],
-  }
-
-  // Data Container For Tokens Streams Information
-  rows = [
-    this.testData,
-    this.testData,
-    this.testData,
-    this.testData,
-  ];
-  
-  // Create Dashboard Table with Flow Datas
-  dashboardTable = DashboardTable(this.rows);
-
   render() {
       return (
         <ThemeProvider>
             <div className="flowInfoContainer">
-              {this.dashboardTable}              
+              {DashboardTable(this.state.tokensInfo)}              
             </div>
-            <button onClick={this.getTokensInfo}>
+
+            {/* <button onClick={this.getTokensInfo}>
               Fetch Tokens Data
-            </button>
+            </button> */}
             <div className="flowInfoContainer">
               <p>Your current fDAIx: {this.state.fDaixBalance}</p>
               <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
