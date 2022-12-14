@@ -19,10 +19,9 @@ class FlowInfo extends Component {
   }
 
   async componentDidMount(){
-    //await this.getBlockNumber()
+    await this.getWalletBalance()
     await this.getFlow()
     await this.getTokensInfo()
-    await this.getWalletBalance()
 
     this.timerID = setInterval(
       () => this.getFlow(),1000
@@ -45,8 +44,8 @@ class FlowInfo extends Component {
       query {
          accounts(
            where: {
-             #enter an address below
-             id: "0xa35a21adcb4490816d26a798394223dd67dab652"
+             #enter an address below (NEED TO BE ALL LOWERCASE)
+             id: "${this.state.account}"
            }
          ) {
            accountTokenSnapshots {
@@ -97,8 +96,10 @@ class FlowInfo extends Component {
               date: '2020-01-02',
               customerId: 'Anonymous',
               amount: 1,
-            },],        })
+            },],
+        })
       }
+
       console.log("TokensINFO:", tokensInfo)
 
       this.setState({       
@@ -106,8 +107,7 @@ class FlowInfo extends Component {
       }) 
 
       console.log(this.state.tokensInfo)
-      return tokensInfo
-
+      
     }
 
   async getFlow() {
