@@ -73,20 +73,20 @@ class FlowInfo extends Component {
       const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
       const tokensInfo = []
 
-      // Add Tokens Info to Array
+      // Add Tokens Info to Array 
       for (let i=0; i<tokensData.length; i++){
         const tokenSymbol = tokensData[i].token.symbol
-        const balance = await this.getTokenBalance(tokenSymbol)
+        // const balance = await this.getTokenBalance(tokenSymbol)
         const totalInflowRate = tokensData[i].totalInflowRate
         const totalOutflowRate = tokensData[i].totalOutflowRate
         const totalNetflowRate = tokensData[i].totalNetFlowRate
         // Add current Token To Array
         tokensInfo.push({
             name: tokenSymbol,
-            balance: balance,
-            inflow : totalInflowRate,
-            outflow: totalOutflowRate,
-            netflow: totalNetflowRate,
+            // balance: 0,
+            inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
+            outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
+            netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
             history:[ {
               date: '2020-01-05',
               customerId: '11091700',
@@ -100,8 +100,11 @@ class FlowInfo extends Component {
         })
       }
 
+      // Batch Promise To Constantly Update Balance More  Efficiently
+      await Promise.all(tokensInfo.map(async token => (
+        token.balance = await this.getTokenBalance(token.name)
+      )));
 
-      // console.log("TokenBalance:",tokenBalance)
       // UPDATE STATE
       this.setState({       
         tokensInfo:tokensInfo     
