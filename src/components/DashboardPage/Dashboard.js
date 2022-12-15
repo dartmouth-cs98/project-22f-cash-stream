@@ -112,7 +112,7 @@ export const DashboardTable = (rows) => {
     <ThemeProvider theme={darkTheme}>
         <h4>
           Goerli Network 
-          {console.log(rows)}
+          {/*console.log(rows)*/}
         </h4>
 
       <CssBaseline/>

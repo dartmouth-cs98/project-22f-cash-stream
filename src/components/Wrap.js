@@ -171,8 +171,9 @@ export const Wrap = () => {
                 }, 1000);
               }}
             >
-            Allow Contract to Wrap your fDAI
+            Allow protocol to wrap your fDAI
             </ApproveButton>
+            <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
           </p>: 
           <p>
             <UpgradeButton

@@ -142,7 +142,7 @@ class FlowInfo extends Component {
 
   render() {
       return (
-        <ThemeProvider>
+        <div>
             <div className="flowInfoContainer">
               {DashboardTable(this.state.tokensInfo)}              
             </div>
@@ -154,7 +154,7 @@ class FlowInfo extends Component {
               <p>Your current fDAIx: {this.state.fDaixBalance}</p>
               <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
             </div> */}
-        </ThemeProvider>
+        </div>
       );
     }
   }
