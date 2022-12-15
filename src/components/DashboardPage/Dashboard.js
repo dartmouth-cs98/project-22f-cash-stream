@@ -59,7 +59,7 @@ function Row(props) {
                     <TableCell align="center">Date</TableCell>
                     <TableCell align="center">To/From </TableCell>
                     <TableCell align="center"> All Time Flow</TableCell>
-                    <TableCell align="center"> Flow Rate</TableCell>
+                    <TableCell align="center">Flow Rate</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

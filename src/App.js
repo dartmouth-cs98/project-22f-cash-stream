@@ -1,5 +1,6 @@
 import "./css/styles.css";
-import {Route, Routes, BrowserRouter} from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import  NavBar from "./components/NavBar";
 import FlowInfo from "./components/DashboardPage/FlowInfo";
 import { Stream } from "./components/Stream";
@@ -7,15 +8,15 @@ import { WrapUnwrap } from "./components/WrapUnwrap";
 
 export default function App() {
 
-
-
+  let [connected, setConnected] = useState(false);
+  
   return (
     <div className="App">
     <BrowserRouter>
-      <NavBar/>
+      <NavBar connected={connected} setConnected={setConnected}/>
       <Routes>
-        <Route exact path="/" element={<FlowInfo />}></Route>
-        <Route exact path="/stream" element={<Stream />}></Route>
+        <Route exact path="/" element={<FlowInfo connected={connected} setConnected={setConnected}/>}></Route>
+        <Route exact path="/stream" element={<Stream/>}></Route>
         <Route exact path="/wrap" element={<WrapUnwrap />}></Route>
       </Routes>
     </BrowserRouter>

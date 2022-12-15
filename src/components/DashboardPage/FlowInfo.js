@@ -9,6 +9,7 @@ import axios from 'axios';
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       fDaixBalance:0,
       account: '',
@@ -21,23 +22,31 @@ class FlowInfo extends Component {
 
   async componentDidMount(){
     await this.getWalletBalance()
-    await this.getTokensInfo()
-
+    //await this.getTokensInfo()
     this.timerID = setInterval(
-      () => this.getTokensInfo(),1000
+      () => {this.getTokensInfo()},1000
     );
   };
 
   async getWalletBalance(){
     // Load account
     const accounts = await ethereum.request({ method: "eth_accounts" });
-    const account = accounts[0]
-    this.setState({ 
-      account: account,
-    })
+    const account = accounts[0];
+    if (account !== undefined) {
+      this.setState({ 
+        account: account,
+      })
+    }
+    else{
+      this.props.setConnected(false);
+    }
   }
 
   async getTokensInfo(){
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    const account = accounts[0];
+
+    if (account !== undefined && this.state.account !== ""){
      // GraphQL Query
       const TOKENS_QUERY =
        `
@@ -66,6 +75,7 @@ class FlowInfo extends Component {
         data: {
           query: TOKENS_QUERY
         }
+
       })
 
       // Get Subgraph Schema by running the Query in this playground
@@ -100,7 +110,7 @@ class FlowInfo extends Component {
         })
       }
 
-      // Batch Promise To Constantly Update Balance More  Efficiently
+      // Batch Promise To Constantly Update Balance More Efficiently
       await Promise.all(tokensInfo.map(async token => (
         token.balance = await this.getTokenBalance(token.name)
       )));
@@ -108,9 +118,12 @@ class FlowInfo extends Component {
       // UPDATE STATE
       this.setState({       
         tokensInfo:tokensInfo     
-      }) 
-      
+      })     
     }
+    else {
+      this.props.setConnected(false);
+    }
+  }
 
   async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -143,10 +156,16 @@ class FlowInfo extends Component {
   render() {
       return (
         <div>
-            <div className="flowInfoContainer">
-              {DashboardTable(this.state.tokensInfo)}              
-            </div>
-
+          {
+          this.props.connected
+          ? (<div className="flowInfoContainer">
+            { DashboardTable(this.state.tokensInfo) }              
+          </div>
+          )
+          : (
+            <p>Connect to Metamask</p>
+          )
+          }
             {/* <button onClick={this.getTokensInfo}>
               Fetch Tokens Data
             </button> */}
