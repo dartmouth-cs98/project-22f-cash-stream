@@ -53,7 +53,7 @@ class FlowInfo extends Component {
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const account = accounts[0];
 
-    if (account !== undefined){
+    if (account !== undefined && this.state.account !== ""){
      // GraphQL Query
       const TOKENS_QUERY =
        `
@@ -169,9 +169,11 @@ class FlowInfo extends Component {
           { DashboardTable(this.state.tokensInfo) }              
         </div>
         )
-        : (
+        : (<div className="connectMessage">
           <p>Connect to Metamask</p>
+        </div>
         )
+          
         }
           {/* <button onClick={this.getTokensInfo}>
             Fetch Tokens Data

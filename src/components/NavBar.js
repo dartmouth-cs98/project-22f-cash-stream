@@ -11,13 +11,13 @@ export const NavBar = (props) => {
         <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
           <NavLink to ="/"> 
-            <div class='nav-item'><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</div>
+            <p class='nav-item'><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
           </NavLink>
           <NavLink to ="/stream"> 
-            <div class='nav-item'><FontAwesomeIcon icon={faBarsStaggered} className="icon"/>Send Stream</div>
+            <p class='nav-item'><FontAwesomeIcon icon={faBarsStaggered} className="icon"/>Send Stream</p>
           </NavLink>
           <NavLink to ="/wrap"> 
-            <div class='nav-item'><FontAwesomeIcon icon={faGift} className="icon"/>Wrap/Unwrap</div>
+            <p class='nav-item'><FontAwesomeIcon icon={faGift} className="icon"/>Wrap/Unwrap</p>
           </NavLink>
         </div>
       </a>

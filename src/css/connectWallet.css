@@ -2,6 +2,19 @@
  * https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
  */
 
+ .connectButton{
+  padding: 18px 30px;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  color: white;
+  background-color: rgb(54, 187, 74);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
 .connectedWalletInfo{
   padding: 20px;
   margin-left: 12px;
@@ -10,6 +23,7 @@
   align-items: left;
   border-radius: 12px;
   justify-content: space-around;
+  font-weight: bold;
 }
 
 .connectedWalletInfo:hover {
@@ -28,9 +42,25 @@
   align-items: center;
   
 }
-#connectWallet {
-  margin-left: 40%;
-  margin-right: 40%;
-  margin-bottom: 3%;
+
+.connectWallet {
+  margin: 10px;
+  border-radius: 12px;
+  padding: 16px 35px;
   cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+  color: rgb(54, 187, 74);
+}
+
+.connectWallet:hover{
+  transition: 0.1s;
+  transition: 0.1s ease-in;
+  background-color: rgba(255, 255, 255, 0.065);
+  color: rgb(124,252,0);
+  z-index: 999;
+}
+
+.icon {
+  margin-right: 15px;
 }

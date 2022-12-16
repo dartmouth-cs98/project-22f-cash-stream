@@ -2,6 +2,8 @@
 //https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import "../css/connectWallet.css";
 
 export const ConnectWallet = (props) => {
@@ -29,7 +31,6 @@ export const ConnectWallet = (props) => {
       console.log(error);
     }
   };
-
   
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -77,9 +78,7 @@ export const ConnectWallet = (props) => {
     <div >
         {!props.connected
         ? (
-          <div id="connectWallet" onClick={connectWallet}>
-            Connect Wallet
-          </div>
+          <div className="connectWallet" onClick={connectWallet}><FontAwesomeIcon icon={faWallet} className="icon"/>Connect Wallet</div>
         ) 
         : (
           <div className="connectedWalletInfo">

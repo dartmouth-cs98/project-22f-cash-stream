@@ -4,13 +4,16 @@
   display: flex;
   flex-direction: column;
 }
+
 a {
   text-decoration: none;
 }
+
 .connectedWallet {
   color: wheat;
   width: 100%;
 }
+
 .connectedWalletInfo{
   display: flex;
   color: white;
@@ -35,6 +38,7 @@ a {
   justify-content: center;
   align-items: center;
 }
+
 .nav-bar {
   background-color: rgb(24, 34, 60);
   width: 14%;
@@ -52,13 +56,13 @@ a {
   height: 80px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  
+  align-items: center;  
   color: white;
   background-color: rgb(54, 187, 74);
   border-radius: 8px;
   margin-bottom: 20px;
 }
+
 .connectedWalletInfo{
   text-decoration: none;
 }
@@ -71,6 +75,7 @@ a {
   justify-content: space-around;
   align-items: center;
 }
+
 .nav-item {
   margin: 10px;
   border-radius: 12px;
@@ -94,6 +99,7 @@ a {
 .activeNavLink {
   background-color: red;
 }
+
 .dashboard {
   margin-top: 50px;
   margin: auto;
