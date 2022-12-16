@@ -1,7 +1,6 @@
 import React, { Component, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import "../../css/flowInfo.css"
 import { DashboardTable } from './Dashboard';
 import axios from 'axios';
@@ -15,16 +14,22 @@ class FlowInfo extends Component {
       account: '',
       tokensInfo:[]
     }
-
-    this.getTokensInfo = this.getTokensInfo.bind(this)
-    this.getTokenBalance= this.getTokenBalance.bind(this)
+    
+    //this.getTokensInfo = this.getTokensInfo.bind(this)
+    //this.getTokenBalance= this.getTokenBalance.bind(this)
   }
 
   async componentDidMount(){
-    await this.getWalletBalance()
-    //await this.getTokensInfo()
+    //await this.getWalletBalance();
+    //await this.getTokensInfo();
+
     this.timerID = setInterval(
-      () => {this.getTokensInfo()},1000
+      () => {
+        if (this.props.connected) {
+          this.getWalletBalance();
+          this.getTokensInfo();
+        }
+      }, 1000
     );
   };
 
@@ -32,6 +37,7 @@ class FlowInfo extends Component {
     // Load account
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const account = accounts[0];
+
     if (account !== undefined) {
       this.setState({ 
         account: account,
@@ -39,6 +45,7 @@ class FlowInfo extends Component {
     }
     else{
       this.props.setConnected(false);
+      this.setState({account: "",});
     }
   }
 
@@ -46,7 +53,7 @@ class FlowInfo extends Component {
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const account = accounts[0];
 
-    if (account !== undefined && this.state.account !== ""){
+    if (account !== undefined){
      // GraphQL Query
       const TOKENS_QUERY =
        `
@@ -75,7 +82,6 @@ class FlowInfo extends Component {
         data: {
           query: TOKENS_QUERY
         }
-
       })
 
       // Get Subgraph Schema by running the Query in this playground
@@ -122,6 +128,7 @@ class FlowInfo extends Component {
     }
     else {
       this.props.setConnected(false);
+      this.setState({account: "",});
     }
   }
 
@@ -154,28 +161,28 @@ class FlowInfo extends Component {
   }
 
   render() {
-      return (
-        <div>
-          {
-          this.props.connected
-          ? (<div className="flowInfoContainer">
-            { DashboardTable(this.state.tokensInfo) }              
-          </div>
-          )
-          : (
-            <p>Connect to Metamask</p>
-          )
-          }
-            {/* <button onClick={this.getTokensInfo}>
-              Fetch Tokens Data
-            </button> */}
-            {/* <div className="flowInfoContainer">
-              <p>Your current fDAIx: {this.state.fDaixBalance}</p>
-              <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
-            </div> */}
+    return (
+      <div>
+        {
+        this.props.connected
+        ? (<div className="flowInfoContainer">
+          { DashboardTable(this.state.tokensInfo) }              
         </div>
-      );
-    }
+        )
+        : (
+          <p>Connect to Metamask</p>
+        )
+        }
+          {/* <button onClick={this.getTokensInfo}>
+            Fetch Tokens Data
+          </button> */}
+          {/* <div className="flowInfoContainer">
+            <p>Your current fDAIx: {this.state.fDaixBalance}</p>
+            <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
+          </div> */}
+      </div>
+    );
   }
+}
   
-  export default FlowInfo;
+export default FlowInfo;
