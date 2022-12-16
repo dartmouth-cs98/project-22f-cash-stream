@@ -83,7 +83,7 @@ class FlowInfo extends Component {
         // Add current Token To Array
         tokensInfo.push({
             name: tokenSymbol,
-            // balance: 0,
+            balance: "",
             inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
             outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
             netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
@@ -108,8 +108,7 @@ class FlowInfo extends Component {
       // UPDATE STATE
       this.setState({       
         tokensInfo:tokensInfo     
-      }) 
-      
+      })  
     }
 
   async getTokenBalance(tokenName) {
