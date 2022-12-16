@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/connectWallet.css";
 
-
 export const ConnectWallet = (props) => {
   
   const [currentAccount, setCurrentAccount] = useState("");
@@ -83,9 +82,9 @@ export const ConnectWallet = (props) => {
           </div>
         ) 
         : (
-          <div class="connectedWalletInfo">
-              <img src = {generateIdenticon()} class='identicon'></img>
-            <div class="walletInfo">
+          <div className="connectedWalletInfo">
+              <img src = {generateIdenticon()} className='identicon'></img>
+            <div className="walletInfo">
               {`${currentAccount.substring(0, 4)}...${currentAccount.substring(38)}`}
               <p>Connected</p>
             </div>

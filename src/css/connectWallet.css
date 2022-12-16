@@ -2,20 +2,17 @@
  * https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
  */
 
-.connectedWallet {
-  margin-left: 40%;
-  margin-right: 40%;
-  margin-bottom: 3%;
-}
-
 .connectedWalletInfo{
+  padding: 20px;
+  margin-left: 12px;
+  margin-right: 10px;
   display: flex;
-  align-items: center;
+  align-items: left;
   border-radius: 12px;
   justify-content: space-around;
 }
 
-.connectedWalletInfo:hover{
+.connectedWalletInfo:hover {
   transition: 0.2s ease-in;
   background-color: black;
   border: solid white 1px;

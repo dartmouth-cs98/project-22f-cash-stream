@@ -14,7 +14,7 @@ class FlowInfo extends Component {
       account: '',
       tokensInfo:[]
     }
-    
+
     //this.getTokensInfo = this.getTokensInfo.bind(this)
     //this.getTokenBalance= this.getTokenBalance.bind(this)
   }
