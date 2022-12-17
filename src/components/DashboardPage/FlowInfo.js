@@ -21,8 +21,7 @@ class FlowInfo extends Component {
 
   async componentDidMount(){
     await this.getWalletBalance()
-    await this.getTokensInfo()
-
+    
     this.timerID = setInterval(
       () => this.getTokensInfo(),1000
     );

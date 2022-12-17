@@ -9,7 +9,6 @@ export const NavBar = () => {
 
         
         <div class='nav-items'>    
-
           <NavLink to ="/" activeStyle={{ color:'red' }}> 
             <p class='nav-item'> Dashboard </p>
           </NavLink>
@@ -20,6 +19,10 @@ export const NavBar = () => {
 
           <NavLink activeStyle={{ color:'red' }} to ="/wrap"> 
             <p class='nav-item'> Wrap/Unwrap </p>
+          </NavLink>
+
+          <NavLink activeStyle={{ color:'red' }} to ="/subscriptions"> 
+            <p class='nav-item'> Subscriptions </p>
           </NavLink>
 
         </div>
