@@ -132,8 +132,8 @@ class FlowInfo extends Component {
           providerOrSigner: signer
       });
 
-      const fDaixBalance = realTimeBalance.availableBalance;
-      const balanceInComa = ethers.utils.formatEther(fDaixBalance).substring(0,30);
+      const superTokenBalance = realTimeBalance.availableBalance;
+      const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,30);
       return balanceInComa
   }
 
