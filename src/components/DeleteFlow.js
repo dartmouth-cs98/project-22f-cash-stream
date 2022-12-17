@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
-import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
 import { ethers } from "ethers";
 
 //where the Superfluid logic takes place
@@ -56,7 +61,13 @@ export const DeleteFlow = () => {
 
   function DeleteButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="success" className="button" {...props}>
+      <Button variant="outlined" 
+        sx={{
+          color: "success.main", 
+          borderColor: "success.main",
+          ":hover": {borderColor: "success.main"}
+        }}
+      >
         {isButtonLoading ? <Spinner animation="border" /> : children}
       </Button>
     );
@@ -68,6 +79,39 @@ export const DeleteFlow = () => {
 
   return (
     <div className="deleteFlowContainer">
+      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+        <CardContent>
+          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
+            Delete Stream
+          </Typography>
+          <Form className="createFlowForm">
+            <FormGroup className="mb-3">
+              <TextField 
+                name="recipient"
+                value={recipient}
+                onChange={handleRecipientChange}
+                placeholder="Recipient wallet address"
+                color="success"
+                sx={{width: "70%", marginBottom: "10px"}}
+              >  
+              </TextField>
+            </FormGroup>
+            <DeleteButton
+              onClick={() => {
+                setIsButtonLoading(true);
+                deleteFlow(recipient);
+                setTimeout(() => {
+                  setIsButtonLoading(false);
+                }, 1000);
+              }}
+            >
+              Delete
+            </DeleteButton>
+          </Form>
+        </CardContent>
+      </Card>
+
+      {/*
       <h3>Delete Stream</h3>
       <Form className="deleteFlowForm">
         <FormGroup className="mb-3">
@@ -90,6 +134,7 @@ export const DeleteFlow = () => {
           Delete Stream
         </DeleteButton>
       </Form>
+      */}
     </div>
   );
 };

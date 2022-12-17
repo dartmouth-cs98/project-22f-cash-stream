@@ -23,9 +23,10 @@ export const Stream = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
+
       <div className="streamContainer">
         <ToggleButtonGroup
-          color="standard"
+          color="success"
           value={alignment}
           exclusive
           onChange={handleChange}

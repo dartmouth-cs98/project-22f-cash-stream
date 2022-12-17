@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import "../../css/flowInfo.css"
@@ -12,7 +12,7 @@ class FlowInfo extends Component {
     this.state = {
       fDaixBalance:0,
       account: '',
-      tokensInfo:[]
+      tokensInfo: []
     }
 
     //this.getTokensInfo = this.getTokensInfo.bind(this)
@@ -44,6 +44,7 @@ class FlowInfo extends Component {
       })
     }
     else{
+      console.log("set to false at checkpoint 1");
       this.props.setConnected(false);
       this.setState({account: "",});
     }
@@ -53,80 +54,84 @@ class FlowInfo extends Component {
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const account = accounts[0];
 
-    if (account !== undefined && this.state.account !== ""){
-     // GraphQL Query
-      const TOKENS_QUERY =
-       `
-      query {
-         accounts(
-           where: {
-             #enter an address below (NEED TO BE ALL LOWERCASE)
-             id: "${this.state.account}"
-           }
-         ) {
-           accountTokenSnapshots {
-             token {
-               symbol
-             }
-             totalInflowRate
-             totalOutflowRate
-             totalNetFlowRate
-           }
-         }
-       }
-       `
-
-      const queryResult = await axios({
-        url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
-        method: 'post',
-        data: {
-          query: TOKENS_QUERY
+    if (account !== undefined){
+      if(this.state.account !== ""){
+        //GraphQL Query
+        const TOKENS_QUERY =
+        `
+        query {
+          accounts(
+            where: {
+              #enter an address below (NEED TO BE ALL LOWERCASE)
+              id: "${this.state.account}"
+            }
+          ) {
+            accountTokenSnapshots {
+              token {
+                symbol
+              }
+              totalInflowRate
+              totalOutflowRate
+              totalNetFlowRate
+            }
+          }
         }
-      })
+        `
 
-      // Get Subgraph Schema by running the Query in this playground
-      // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
-      const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
-      const tokensInfo = []
+        const queryResult = await axios({
+          url: 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
+          method: 'post',
+          data: {
+            query: TOKENS_QUERY
+          }
+        })
 
-      // Add Tokens Info to Array 
-      for (let i=0; i<tokensData.length; i++){
-        const tokenSymbol = tokensData[i].token.symbol
-        // const balance = await this.getTokenBalance(tokenSymbol)
-        const totalInflowRate = tokensData[i].totalInflowRate
-        const totalOutflowRate = tokensData[i].totalOutflowRate
-        const totalNetflowRate = tokensData[i].totalNetFlowRate
-        // Add current Token To Array
-        tokensInfo.push({
-            name: tokenSymbol,
-            // balance: 0,
-            inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
-            outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
-            netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
-            history:[ {
-              date: '2020-01-05',
-              customerId: '11091700',
-              amount: 3,
-            },
-            {
-              date: '2020-01-02',
-              customerId: 'Anonymous',
-              amount: 1,
-            },],
+        // Get Subgraph Schema by running the Query in this playground
+        // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
+        const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
+        const tokensInfo = []
+
+        // Add Tokens Info to Array 
+        for (let i=0; i<tokensData.length; i++){
+          const tokenSymbol = tokensData[i].token.symbol
+          // const balance = await this.getTokenBalance(tokenSymbol)
+          const totalInflowRate = tokensData[i].totalInflowRate
+          const totalOutflowRate = tokensData[i].totalOutflowRate
+          const totalNetflowRate = tokensData[i].totalNetFlowRate
+          // Add current Token To Array
+          tokensInfo.push({
+              name: tokenSymbol,
+              // balance: 0,
+              inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
+              outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
+              netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
+              history:[ {
+                date: '2020-01-05',
+                customerId: '11091700',
+                amount: 3,
+              },
+              {
+                date: '2020-01-02',
+                customerId: 'Anonymous',
+                amount: 1,
+              },],
+          })
+        }
+
+        // Batch Promise To Constantly Update Balance More Efficiently
+        await Promise.all(tokensInfo.map(async token => (
+          token.balance = await this.getTokenBalance(token.name)
+        )));
+
+        // UPDATE STATE
+        this.setState({       
+          tokensInfo:tokensInfo     
         })
       }
-
-      // Batch Promise To Constantly Update Balance More Efficiently
-      await Promise.all(tokensInfo.map(async token => (
-        token.balance = await this.getTokenBalance(token.name)
-      )));
-
-      // UPDATE STATE
-      this.setState({       
-        tokensInfo:tokensInfo     
-      })     
     }
     else {
+      console.log("set to false at checkpoint 2");
+      console.log(this.state.account);
       this.props.setConnected(false);
       this.setState({account: "",});
     }
