@@ -122,12 +122,11 @@ class FlowInfo extends Component {
         provider: provider
       });
 
-      const fDAIx = await sf.loadSuperToken(tokenName);
-      const fDAIxAddress= fDAIx.address;
-
+      const superToken = await sf.loadSuperToken(tokenName);
+      // const fDAIxAddress= superToken.address;
       // ================================================================
       // Real Time Balance
-      const realTimeBalance= await fDAIx.realtimeBalanceOf({
+      const realTimeBalance= await superToken.realtimeBalanceOf({
           account: account,
           // timestamp: string,
           providerOrSigner: signer
@@ -144,14 +143,6 @@ class FlowInfo extends Component {
             <div className="flowInfoContainer">
               {DashboardTable(this.state.tokensInfo)}              
             </div>
-
-            {/* <button onClick={this.getTokensInfo}>
-              Fetch Tokens Data
-            </button> */}
-            {/* <div className="flowInfoContainer">
-              <p>Your current fDAIx: {this.state.fDaixBalance}</p>
-              <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
-            </div> */}
         </ThemeProvider>
       );
     }
