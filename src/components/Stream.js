@@ -23,7 +23,6 @@ export const Stream = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-
       <div className="streamContainer">
         <ToggleButtonGroup
           color="success"
@@ -32,8 +31,8 @@ export const Stream = () => {
           onChange={handleChange}
           aria-label="Platform"
         >
-          <ToggleButton value="create">Create</ToggleButton>
-          <ToggleButton value="delete">Delete</ToggleButton>
+          <ToggleButton value="create" sx={{textTransform: "none"}}>Create</ToggleButton>
+          <ToggleButton value="delete" sx={{textTransform: "none"}}>Delete</ToggleButton>
         </ToggleButtonGroup>
         {
           alignment === "create" ? 

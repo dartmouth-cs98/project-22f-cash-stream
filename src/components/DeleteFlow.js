@@ -63,6 +63,7 @@ export const DeleteFlow = () => {
     return (
       <Button variant="outlined" 
         sx={{
+          textTransform: "none",
           color: "success.main", 
           borderColor: "success.main",
           ":hover": {borderColor: "success.main"}

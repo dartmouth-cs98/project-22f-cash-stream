@@ -44,7 +44,6 @@ class FlowInfo extends Component {
       })
     }
     else{
-      console.log("set to false at checkpoint 1");
       this.props.setConnected(false);
       this.setState({account: "",});
     }
@@ -130,8 +129,6 @@ class FlowInfo extends Component {
       }
     }
     else {
-      console.log("set to false at checkpoint 2");
-      console.log(this.state.account);
       this.props.setConnected(false);
       this.setState({account: "",});
     }

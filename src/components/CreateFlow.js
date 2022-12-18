@@ -88,6 +88,7 @@ export const CreateFlow = () => {
     return (
       <Button variant="outlined" 
         sx={{
+          textTransform: "none",
           color: "success.main", 
           borderColor: "success.main",
           ":hover": {borderColor: "success.main"}

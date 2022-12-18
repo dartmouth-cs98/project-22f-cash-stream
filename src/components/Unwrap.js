@@ -6,7 +6,12 @@ import React, { useState } from "react";
 import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
-import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
 import "../css/wrapUnwrap.css";
 
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
@@ -56,7 +61,14 @@ export const Unwrap = () => {
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="success" className="button" {...props}>
+      <Button variant="outlined" 
+        sx={{
+          textTransform: "none",
+          color: "success.main", 
+          borderColor: "success.main",
+          ":hover": {borderColor: "success.main"}
+        }}
+      >
         {isDowngradeButtonLoading ? <Spinner animation="border" /> : children}
       </Button>
     );
@@ -68,6 +80,41 @@ export const Unwrap = () => {
 
   return (
     <div className="unwrapContainer">
+      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+        <CardContent>
+          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
+            Unwrap
+          </Typography>
+          <Form>
+            <FormGroup className="unwrapForm">
+              <TextField 
+                name="amount"
+                value={amount}
+                onChange={handleAmountChange}
+                placeholder="0.0"
+                color="success"
+                sx={{width: "70%", marginBottom: "10px"}}
+              >  
+              </TextField>
+            </FormGroup>
+            <p>
+              <DowngradeButton
+                onClick={() => {
+                  setIsDowngradeButtonLoading(true);
+                  daiDowngrade(amount);
+                  setTimeout(() => {
+                    setIsDowngradeButtonLoading(false);
+                  }, 1000);
+                }}
+              >
+                Unwrap fDAIx to fDAI
+              </DowngradeButton>
+            </p>
+          </Form>
+        </CardContent>
+      </Card>
+
+      {/*
       <h3>Unwrap Token</h3>
       <Form>
         <FormGroup className="unwrapForm">
@@ -91,6 +138,7 @@ export const Unwrap = () => {
           Unwrap fDAIx to fDAI
         </DowngradeButton>
       </Form>
+      */}
     </div>
   );
 };

@@ -8,7 +8,12 @@ import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
 import { daiABI } from "../config";
-import { Button, Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { Form, FormGroup, Spinner } from "react-bootstrap";
 import "../css/wrapUnwrap.css";
 
 //Contract Addresses
@@ -129,7 +134,14 @@ export const Wrap = () => {
 
   function UpgradeButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="success" className="button" {...props}>
+      <Button variant="outlined" 
+        sx={{
+          textTransform: "none",
+          color: "success.main", 
+          borderColor: "success.main",
+          ":hover": {borderColor: "success.main"}
+        }}
+      >
         {isUpgradeButtonLoading ? <Spinner animation="border" /> : children}
       </Button>
     );
@@ -137,7 +149,13 @@ export const Wrap = () => {
 
   function ApproveButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="success" className="button" {...props}>
+      <Button variant="outlined" 
+        sx={{
+          color: "success.main", 
+          borderColor: "success.main",
+          ":hover": {borderColor: "success.main"}
+        }}
+      >
         {isApproveButtonLoading ? <Spinner animation="border" /> : children}
       </Button>
     );
@@ -149,6 +167,58 @@ export const Wrap = () => {
 
   return (
     <div className="wrapContainer">
+      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+        <CardContent>
+          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
+            Wrap
+          </Typography>
+          <Form>
+            <FormGroup className="wrapForm">
+              <TextField 
+                name="amount"
+                value={amount}
+                onChange={handleAmountChange}
+                placeholder="0.0"
+                color="success"
+                sx={{width: "70%", marginBottom: "10px"}}
+              >  
+              </TextField>
+            </FormGroup>
+            {
+              exceedsAllowance 
+              ? <p>
+                <ApproveButton
+                  onClick={() => {
+                    setIsApproveButtonLoading(true);
+                    daiApprove(amount);
+                    setTimeout(() => {
+                      setIsApproveButtonLoading(false);
+                    }, 1000);
+                  }}
+                >
+                Allow protocol to wrap your fDAI
+                </ApproveButton>
+                <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
+              </p>
+              : <p>
+                <UpgradeButton
+                  onClick={() => {
+                    setIsUpgradeButtonLoading(true);
+                    daiUpgrade(amount);
+                    setTimeout(() => {
+                      setIsUpgradeButtonLoading(false);
+                    }, 1000);
+                  }}
+                >
+                  Wrap fDAI to fDAIx
+                </UpgradeButton>
+              </p>
+            }
+          </Form>
+        </CardContent>
+      </Card>
+
+      {/*
       <h3>Wrap Token</h3>
       <Form>
         <FormGroup className="wrapForm">
@@ -190,6 +260,7 @@ export const Wrap = () => {
           </p>
         }
       </Form>
+      */}
     </div>
   );
 };
