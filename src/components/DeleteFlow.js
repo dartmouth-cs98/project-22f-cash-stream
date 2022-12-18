@@ -5,7 +5,8 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
+import { LoadingButton } from "@mui/lab";
+import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 
 //where the Superfluid logic takes place
@@ -61,16 +62,23 @@ export const DeleteFlow = () => {
 
   function DeleteButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="outlined" 
-        sx={{
-          textTransform: "none",
-          color: "success.main", 
-          borderColor: "success.main",
-          ":hover": {borderColor: "success.main"}
-        }}
-      >
-        {isButtonLoading ? <Spinner animation="border" /> : children}
-      </Button>
+      <div>
+        {
+        isButtonLoading
+        ? <LoadingButton loading/>
+        : <Button variant="outlined" 
+            sx={{
+              textTransform: "none",
+              color: "success.main", 
+              borderColor: "success.main",
+              ":hover": {borderColor: "success.main"}
+            }}
+            {...props}
+          >
+          {children}
+          </Button>
+        }
+      </div>
     );
   }
 

@@ -11,7 +11,8 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Form, FormGroup, FormControl, Spinner } from "react-bootstrap";
+import { LoadingButton } from "@mui/lab";
+import { Form, FormGroup } from "react-bootstrap";
 import "../css/wrapUnwrap.css";
 
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
@@ -61,16 +62,23 @@ export const Unwrap = () => {
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="outlined" 
-        sx={{
-          textTransform: "none",
-          color: "success.main", 
-          borderColor: "success.main",
-          ":hover": {borderColor: "success.main"}
-        }}
-      >
-        {isDowngradeButtonLoading ? <Spinner animation="border" /> : children}
-      </Button>
+      <div>
+        {
+        isDowngradeButtonLoading
+        ? <LoadingButton loading/>
+        : <Button variant="outlined" 
+            sx={{
+              textTransform: "none",
+              color: "success.main", 
+              borderColor: "success.main",
+              ":hover": {borderColor: "success.main"}
+            }}
+            {...props}
+          >
+            {children}
+          </Button>
+        }
+      </div>
     );
   }
 

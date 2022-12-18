@@ -13,7 +13,8 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Form, FormGroup, Spinner } from "react-bootstrap";
+import { LoadingButton } from "@mui/lab";
+import { Form, FormGroup } from "react-bootstrap";
 import "../css/wrapUnwrap.css";
 
 //Contract Addresses
@@ -134,30 +135,43 @@ export const Wrap = () => {
 
   function UpgradeButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="outlined" 
-        sx={{
-          textTransform: "none",
-          color: "success.main", 
-          borderColor: "success.main",
-          ":hover": {borderColor: "success.main"}
-        }}
-      >
-        {isUpgradeButtonLoading ? <Spinner animation="border" /> : children}
-      </Button>
+      <div>
+      {
+      isUpgradeButtonLoading
+      ? <LoadingButton loading/>
+      : <Button variant="outlined" 
+          sx={{
+            textTransform: "none",
+            color: "success.main", 
+            borderColor: "success.main",
+            ":hover": {borderColor: "success.main"}
+          }}
+          {...props}
+        >
+          {children}
+        </Button>
+      }
+      </div>
     );
   }
 
   function ApproveButton({ isLoading, children, ...props }) {
     return (
-      <Button variant="outlined" 
-        sx={{
-          color: "success.main", 
-          borderColor: "success.main",
-          ":hover": {borderColor: "success.main"}
-        }}
-      >
-        {isApproveButtonLoading ? <Spinner animation="border" /> : children}
-      </Button>
+      <div>
+        {
+        isApproveButtonLoading
+        ? <LoadingButton loading/>
+        : <Button variant="outlined" 
+            sx={{
+              color: "success.main", 
+              borderColor: "success.main",
+              ":hover": {borderColor: "success.main"}
+            }}
+          >
+            {children}
+          </Button>
+        }
+      </div>
     );
   }
 
