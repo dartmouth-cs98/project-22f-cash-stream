@@ -28,3 +28,17 @@
 .deleteFlowForm{
   margin: 3%;
 }
+
+.displayNone{
+  display: none;
+}
+
+.streamContainer a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.streamContainer a:visited{
+  color: white;
+  text-decoration: underline;
+}

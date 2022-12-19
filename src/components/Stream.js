@@ -13,8 +13,9 @@ const darkTheme = createTheme({
   },
 });
 
+//Stream page (wrapper component for create/delete flow)
 export const Stream = () => {
-  const [alignment, setAlignment] = useState('create');
+  const [alignment, setAlignment] = useState('create'); //togglebutton options
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);

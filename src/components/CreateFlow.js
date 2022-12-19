@@ -1,6 +1,4 @@
-//The component and functions on this file are from: 
-//https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
-
+//Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
@@ -8,18 +6,19 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import LoadingButton from '@mui/lab/LoadingButton';
+import LinearProgress from '@mui/material/LinearProgress';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
+import { SnackBar } from "./Snackbar";
 import "../css/stream.css";
 
-//where the Superfluid logic takes place
-async function createNewFlow(recipient, flowRate) {
+async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setOpacity) {
 
-  console.log(recipient)
+  console.log(recipient);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   console.log(provider);
+
   const signer = provider.getSigner();
   console.log(signer);
 
@@ -46,30 +45,45 @@ async function createNewFlow(recipient, flowRate) {
     });
 
     console.log("Creating your stream...");
+    setTxLoading(true);
+    setOpacity(0.1);
 
-    await createFlowOperation.exec(signer);
-
-    console.log(
-      `Congrats - you've just created a money stream!
-      View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
-      Network: Goerli
-      Super Token: fDAIx
-      Receiver: ${recipient},
-      FlowRate: ${flowRate}
-      `
-    );
+    const createTxn = await createFlowOperation.exec(signer);
+    await createTxn.wait().then(function (tx) {
+      console.log(
+        `Congrats - you've just created a money stream!
+        View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+        Network: Goerli
+        Super Token: fDAIx
+        Receiver: ${recipient},
+        FlowRate: ${flowRate},
+        Transaction: ${tx.transactionHash}
+        `
+      );
+      setTxLoading(false);
+      setOpacity(1.0);
+      setTxCompleted(true);
+      setTxHash(tx.transactionHash);
+    });
   } catch (error) {
     console.error(error);
-    alert("Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address")
+    alert("Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address");
+    setTxLoading(false);
+    setOpacity(1.0);
   }
 }
 
 export const CreateFlow = () => {
   const [recipient, setRecipient] = useState("");
-  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  //const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
   const [flowRate, setFlowRate] = useState("");
   const [flowRateDisplay, setFlowRateDisplay] = useState("");
+  const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
+  const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
+  const [txHash, setTxHash] = useState("");
+  const [pageOpacity, setOpacity] = useState(1.0);
 
+  //convert wei/sec to fDAIx/month
   function calculateFlowRate(amount) {
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       alert("You can only calculate a flowRate based on a number");
@@ -87,23 +101,17 @@ export const CreateFlow = () => {
 
   function CreateButton({ isLoading, children, ...props }) {
     return (
-      <div>
-      {
-       isButtonLoading 
-       ? <LoadingButton loading/>
-       : <Button variant="outlined"
-          sx={{
-            textTransform: "none",
-            color: "success.main", 
-            borderColor: "success.main",
-            ":hover": {borderColor: "success.main"}
-          }}
-          {...props}
-        >
-          {children}
-        </Button>
-      }
-      </div>
+      <Button variant="outlined"
+        sx={{
+          textTransform: "none",
+          color: "success.main", 
+          borderColor: "success.main",
+          ":hover": {borderColor: "success.main"}
+        }}
+        {...props}
+      >
+        {children}
+      </Button>
     );
   }
 
@@ -124,10 +132,9 @@ export const CreateFlow = () => {
   return (
     <div className="createFlowContainer">
       <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
-        <CardContent>
-          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
-            Create Stream
-          </Typography>
+        <CardContent sx ={{opacity:`${pageOpacity}`}}>
+          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Create Stream</Typography>
+
           <Form className="createFlowForm">
             <FormGroup className="mb-3">
               <TextField 
@@ -137,9 +144,9 @@ export const CreateFlow = () => {
                 placeholder="Recipient wallet address"
                 color="success"
                 sx={{width: "70%", marginBottom: "5px"}}
-              >  
-              </TextField>
+              /> 
             </FormGroup>
+
             <FormGroup className="mb-3">
               <TextField 
                 name="flowRate"
@@ -148,23 +155,36 @@ export const CreateFlow = () => {
                 placeholder="Flow rate in wei/second"
                 color="success"
                 sx={{width: "70%", marginBottom: "10px"}}
-              >
-              </TextField>
+              />
             </FormGroup>
-            <CreateButton
-              onClick={() => {
-                setIsButtonLoading(true);
-                createNewFlow(recipient, flowRate);
-                setTimeout(() => {
-                  setIsButtonLoading(false);
-                }, 1000);
-              }}
-            >
-              Create
-            </CreateButton>
+            
+            {
+              recipient == "" || flowRate =="" || txLoading
+              ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
+              : <CreateButton
+                  onClick={() => {
+                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setOpacity);
+                    setRecipient('');
+                    setFlowRate('');
+                  }}
+                >
+                  Create
+                </CreateButton>
+            }
           </Form>
         </CardContent>
+
+        {
+          txLoading
+          ? <LinearProgress color="success"/>
+          : <div className="displayNone"></div>
+        }
       </Card>
+
+      <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
+        {"Your transaction has been boradcasted! View on block explorer "}
+        <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
+      </SnackBar>
 
       {/*
       <h3>Create Stream</h3>

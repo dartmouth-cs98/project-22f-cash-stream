@@ -1,3 +1,4 @@
+//Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
@@ -9,10 +10,9 @@ import { LoadingButton } from "@mui/lab";
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 
-//where the Superfluid logic takes place
 async function deleteFlow(recipient) {
 
-  console.log(recipient)
+  console.log(recipient);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -58,12 +58,13 @@ async function deleteFlow(recipient) {
 
 export const DeleteFlow = () => {
   const [recipient, setRecipient] = useState("");
-  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
 
   function DeleteButton({ isLoading, children, ...props }) {
     return (
       <div>
         {
+        //Show spinner for loading when the button is pressed
         isButtonLoading
         ? <LoadingButton loading/>
         : <Button variant="outlined" 
@@ -90,9 +91,8 @@ export const DeleteFlow = () => {
     <div className="deleteFlowContainer">
       <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
-          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
-            Delete Stream
-          </Typography>
+          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Delete Stream</Typography>
+          
           <Form className="createFlowForm">
             <FormGroup className="mb-3">
               <TextField 
@@ -105,6 +105,7 @@ export const DeleteFlow = () => {
               >  
               </TextField>
             </FormGroup>
+            
             <DeleteButton
               onClick={() => {
                 setIsButtonLoading(true);

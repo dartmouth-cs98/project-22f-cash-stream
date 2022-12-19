@@ -1,6 +1,4 @@
-//The component and functions on this file are from: 
-//https://docs.superfluid.finance/superfluid/developers/super-tokens/using-super-tokens 
-//adjusted to connect to web3 provider (metamask)
+//Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 
 import React, { useState } from "react";
 import { customHttpProvider } from "../config";
@@ -15,6 +13,7 @@ import { LoadingButton } from "@mui/lab";
 import { Form, FormGroup } from "react-bootstrap";
 import "../css/wrapUnwrap.css";
 
+//Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
 
 //where the Superfluid logic takes place
@@ -56,28 +55,27 @@ async function daiDowngrade(amt) {
 
 export const Unwrap = () => {
   const [amount, setAmount] = useState("");
-  const [isDowngradeButtonLoading, setIsDowngradeButtonLoading] = useState(
-    false
-  );
+  const [isDowngradeButtonLoading, setIsDowngradeButtonLoading] = useState(false);
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
       <div>
-        {
-        isDowngradeButtonLoading
-        ? <LoadingButton loading/>
-        : <Button variant="outlined" 
-            sx={{
-              textTransform: "none",
-              color: "success.main", 
-              borderColor: "success.main",
-              ":hover": {borderColor: "success.main"}
-            }}
-            {...props}
-          >
-            {children}
-          </Button>
-        }
+          {
+          //Show spinner for loading when the button is pressed
+          isDowngradeButtonLoading
+          ? <LoadingButton loading/>
+          : <Button variant="outlined" 
+              sx={{
+                textTransform: "none",
+                color: "success.main", 
+                borderColor: "success.main",
+                ":hover": {borderColor: "success.main"}
+              }}
+              {...props}
+            >
+              {children}
+            </Button>
+          }
       </div>
     );
   }
@@ -102,8 +100,7 @@ export const Unwrap = () => {
                 placeholder="0.0"
                 color="success"
                 sx={{width: "70%", marginBottom: "10px"}}
-              >  
-              </TextField>
+              />
             </FormGroup>
             <p>
               <DowngradeButton

@@ -13,8 +13,9 @@ const darkTheme = createTheme({
   },
 });
 
+//Stream page (wrapper component for wrap/unwrap)
 export const WrapUnwrap = () => {
-  const [alignment, setAlignment] = useState('wrap');
+  const [alignment, setAlignment] = useState('wrap'); //togglebutton options
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);

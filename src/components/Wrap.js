@@ -1,7 +1,4 @@
-//Most component and functions (daiApprove, daiUpgrade, Wrap) on this file are from: 
-//https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
-//adjusted to connect to web3 provider (metamask)
-//adjusted to request approval only if the amount is greater than the current allowance on contract
+//Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 
 import React, { useEffect, useState } from "react";
 import { customHttpProvider } from "../config";
@@ -17,17 +14,15 @@ import { LoadingButton } from "@mui/lab";
 import { Form, FormGroup } from "react-bootstrap";
 import "../css/wrapUnwrap.css";
 
-//Contract Addresses
-//Can be found here: https://docs.superfluid.finance/superfluid/developers/networks
+//Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
-let allowance = "0";
+let allowance = "0"; //number of tokens the protocol is allowed to wrap
 
 function convertWeitofDAIx(wei){
   return wei * Math.pow(10, -18);
 }
 
-//Get allowance (how much the spender has been approved to spend on behalf of the owner)
 async function getAllowance(){
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -54,7 +49,7 @@ async function getAllowance(){
   }
 }
 
-//will be used to approve super token contract to spend DAI
+//this function increases the allowance if the number of tokens being wrapped is greater than allowance
 async function daiApprove(amt) {
   const sf = await Framework.create({
     chainId: 5,
@@ -85,7 +80,7 @@ async function daiApprove(amt) {
   }
 }
 
-//where the Superfluid logic takes place
+//wrap tokens to supertokens
 async function daiUpgrade(amt) {
 
   const sf = await Framework.create({
@@ -119,9 +114,9 @@ async function daiUpgrade(amt) {
 
 export const Wrap = () => {
   const [amount, setAmount] = useState("");
-  const [isUpgradeButtonLoading, setIsUpgradeButtonLoading] = useState(false);
+  const [isUpgradeButtonLoading, setIsUpgradeButtonLoading] = useState(false); //spinner for loading when the button is pressed.
   const [isApproveButtonLoading, setIsApproveButtonLoading] = useState(false);
-  const [exceedsAllowance, setExceedsAllowance] = useState(false);
+  const [exceedsAllowance, setExceedsAllowance] = useState(false); //checks if the number of tokens to wrap exceeds allowance
 
   useEffect(() => {
     getAllowance();
@@ -159,6 +154,7 @@ export const Wrap = () => {
     return (
       <div>
         {
+        //Show spinner for loading when the button is pressed
         isApproveButtonLoading
         ? <LoadingButton loading/>
         : <Button variant="outlined" 
@@ -183,9 +179,7 @@ export const Wrap = () => {
     <div className="wrapContainer">
       <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
-          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
-            Wrap
-          </Typography>
+          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Wrap</Typography>
           <Form>
             <FormGroup className="wrapForm">
               <TextField 
@@ -195,10 +189,11 @@ export const Wrap = () => {
                 placeholder="0.0"
                 color="success"
                 sx={{width: "70%", marginBottom: "10px"}}
-              >  
-              </TextField>
+              />
             </FormGroup>
-            {
+
+            { 
+              //display approve button if exceedsAllowance, display upgrade button if not.
               exceedsAllowance 
               ? <p>
                 <ApproveButton
