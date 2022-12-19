@@ -11,7 +11,7 @@ export const ServiceCard = () => {
                 
                 <div class = 'service-name-and-price'>
                 <div class= 'service-name'>
-                    Name
+                    Netflix
                 </div>
 
                 <div class= 'service-price'>

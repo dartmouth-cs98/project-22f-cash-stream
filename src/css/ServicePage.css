@@ -3,10 +3,10 @@
 .subscriptions-container {
     text-decoration: none;
     color:aliceblue;
-    background-color: black;
+    background-color: rgba(8, 7, 12, 0.95   );
+    height: 900px;
 }
 .subscriptions-container {
-    margin-top: 3%;
     margin-left: 14%;
     font-family: sans-serif;
     display: flex;
