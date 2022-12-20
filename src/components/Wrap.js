@@ -1,5 +1,4 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
-
 import React, { useEffect, useState } from "react";
 import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -10,8 +9,9 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { LoadingButton } from "@mui/lab";
+import LinearProgress from '@mui/material/LinearProgress';
 import { Form, FormGroup } from "react-bootstrap";
+import { SnackBar } from "./Snackbar";
 import "../css/wrapUnwrap.css";
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
@@ -50,7 +50,7 @@ async function getAllowance(){
 }
 
 //this function increases the allowance if the number of tokens being wrapped is greater than allowance
-async function daiApprove(amt) {
+async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash) {
   const sf = await Framework.create({
     chainId: 5,
     provider: customHttpProvider
@@ -67,21 +67,26 @@ async function daiApprove(amt) {
   );
   try {
     console.log("approving DAI spend");
+    setTxLoading(true);
     await fDAI.approve(
-      fDAI_contract_address,
+      fDAIx_contract_address,
       ethers.utils.parseEther(amt.toString())
     ).then(function (tx) {
       console.log(
         `Congrats, you just approved your DAI spend. You can see this tx at https://goerli.etherscan.io/tx/${tx.hash}`
       );
+      setTxLoading(false);
+      setTxCompleted(true);
+      setTxHash(tx.hash);
     });
   } catch (error) {
     console.error(error);
+    setTxLoading(false);
   }
 }
 
 //wrap tokens to supertokens
-async function daiUpgrade(amt) {
+async function daiUpgrade(amt, setTxLoading, setTxCompleted, setTxHash) {
 
   const sf = await Framework.create({
     chainId: 5,
@@ -95,10 +100,13 @@ async function daiUpgrade(amt) {
 
   try {
     console.log(`upgrading ${amt} DAI to DAIx`);
+    setTxLoading(true);
+    
     const amtToUpgrade = ethers.utils.parseEther(amt.toString());
     const upgradeOperation = DAIx.upgrade({
       amount: amtToUpgrade.toString()
     });
+
     const upgradeTxn = await upgradeOperation.exec(signer);
     await upgradeTxn.wait().then(function (tx) {
       console.log(
@@ -106,17 +114,24 @@ async function daiUpgrade(amt) {
         Congrats - you've just upgraded DAI to DAIx!
       `
       );
+      setTxLoading(false);
+      setTxCompleted(true);
+      setTxHash(tx.hash);
     });
   } catch (error) {
     console.error(error);
+    setTxLoading(false);
   }
 }
 
 export const Wrap = () => {
   const [amount, setAmount] = useState("");
-  const [isUpgradeButtonLoading, setIsUpgradeButtonLoading] = useState(false); //spinner for loading when the button is pressed.
-  const [isApproveButtonLoading, setIsApproveButtonLoading] = useState(false);
+  //const [isUpgradeButtonLoading, setIsUpgradeButtonLoading] = useState(false);
+  //const [isApproveButtonLoading, setIsApproveButtonLoading] = useState(false);
   const [exceedsAllowance, setExceedsAllowance] = useState(false); //checks if the number of tokens to wrap exceeds allowance
+  const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
+  const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
+  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
 
   useEffect(() => {
     getAllowance();
@@ -128,41 +143,42 @@ export const Wrap = () => {
     }
   });
 
-  function UpgradeButton({ isLoading, children, ...props }) {
+  function UpgradeButton({ children, ...props }) {
     return (
       <div>
       {
-      isUpgradeButtonLoading
-      ? <LoadingButton loading/>
-      : <Button variant="outlined" 
-          sx={{
-            textTransform: "none",
-            color: "success.main", 
-            borderColor: "success.main",
-            ":hover": {borderColor: "success.main"}
-          }}
-          {...props}
-        >
-          {children}
-        </Button>
+        txLoading || amount == ""
+        ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
+        : <Button variant="outlined" 
+            sx={{
+              textTransform: "none",
+              color: "success.main", 
+              borderColor: "success.main",
+              ":hover": {borderColor: "success.main"}
+            }}
+            {...props}
+          >
+            {children}
+          </Button>
       }
       </div>
     );
   }
 
-  function ApproveButton({ isLoading, children, ...props }) {
+  function ApproveButton({ children, ...props }) {
     return (
       <div>
-        {
-        //Show spinner for loading when the button is pressed
-        isApproveButtonLoading
-        ? <LoadingButton loading/>
-        : <Button variant="outlined" 
+        {        
+          txLoading || amount == ""
+          ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
+          : <Button variant="outlined" 
             sx={{
+              textTransform: "none",
               color: "success.main", 
               borderColor: "success.main",
               ":hover": {borderColor: "success.main"}
             }}
+            {...props}
           >
             {children}
           </Button>
@@ -177,7 +193,7 @@ export const Wrap = () => {
 
   return (
     <div className="wrapContainer">
-      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
           <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Wrap</Typography>
           <Form>
@@ -195,28 +211,21 @@ export const Wrap = () => {
             { 
               //display approve button if exceedsAllowance, display upgrade button if not.
               exceedsAllowance 
-              ? <p>
+              ? <div>
                 <ApproveButton
                   onClick={() => {
-                    setIsApproveButtonLoading(true);
-                    daiApprove(amount);
-                    setTimeout(() => {
-                      setIsApproveButtonLoading(false);
-                    }, 1000);
+                    daiApprove(amount, setTxLoading, setTxCompleted, setTxHash);
                   }}
                 >
-                Allow protocol to wrap your fDAI
+                  Allow protocol to wrap your fDAI
                 </ApproveButton>
                 <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
-              </p>
+              </div>
               : <p>
                 <UpgradeButton
                   onClick={() => {
-                    setIsUpgradeButtonLoading(true);
-                    daiUpgrade(amount);
-                    setTimeout(() => {
-                      setIsUpgradeButtonLoading(false);
-                    }, 1000);
+                    daiUpgrade(amount, setTxLoading, setTxCompleted, setTxHash);
+                    setAmount("");
                   }}
                 >
                   Wrap fDAI to fDAIx
@@ -225,7 +234,18 @@ export const Wrap = () => {
             }
           </Form>
         </CardContent>
+
+        {
+          txLoading
+          ? <LinearProgress color="success"/>
+          : <div className="displayNone"/>
+        }
       </Card>
+
+      <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
+        {"Your transaction has been boradcasted! View on block explorer "}
+        <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
+      </SnackBar>
 
       {/*
       <h3>Wrap Token</h3>

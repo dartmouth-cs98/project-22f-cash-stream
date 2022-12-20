@@ -13,6 +13,7 @@
 }
 
 .wrapMessage{
+  font-size: smaller;
   margin: 3%;
 }
 
@@ -22,4 +23,18 @@
 
 .unwrapForm{
   margin: 3%;
+}
+
+.wrapUnwrapContainer a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.wrapUnwrapContainer a:visited{
+  color: white;
+  text-decoration: underline;
+}
+
+.displayNone{
+  display: none;
 }

@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
 import "../css/stream.css";
 
-async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setOpacity) {
+async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash) {
 
   console.log(recipient);
 
@@ -46,7 +46,6 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 
     console.log("Creating your stream...");
     setTxLoading(true);
-    setOpacity(0.1);
 
     const createTxn = await createFlowOperation.exec(signer);
     await createTxn.wait().then(function (tx) {
@@ -61,7 +60,6 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
         `
       );
       setTxLoading(false);
-      setOpacity(1.0);
       setTxCompleted(true);
       setTxHash(tx.transactionHash);
     });
@@ -69,7 +67,6 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
     console.error(error);
     alert("Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address");
     setTxLoading(false);
-    setOpacity(1.0);
   }
 }
 
@@ -80,8 +77,7 @@ export const CreateFlow = () => {
   const [flowRateDisplay, setFlowRateDisplay] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  const [txHash, setTxHash] = useState("");
-  const [pageOpacity, setOpacity] = useState(1.0);
+  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
 
   //convert wei/sec to fDAIx/month
   function calculateFlowRate(amount) {
@@ -99,7 +95,7 @@ export const CreateFlow = () => {
     }
   }
 
-  function CreateButton({ isLoading, children, ...props }) {
+  function CreateButton({ children, ...props }) {
     return (
       <Button variant="outlined"
         sx={{
@@ -131,8 +127,8 @@ export const CreateFlow = () => {
 
   return (
     <div className="createFlowContainer">
-      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
-        <CardContent sx ={{opacity:`${pageOpacity}`}}>
+      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+        <CardContent>
           <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Create Stream</Typography>
 
           <Form className="createFlowForm">
@@ -159,11 +155,11 @@ export const CreateFlow = () => {
             </FormGroup>
             
             {
-              recipient == "" || flowRate =="" || txLoading
+              recipient == "" || flowRate == "" || txLoading
               ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
               : <CreateButton
                   onClick={() => {
-                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setOpacity);
+                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash);
                     setRecipient('');
                     setFlowRate('');
                   }}
@@ -177,7 +173,7 @@ export const CreateFlow = () => {
         {
           txLoading
           ? <LinearProgress color="success"/>
-          : <div className="displayNone"></div>
+          : <div className="displayNone"/>
         }
       </Card>
 

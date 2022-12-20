@@ -1,5 +1,4 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
-
 import React, { useState } from "react";
 import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -9,15 +8,16 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { LoadingButton } from "@mui/lab";
+import LinearProgress from '@mui/material/LinearProgress';
 import { Form, FormGroup } from "react-bootstrap";
+import { SnackBar } from "./Snackbar";
 import "../css/wrapUnwrap.css";
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
 
 //where the Superfluid logic takes place
-async function daiDowngrade(amt) {
+async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash) {
   const sf = await Framework.create({
     chainId: 5,
     provider: customHttpProvider
@@ -31,10 +31,13 @@ async function daiDowngrade(amt) {
 
   try {
     console.log(`Downgrading ${amt} fDAIx...`);
+    setTxLoading(true);
+
     const amtToDowngrade = ethers.utils.parseEther(amt.toString());
     const downgradeOperation = fDAIx.downgrade({
       amount: amtToDowngrade.toString()
     });
+
     const downgradeTxn = await downgradeOperation.exec(signer);
     await downgradeTxn.wait().then(function (tx) {
       console.log(
@@ -47,23 +50,29 @@ async function daiDowngrade(amt) {
         Or you can downgrade tokens at app.superfluid.finance/dashboard.
       `
       );
+      setTxLoading(false);
+      setTxCompleted(true);
+      setTxHash(tx.transactionHash);
     });
   } catch (error) {
     console.error(error);
+    setTxLoading(false);
   }
 }
 
 export const Unwrap = () => {
   const [amount, setAmount] = useState("");
-  const [isDowngradeButtonLoading, setIsDowngradeButtonLoading] = useState(false);
+  //const [isDowngradeButtonLoading, setIsDowngradeButtonLoading] = useState(false);
+  const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
+  const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
+  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
       <div>
-          {
-          //Show spinner for loading when the button is pressed
-          isDowngradeButtonLoading
-          ? <LoadingButton loading/>
+        {
+          txLoading || amount == ""
+          ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
           : <Button variant="outlined" 
               sx={{
                 textTransform: "none",
@@ -75,7 +84,7 @@ export const Unwrap = () => {
             >
               {children}
             </Button>
-          }
+        }
       </div>
     );
   }
@@ -86,7 +95,7 @@ export const Unwrap = () => {
 
   return (
     <div className="unwrapContainer">
-      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
           <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
             Unwrap
@@ -105,11 +114,8 @@ export const Unwrap = () => {
             <p>
               <DowngradeButton
                 onClick={() => {
-                  setIsDowngradeButtonLoading(true);
-                  daiDowngrade(amount);
-                  setTimeout(() => {
-                    setIsDowngradeButtonLoading(false);
-                  }, 1000);
+                  daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash);
+                  setAmount("");
                 }}
               >
                 Unwrap fDAIx to fDAI
@@ -117,7 +123,18 @@ export const Unwrap = () => {
             </p>
           </Form>
         </CardContent>
+
+        {
+          txLoading
+          ? <LinearProgress color="success"/>
+          : <div className="displayNone"/>
+        }
       </Card>
+
+      <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
+        {"Your transaction has been boradcasted! View on block explorer "}
+        <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
+      </SnackBar>
 
       {/*
       <h3>Unwrap Token</h3>

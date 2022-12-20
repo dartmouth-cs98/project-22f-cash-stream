@@ -6,11 +6,12 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { LoadingButton } from "@mui/lab";
+import LinearProgress from '@mui/material/LinearProgress';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
+import { SnackBar } from "./Snackbar";
 
-async function deleteFlow(recipient) {
+async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash) {
 
   console.log(recipient);
 
@@ -39,47 +40,50 @@ async function deleteFlow(recipient) {
     });
 
     console.log("Deleting your stream...");
+    setTxLoading(true);
 
-    await deleteFlowOperation.exec(signer);
-
+    const deleteTxn = await deleteFlowOperation.exec(signer);
+    await deleteTxn.wait().then(function (tx) {
     console.log(
       `Congrats - you've just deleted your money stream!
        Network: Goerli
        Super Token: fDAIx
        Sender: ${signer._address}
        Receiver: ${recipient}
+       Transaction: ${tx.transactionHash}
     `
     );
+
+    setTxLoading(false);
+    setTxCompleted(true);
+    setTxHash(tx.transactionHash);
+    });
   } catch (error) {
     console.error(error);
-    alert("Hmmm, your transaction threw an error.")
+    alert("Hmmm, your transaction threw an error.");
+    setTxLoading(false);
   }
 }
 
 export const DeleteFlow = () => {
   const [recipient, setRecipient] = useState("");
-  const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
+  const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
+  const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
+  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
 
-  function DeleteButton({ isLoading, children, ...props }) {
+  function DeleteButton({ children, ...props }) {
     return (
-      <div>
-        {
-        //Show spinner for loading when the button is pressed
-        isButtonLoading
-        ? <LoadingButton loading/>
-        : <Button variant="outlined" 
-            sx={{
-              textTransform: "none",
-              color: "success.main", 
-              borderColor: "success.main",
-              ":hover": {borderColor: "success.main"}
-            }}
-            {...props}
-          >
-          {children}
-          </Button>
-        }
-      </div>
+      <Button variant="outlined" 
+          sx={{
+            textTransform: "none",
+            color: "success.main", 
+            borderColor: "success.main",
+            ":hover": {borderColor: "success.main"}
+          }}
+          {...props}
+        >
+        {children}
+      </Button>
     );
   }
 
@@ -89,7 +93,7 @@ export const DeleteFlow = () => {
 
   return (
     <div className="deleteFlowContainer">
-      <Card sx={{ width: "70%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
           <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Delete Stream</Typography>
           
@@ -106,20 +110,32 @@ export const DeleteFlow = () => {
               </TextField>
             </FormGroup>
             
-            <DeleteButton
-              onClick={() => {
-                setIsButtonLoading(true);
-                deleteFlow(recipient);
-                setTimeout(() => {
-                  setIsButtonLoading(false);
-                }, 1000);
-              }}
-            >
-              Delete
-            </DeleteButton>
+            {
+              recipient == "" || txLoading
+              ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Delete</Button>
+              : <DeleteButton
+                  onClick={() => {
+                    deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash);
+                    setRecipient('');
+                  }}
+                >
+                  Delete
+                </DeleteButton>
+            }
           </Form>
         </CardContent>
+
+        {
+          txLoading
+          ? <LinearProgress color="success"/>
+          : <div className="displayNone"/>
+        }
       </Card>
+
+      <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
+        {"Your transaction has been boradcasted! View on block explorer "}
+        <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
+      </SnackBar>
 
       {/*
       <h3>Delete Stream</h3>
