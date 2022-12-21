@@ -1,18 +1,38 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
+import Box from '@mui/material/Box'; 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
+import Modal from '@mui/material/Modal';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
+import axios from 'axios';
 import "../css/stream.css";
 
-async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash) {
+var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
+
+//Checks transaction status from Etherscan until success
+async function checkTxStatus(resolve, reject){
+  const url = `https://api-goerli.etherscan.io/api?module=transaction&action=getstatus&txhash=${txHash}&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`;
+  const res = await axios.get(url);
+  
+  console.log('transaction status: ' + res.data.status);
+  if(res.data.status == '1'){
+    console.log('indexing...')
+    checkTxStatus(resolve);
+  }
+  else{
+    resolve(res);
+  }
+}
+
+async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
 
   console.log(recipient);
 
@@ -46,6 +66,7 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 
     console.log("Creating your stream...");
     setTxLoading(true);
+    setTxMsg("Transaction being broadcasted...");
 
     const createTxn = await createFlowOperation.exec(signer);
     await createTxn.wait().then(function (tx) {
@@ -59,6 +80,17 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
         Transaction: ${tx.transactionHash}
         `
       );
+      
+      setTxMsg("Transaction being indexed...");
+
+      txHash = tx.transactionHash;
+      new Promise((resolve, reject)=>{
+        checkTxStatus(resolve, reject);
+      }).then((result)=>{
+        console.log('transaction successful!');
+        setTxMsg("");
+      });
+
       setTxLoading(false);
       setTxCompleted(true);
       setTxHash(tx.transactionHash);
@@ -78,6 +110,7 @@ export const CreateFlow = () => {
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
+  const [txMsg, setTxMsg] = useState("");
 
   //convert wei/sec to fDAIx/month
   function calculateFlowRate(amount) {
@@ -111,6 +144,37 @@ export const CreateFlow = () => {
     );
   }
 
+  function BasicModal() {
+    return (
+        <Modal
+          open={true}
+          onClose={!txLoading}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{marginLeft: "20%"}}
+        >
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: '#212121',
+            //border: '2px solid #4caf50',
+            borderRadius: '15px',
+            boxShadow: 10,
+            p: 4,
+            outline: 0
+          }}>
+            <div>
+              <Typography sx={{textAlign: 'center'}}>{txMsg}</Typography>
+              <LinearProgress color="success" sx={{marginTop: '20px'}}/>
+            </div>
+          </Box>
+        </Modal>
+    );
+  }
+
   const handleRecipientChange = (e) => {
     setRecipient(() => ([e.target.name] = e.target.value));
   };
@@ -129,7 +193,11 @@ export const CreateFlow = () => {
     <div className="createFlowContainer">
       <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
-          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Create Stream</Typography>
+          {
+            txLoading
+            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Create Stream</Typography>
+            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Create Stream</Typography>
+          }
 
           <Form className="createFlowForm">
             <FormGroup className="mb-3">
@@ -159,7 +227,7 @@ export const CreateFlow = () => {
               ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
               : <CreateButton
                   onClick={() => {
-                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash);
+                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setRecipient('');
                     setFlowRate('');
                   }}
@@ -169,16 +237,16 @@ export const CreateFlow = () => {
             }
           </Form>
         </CardContent>
-
-        {
-          txLoading
-          ? <LinearProgress color="success"/>
-          : <div className="displayNone"/>
-        }
       </Card>
 
+      {
+        txLoading
+        ? <BasicModal/>
+        : <div className="displayNone"/>
+      }
+
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
-        {"Your transaction has been boradcasted! View on block explorer "}
+        {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
 

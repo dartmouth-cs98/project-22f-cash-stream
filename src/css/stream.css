@@ -42,3 +42,8 @@
   color: white;
   text-decoration: underline;
 }
+
+.txMsg{
+  font-size: small;
+  margin-top: 20px;
+}
