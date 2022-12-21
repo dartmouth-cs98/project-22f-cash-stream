@@ -1,18 +1,16 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
-import Box from '@mui/material/Box'; 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import LinearProgress from '@mui/material/LinearProgress';
-import Modal from '@mui/material/Modal';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
-import { SnackBar } from "./Snackbar";
 import axios from 'axios';
+import { SnackBar } from "./Snackbar";
+import { TxModal } from "./Modal";
 import "../css/stream.css";
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
@@ -144,36 +142,7 @@ export const CreateFlow = () => {
     );
   }
 
-  function BasicModal() {
-    return (
-        <Modal
-          open={true}
-          onClose={!txLoading}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          sx={{marginLeft: "20%"}}
-        >
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: '#212121',
-            //border: '2px solid #4caf50',
-            borderRadius: '15px',
-            boxShadow: 10,
-            p: 4,
-            outline: 0
-          }}>
-            <div>
-              <Typography sx={{textAlign: 'center'}}>{txMsg}</Typography>
-              <LinearProgress color="success" sx={{marginTop: '20px'}}/>
-            </div>
-          </Box>
-        </Modal>
-    );
-  }
+  
 
   const handleRecipientChange = (e) => {
     setRecipient(() => ([e.target.name] = e.target.value));
@@ -241,7 +210,7 @@ export const CreateFlow = () => {
 
       {
         txLoading
-        ? <BasicModal/>
+        ? <TxModal txMsg={txMsg}/>
         : <div className="displayNone"/>
       }
 

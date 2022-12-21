@@ -8,16 +8,34 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import LinearProgress from '@mui/material/LinearProgress';
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
+import { TxModal } from "./Modal";
+import axios from 'axios';
 import "../css/wrapUnwrap.css";
+
+var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
+
+//Checks transaction status from Etherscan until success
+async function checkTxStatus(resolve, reject){
+  const url = `https://api-goerli.etherscan.io/api?module=transaction&action=getstatus&txhash=${txHash}&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`;
+  const res = await axios.get(url);
+  
+  console.log('transaction status: ' + res.data.status);
+  if(res.data.status == '1'){
+    console.log('indexing...')
+    checkTxStatus(resolve);
+  }
+  else{
+    resolve(res);
+  }
+}
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
 
 //where the Superfluid logic takes place
-async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash) {
+async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
   const sf = await Framework.create({
     chainId: 5,
     provider: customHttpProvider
@@ -32,6 +50,7 @@ async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash) {
   try {
     console.log(`Downgrading ${amt} fDAIx...`);
     setTxLoading(true);
+    setTxMsg("Transaction being broadcasted...");
 
     const amtToDowngrade = ethers.utils.parseEther(amt.toString());
     const downgradeOperation = fDAIx.downgrade({
@@ -50,6 +69,16 @@ async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash) {
         Or you can downgrade tokens at app.superfluid.finance/dashboard.
       `
       );
+      
+      setTxMsg("Transaction being indexed...");
+      txHash = tx.transactionHash;
+      new Promise((resolve, reject)=>{
+        checkTxStatus(resolve, reject);
+      }).then((result)=>{
+        console.log('transaction successful!');
+        setTxMsg("");
+      });
+
       setTxLoading(false);
       setTxCompleted(true);
       setTxHash(tx.transactionHash);
@@ -66,6 +95,7 @@ export const Unwrap = () => {
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
+  const [txMsg, setTxMsg] = useState("");
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
@@ -97,9 +127,11 @@ export const Unwrap = () => {
     <div className="unwrapContainer">
       <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
-          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>
-            Unwrap
-          </Typography>
+        {
+            txLoading
+            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Unwrap</Typography>
+            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Unwrap</Typography>
+          }
           <Form>
             <FormGroup className="unwrapForm">
               <TextField 
@@ -114,7 +146,7 @@ export const Unwrap = () => {
             <p>
               <DowngradeButton
                 onClick={() => {
-                  daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash);
+                  daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                   setAmount("");
                 }}
               >
@@ -123,13 +155,13 @@ export const Unwrap = () => {
             </p>
           </Form>
         </CardContent>
-
-        {
-          txLoading
-          ? <LinearProgress color="success"/>
-          : <div className="displayNone"/>
-        }
       </Card>
+
+      {
+        txLoading
+        ? <TxModal txMsg={txMsg}/>
+        : <div className="displayNone"/>
+      }
 
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
         {"Your transaction has been boradcasted! View on block explorer "}

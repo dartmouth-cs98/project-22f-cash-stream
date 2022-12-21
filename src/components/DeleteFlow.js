@@ -6,12 +6,30 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import LinearProgress from '@mui/material/LinearProgress';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
+import { TxModal } from "./Modal";
+import axios from 'axios';
 
-async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash) {
+var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
+
+//Checks transaction status from Etherscan until success
+async function checkTxStatus(resolve, reject){
+  const url = `https://api-goerli.etherscan.io/api?module=transaction&action=getstatus&txhash=${txHash}&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`;
+  const res = await axios.get(url);
+  
+  console.log('transaction status: ' + res.data.status);
+  if(res.data.status == '1'){
+    console.log('indexing...')
+    checkTxStatus(resolve);
+  }
+  else{
+    resolve(res);
+  }
+}
+
+async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
 
   console.log(recipient);
 
@@ -41,6 +59,7 @@ async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash) {
 
     console.log("Deleting your stream...");
     setTxLoading(true);
+    setTxMsg("Transaction being broadcasted...");
 
     const deleteTxn = await deleteFlowOperation.exec(signer);
     await deleteTxn.wait().then(function (tx) {
@@ -53,6 +72,15 @@ async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash) {
        Transaction: ${tx.transactionHash}
     `
     );
+    
+    setTxMsg("Transaction being indexed...");
+    txHash = tx.transactionHash;
+    new Promise((resolve, reject)=>{
+      checkTxStatus(resolve, reject);
+    }).then((result)=>{
+      console.log('transaction successful!');
+      setTxMsg("");
+    });
 
     setTxLoading(false);
     setTxCompleted(true);
@@ -70,6 +98,7 @@ export const DeleteFlow = () => {
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
+  const [txMsg, setTxMsg] = useState("");
 
   function DeleteButton({ children, ...props }) {
     return (
@@ -95,7 +124,11 @@ export const DeleteFlow = () => {
     <div className="deleteFlowContainer">
       <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
         <CardContent>
-          <Typography variant="h5" component="div" sx={{marginTop: "20px"}}>Delete Stream</Typography>
+          {
+            txLoading
+            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Delete Stream</Typography>
+            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Delete Stream</Typography>
+          }
           
           <Form className="createFlowForm">
             <FormGroup className="mb-3">
@@ -115,7 +148,7 @@ export const DeleteFlow = () => {
               ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Delete</Button>
               : <DeleteButton
                   onClick={() => {
-                    deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash);
+                    deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setRecipient('');
                   }}
                 >
@@ -124,13 +157,13 @@ export const DeleteFlow = () => {
             }
           </Form>
         </CardContent>
-
-        {
-          txLoading
-          ? <LinearProgress color="success"/>
-          : <div className="displayNone"/>
-        }
       </Card>
+
+      {
+        txLoading
+        ? <TxModal txMsg={txMsg}/>
+        : <div className="displayNone"/>
+      }
 
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
         {"Your transaction has been boradcasted! View on block explorer "}
