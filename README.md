@@ -32,8 +32,8 @@ yarn start
 ```
 
 ## Deployment
-
-
+[Spotify 3.0 Demo](https://spotify-3-0.onrender.com/)
+https://github.com/thanvinhbaohoang/Spotify-3.0
 
 ## Authors
 
