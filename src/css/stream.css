@@ -1,7 +1,7 @@
 .streamContainer {
-  margin-top: 3%;
-  margin-left: 14%;
+  margin-top: 10%;
   font-family: sans-serif;
+  margin-left: 20%;
 }
 
 .createFlowContainer {
@@ -27,4 +27,23 @@
 
 .deleteFlowForm{
   margin: 3%;
+}
+
+.displayNone{
+  display: none;
+}
+
+.streamContainer a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.streamContainer a:visited{
+  color: white;
+  text-decoration: underline;
+}
+
+.txMsg{
+  font-size: small;
+  margin-top: 20px;
 }

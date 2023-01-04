@@ -46,7 +46,8 @@ function Row(props) {
             {open ? <FiArrowUpCircle/> : <FiArrowDownCircle/>}
           </IconButton>
         </TableCell>
-      </TableRow>      <TableRow>
+      </TableRow>      
+      <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
@@ -59,7 +60,7 @@ function Row(props) {
                     <TableCell align="center">Date</TableCell>
                     <TableCell align="center">To/From </TableCell>
                     <TableCell align="center"> All Time Flow</TableCell>
-                    <TableCell align="center"> Flow Rate</TableCell>
+                    <TableCell align="center">Flow Rate</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -112,7 +113,7 @@ export const DashboardTable = (rows) => {
     <ThemeProvider theme={darkTheme}>
         <h4>
           Goerli Network 
-          {console.log(rows)}
+          {/*console.log(rows)*/}
         </h4>
 
       <CssBaseline/>

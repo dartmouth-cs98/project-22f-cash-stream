@@ -13,8 +13,9 @@ const darkTheme = createTheme({
   },
 });
 
+//Stream page (wrapper component for wrap/unwrap)
 export const WrapUnwrap = () => {
-  const [alignment, setAlignment] = useState('create');
+  const [alignment, setAlignment] = useState('wrap'); //togglebutton options
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -25,17 +26,17 @@ export const WrapUnwrap = () => {
       <CssBaseline/>
       <div className="wrapUnwrapContainer">
         <ToggleButtonGroup
-          color="standard"
+          color="success"
           value={alignment}
           exclusive
           onChange={handleChange}
           aria-label="Platform"
         >
-          <ToggleButton value="create">Wrap</ToggleButton>
-          <ToggleButton value="delete">Unwrap</ToggleButton>
+          <ToggleButton value="wrap" sx={{textTransform: "none"}}>Wrap</ToggleButton>
+          <ToggleButton value="unwrap" sx={{textTransform: "none"}}>Unwrap</ToggleButton>
         </ToggleButtonGroup>
         {
-          alignment === "create" ? 
+          alignment === "wrap" ? 
           <Wrap /> :
           <Unwrap />
         }

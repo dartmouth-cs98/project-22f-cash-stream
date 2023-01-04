@@ -13,8 +13,9 @@ const darkTheme = createTheme({
   },
 });
 
+//Stream page (wrapper component for create/delete flow)
 export const Stream = () => {
-  const [alignment, setAlignment] = useState('create');
+  const [alignment, setAlignment] = useState('create'); //togglebutton options
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -25,14 +26,14 @@ export const Stream = () => {
       <CssBaseline/>
       <div className="streamContainer">
         <ToggleButtonGroup
-          color="standard"
+          color="success"
           value={alignment}
           exclusive
           onChange={handleChange}
           aria-label="Platform"
         >
-          <ToggleButton value="create">Create</ToggleButton>
-          <ToggleButton value="delete">Delete</ToggleButton>
+          <ToggleButton value="create" sx={{textTransform: "none"}}>Create</ToggleButton>
+          <ToggleButton value="delete" sx={{textTransform: "none"}}>Delete</ToggleButton>
         </ToggleButtonGroup>
         {
           alignment === "create" ? 
