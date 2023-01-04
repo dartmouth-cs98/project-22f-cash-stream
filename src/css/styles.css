@@ -109,7 +109,7 @@ a {
   width: 70%;
   color: white;
   border-radius: 8px;
-  border: solid white 1px;
+  border: solid rgba(255, 255, 255, 0.636) 0.5px;
   background-color: rgba(26, 36, 61, 0.763);
 }
 

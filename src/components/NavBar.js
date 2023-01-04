@@ -19,6 +19,9 @@ export const NavBar = (props) => {
           <NavLink to ="/wrap"> 
             <p class='nav-item'><FontAwesomeIcon icon={faGift} className="icon"/>Wrap/Unwrap</p>
           </NavLink>
+          <NavLink activeStyle={{ color:'red' }} to ="/subscriptions"> 
+            <p class='nav-item'> Subscriptions </p>
+          </NavLink>
         </div>
       </a>
     </nav> 

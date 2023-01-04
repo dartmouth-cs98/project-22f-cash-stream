@@ -20,9 +20,9 @@ class FlowInfo extends Component {
   }
 
   async componentDidMount(){
-    //await this.getWalletBalance();
-    //await this.getTokensInfo();
 
+    await this.getWalletBalance()
+    
     this.timerID = setInterval(
       () => {
         if (this.props.connected) {
@@ -75,6 +75,7 @@ class FlowInfo extends Component {
             }
           }
         }
+
         `
 
         const queryResult = await axios({
@@ -83,6 +84,7 @@ class FlowInfo extends Component {
           data: {
             query: TOKENS_QUERY
           }
+
         })
 
         // Get Subgraph Schema by running the Query in this playground
@@ -146,19 +148,18 @@ class FlowInfo extends Component {
         provider: provider
       });
 
-      const fDAIx = await sf.loadSuperToken(tokenName);
-      const fDAIxAddress= fDAIx.address;
-
+      const superToken = await sf.loadSuperToken(tokenName);
+      // const fDAIxAddress= superToken.address;
       // ================================================================
       // Real Time Balance
-      const realTimeBalance= await fDAIx.realtimeBalanceOf({
+      const realTimeBalance= await superToken.realtimeBalanceOf({
           account: account,
           // timestamp: string,
           providerOrSigner: signer
       });
 
-      const fDaixBalance = realTimeBalance.availableBalance;
-      const balanceInComa = ethers.utils.formatEther(fDaixBalance).substring(0,30);
+      const superTokenBalance = realTimeBalance.availableBalance;
+      const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,30);
       return balanceInComa
   }
 

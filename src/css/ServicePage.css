@@ -1,0 +1,90 @@
+
+
+.subscriptions-container {
+    text-decoration: none;
+    color:aliceblue;
+    background-color: rgba(8, 7, 12, 0.95   );
+    height: 900px;
+}
+.subscriptions-container {
+    margin-left: 14%;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-card{
+    background-color: rgb(7, 5, 22);
+    margin: 10px;
+    width: 700px;
+    height: 140px;
+    padding: 30px;
+    border: solid black 1px;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.service-card:hover{
+    cursor: pointer;
+    border: solid white 1px;
+    background-color: rgb(38, 36, 55);
+    transition: 0.3s;
+}
+.service-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-thumbnail {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    border: solid white 1px;
+    border-radius: 18px;
+}
+.service-name-and-price{
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: baseline;
+}
+
+.service-name{
+    font-weight: bold;
+}
+
+.service-price {
+    color: rgb(16, 198, 0);
+}
+.service-subscribe-button {
+    color: white;
+    text-decoration: none;
+    background-color: #de0050;
+    border: solid black 1px;
+    border-radius: 8px;
+    padding: 15px 20px;
+    transition: 0.1s;
+}
+
+.service-subscribe-button:hover {
+    cursor: pointer;
+    border: solid white 1px;
+    transition: 0.2s ease-in-out;
+    filter: brightness(0.8);
+}
+
+.service-subscribe-button:active{
+    box-shadow: black 3px 5px 10px;
+    transition: 0.08s ease-out;
+    transform: translateY(5px);
+}
+
+/* a:hover, a:focus {
+    text-decoration:none;
+} */

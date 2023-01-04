@@ -5,10 +5,17 @@ import  NavBar from "./components/NavBar";
 import FlowInfo from "./components/DashboardPage/FlowInfo";
 import { Stream } from "./components/Stream";
 import { WrapUnwrap } from "./components/WrapUnwrap";
+import { Subscriptions } from "./components/ServicesPage/Subscriptions";
+import { useEffect } from "react";
 
 export default function App() {
 
   let [connected, setConnected] = useState(false);
+  
+  useEffect(() => {
+    document.title = 'CashStream';
+    document.icon
+    }, []);
   
   return (
     <div className="App">
@@ -18,6 +25,7 @@ export default function App() {
         <Route exact path="/" element={<FlowInfo connected={connected} setConnected={setConnected}/>}></Route>
         <Route exact path="/stream" element={<Stream/>}></Route>
         <Route exact path="/wrap" element={<WrapUnwrap />}></Route>
+        <Route exact path="/subscriptions" element={<Subscriptions />}></Route>
       </Routes>
     </BrowserRouter>
   </div>
