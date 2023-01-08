@@ -16,18 +16,18 @@ import "../css/stream.css";
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
-const period = [
+const intervals = [
   {
     value: 'hour',
-    label: 'hour',
+    label: '/ hour',
   },
   {
     value: 'day',
-    label: 'day',
+    label: '/ day',
   },
   {
     value: 'month',
-    label: 'month',
+    label: '/ month',
   },
 ];
 
@@ -120,12 +120,14 @@ export const CreateFlow = () => {
   const [recipient, setRecipient] = useState("");
   //const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
   const [flowRate, setFlowRate] = useState("");
-  const [flowRateDisplay, setFlowRateDisplay] = useState("");
+  const [interval, setInterval] = useState("hour");
+  //const [flowRateDisplay, setFlowRateDisplay] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
 
+  /*
   //convert wei/sec to fDAIx/month
   function calculateFlowRate(amount) {
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
@@ -141,9 +143,10 @@ export const CreateFlow = () => {
       return calculatedFlowRate;
     }
   }
+  */
   
   //compute wei/sec flowrate 
-  function calculateFlowRate2(amount, period){
+  function calculateFlowRate(amount, interval){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       alert("You can only calculate a flowRate based on a number");
       return;
@@ -152,18 +155,20 @@ export const CreateFlow = () => {
       if (Number(amount) === 0) {
         return 0;
       }
-      const amountBN = ethers.BigNumber.from(amount);
-      const formattedAmount = ethers.utils.formatEther(amountBN.toString());
 
-      if(period == "hour"){
-        return formattedAmount/3600;
+      var converted = ethers.FixedNumber.from(amount);
+
+      if(interval == "hour"){
+        converted = amount/3600;
       }
-      else if(period == "day"){
-        return formattedAmount/3600/24;
+      else if(interval == "day"){
+        converted = amount/3600/24;
       }
-      else if(period == "month"){
-        return formattedAmount/3600/24/30;
+      else if(interval == "month"){
+        converted = amount/3600/24/30;
       }
+
+      return converted.toFixed();
     }
   }
 
@@ -190,11 +195,13 @@ export const CreateFlow = () => {
   const handleFlowRateChange = (e) => {
     try {
       setFlowRate(() => ([e.target.name] = e.target.value));
-      let newFlowRateDisplay = calculateFlowRate(e.target.value);
-      setFlowRateDisplay(newFlowRateDisplay.toString());
     } catch {
-      console.error("Flowrate invalid.")
+      console.error("Flowrate invalid.");
     }
+  };
+
+  const handleIntervalChange = (e) => {
+    setInterval(() => ([e.target.name] = e.target.value));
   };
 
   return (
@@ -224,7 +231,7 @@ export const CreateFlow = () => {
                 name="flowRate"
                 value={flowRate}
                 onChange={handleFlowRateChange}
-                placeholder="Flow rate in wei/second"
+                placeholder="fDAIx" //2000 a hour, 48000 a day, 1440000 a month
                 color="success"
                 sx={{width: "70%", marginBottom: "10px"}}
               />
@@ -234,19 +241,28 @@ export const CreateFlow = () => {
               <TextField 
               select
               defaultValue="hour"
+              value={interval}
+              onChange={handleIntervalChange}
+              color="success"
               >
-                {period.map((option) => (
-                  <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
-                ))}
+                {
+                  intervals.map((option) => (
+                    <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
+                  ))
+                }
               </TextField>
             </FormGroup>
+              
+            <p>amount: {flowRate}</p>
+            <p>interval: {interval}</p>
+            <p>converted: {calculateFlowRate(flowRate, interval)}</p>
             
             {
               recipient == "" || flowRate == "" || txLoading
               ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
               : <CreateButton
                   onClick={() => {
-                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setRecipient('');
                     setFlowRate('');
                   }}

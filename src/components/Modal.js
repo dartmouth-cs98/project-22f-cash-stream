@@ -7,7 +7,7 @@ export const TxModal = (props) => {
   return (
       <Modal
         open={true}
-        onClose={true}
+        //onClose={true}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{marginLeft: "20%"}}
