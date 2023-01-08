@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { MenuItem } from "@mui/material";
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
@@ -14,6 +15,21 @@ import { TxModal } from "./Modal";
 import "../css/stream.css";
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
+
+const period = [
+  {
+    value: 'hour',
+    label: 'hour',
+  },
+  {
+    value: 'day',
+    label: 'day',
+  },
+  {
+    value: 'month',
+    label: 'month',
+  },
+];
 
 //Checks transaction status from Etherscan until success
 async function checkTxStatus(resolve, reject){
@@ -125,6 +141,31 @@ export const CreateFlow = () => {
       return calculatedFlowRate;
     }
   }
+  
+  //compute wei/sec flowrate 
+  function calculateFlowRate2(amount, period){
+    if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
+      alert("You can only calculate a flowRate based on a number");
+      return;
+    }
+    else{
+      if (Number(amount) === 0) {
+        return 0;
+      }
+      const amountBN = ethers.BigNumber.from(amount);
+      const formattedAmount = ethers.utils.formatEther(amountBN.toString());
+
+      if(period == "hour"){
+        return formattedAmount/3600;
+      }
+      else if(period == "day"){
+        return formattedAmount/3600/24;
+      }
+      else if(period == "month"){
+        return formattedAmount/3600/24/30;
+      }
+    }
+  }
 
   function CreateButton({ children, ...props }) {
     return (
@@ -141,8 +182,6 @@ export const CreateFlow = () => {
       </Button>
     );
   }
-
-  
 
   const handleRecipientChange = (e) => {
     setRecipient(() => ([e.target.name] = e.target.value));
@@ -189,6 +228,17 @@ export const CreateFlow = () => {
                 color="success"
                 sx={{width: "70%", marginBottom: "10px"}}
               />
+            </FormGroup>
+
+            <FormGroup className="mb-3">
+              <TextField 
+              select
+              defaultValue="hour"
+              >
+                {period.map((option) => (
+                  <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
+                ))}
+              </TextField>
             </FormGroup>
             
             {
