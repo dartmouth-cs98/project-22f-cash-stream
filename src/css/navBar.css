@@ -1,5 +1,7 @@
 .nav-bar{
   width: 20%;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
 }
 
 .nav-items {
@@ -9,6 +11,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  color: white;
 }
 
 .nav-item {

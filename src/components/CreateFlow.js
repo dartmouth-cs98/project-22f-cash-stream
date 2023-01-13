@@ -121,14 +121,14 @@ export const CreateFlow = () => {
   //const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
   const [flowRate, setFlowRate] = useState("");
   const [interval, setInterval] = useState("hour");
-  const [flowRateDisplay, setFlowRateDisplay] = useState("");
+  //const [flowRateDisplay, setFlowRateDisplay] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
   
-  //convert wei/sec to fDAIx/month
-  function calculateFlowRate(amount, interval) {
+  {/* convert wei/sec to fDAIx/month
+  function calculateFlowRate(amount) {
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       alert("You can only calculate a flowRate based on a number");
       return;
@@ -138,20 +138,35 @@ export const CreateFlow = () => {
       }
       const amountInWei = ethers.BigNumber.from(amount);
       const monthlyAmount = ethers.utils.formatEther(amountInWei.toString());
-      //const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30;
+      const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30;
+      return calculatedFlowRate;
+    }
+  }
+  */}
+  
+  function calculateFlowRate(amount, period){
+    if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
+      alert("You can only calculate a flowRate based on a number");
+      return;
+    }
+    else{
+      if (Number(amount) === 0) {
+        return 0;
+      }
+      const amountBN = ethers.BigNumber.from(amount);
+      const formattedAmount = ethers.utils.parseEther(amountBN.toString());
 
-      if(interval == "hour"){
-        return monthlyAmount * 3600;
+      if(period == "hour"){
+        return Math.round(formattedAmount/3600);
       }
-      else if(interval == "day"){
-        return monthlyAmount * 3600 * 24;
+      else if(period == "day"){
+        return Math.round(formattedAmount/3600/24);
       }
-      else if(interval == "month"){
-        return monthlyAmount * 3600 * 24 * 30;
+      else if(period == "month"){
+        return Math.round(formattedAmount/3600/24/30);
       }
     }
   }
-  
 
   function CreateButton({ children, ...props }) {
     return (
@@ -197,54 +212,51 @@ export const CreateFlow = () => {
 
           <Form className="createFlowForm">
             <FormGroup className="mb-3">
-              <TextField 
+              <TextField
+                label="Recipient Wallet Address"
                 name="recipient"
                 value={recipient}
                 onChange={handleRecipientChange}
-                placeholder="Recipient wallet address"
+                placeholder="0x00..."
                 color="success"
                 sx={{width: "70%", marginBottom: "5px"}}
               /> 
             </FormGroup>
 
             <FormGroup className="mb-3">
-              <TextField 
+              <TextField
+                label="Amount"
                 name="flowRate"
                 value={flowRate}
                 onChange={handleFlowRateChange}
-                placeholder="Flowrate in wei/sec"
+                placeholder="fDAIx"
                 color="success"
                 sx={{width: "70%", marginBottom: "10px"}}
               />
             </FormGroup>
 
-            {
-              flowRate == ""
-              ? <></>
-              : <FormGroup className="mb-3">
-                <p>{calculateFlowRate(flowRate, interval)} fDAIx</p>
-                <TextField 
-                select
-                defaultValue="hour"
-                value={interval}
-                onChange={handleIntervalChange}
-                color="success"
-                >
-                  {
-                    intervals.map((option) => (
-                      <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
-                    ))
-                  }
-                </TextField>
-              </FormGroup>
-            }
+            <FormGroup className="mb-3">
+              <TextField 
+              select
+              defaultValue="hour"
+              value={interval}
+              onChange={handleIntervalChange}
+              color="success"
+              >
+                {
+                  intervals.map((option) => (
+                    <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
+                  ))
+                }
+              </TextField>
+            </FormGroup>
 
             {
               recipient == "" || flowRate == "" || txLoading
               ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
               : <CreateButton
                   onClick={() => {
-                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setRecipient('');
                     setFlowRate('');
                   }}
