@@ -27,16 +27,16 @@ const theme = createTheme({
 
 const intervals = [
   {
-    value: 'hour',
-    label: '/ hour',
+    value: 'month',
+    label: '/ month',
   },
   {
     value: 'day',
     label: '/ day',
   },
   {
-    value: 'month',
-    label: '/ month',
+    value: 'hour',
+    label: '/ hour',
   },
 ];
 
@@ -130,7 +130,7 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 export const CreateFlow = () => {
   const [recipient, setRecipient] = useState("");
   const [flowRate, setFlowRate] = useState("");
-  const [interval, setInterval] = useState("hour");
+  const [interval, setInterval] = useState("month");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
@@ -147,17 +147,32 @@ export const CreateFlow = () => {
       }
       const amountBN = ethers.BigNumber.from(amount);
       const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+      var flowRate = 0;
 
       if(period == "hour"){
         console.log(Math.round(formattedAmount/3600));
-        return Math.round(formattedAmount/3600);
+        flowRate = Math.round(formattedAmount/3600);
       }
       else if(period == "day"){
-        return Math.round(formattedAmount/3600/24);
+        flowRate = Math.round(formattedAmount/3600/24);
       }
       else if(period == "month"){
-        return Math.round(formattedAmount/3600/24/30);
+        flowRate = Math.round(formattedAmount/3600/24/30);
       }
+
+      if(flowRate == 0){
+        alert("The flowrate is too small. Enter a greater amount.");
+        return;
+      }
+
+      if (flowRate > Number.MAX_SAFE_INTEGER){
+        //max safe integer is 2^53-1, 9007199254740000.
+        //Amount greater than 32.425917/hour, 778.22202/day, and 2334666.66/month will throw an overflow error.
+        alert("The flowrate cannot exceed the maximum safe integer value (32/hr, 778/day, 23346/month). Enter a smaller amount. ");
+        return;
+      }
+
+      return flowRate;
     }
   }
 
