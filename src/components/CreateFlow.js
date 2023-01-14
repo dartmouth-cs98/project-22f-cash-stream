@@ -4,7 +4,7 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+//import Typography from '@mui/material/Typography';
 import { MenuItem } from "@mui/material";
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
@@ -13,8 +13,17 @@ import axios from 'axios';
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import "../css/stream.css";
+//import { width } from "@mui/system";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { typography } from "@mui/system";
 
-var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
+const theme = createTheme({
+  palette: {
+    success: {
+      main: '#10bb35',
+    },
+  },
+});
 
 const intervals = [
   {
@@ -30,6 +39,8 @@ const intervals = [
     label: '/ month',
   },
 ];
+
+var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
 //Checks transaction status from Etherscan until success
 async function checkTxStatus(resolve, reject){
@@ -118,31 +129,12 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 
 export const CreateFlow = () => {
   const [recipient, setRecipient] = useState("");
-  //const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
   const [flowRate, setFlowRate] = useState("");
   const [interval, setInterval] = useState("hour");
-  //const [flowRateDisplay, setFlowRateDisplay] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
-  
-  {/* convert wei/sec to fDAIx/month
-  function calculateFlowRate(amount) {
-    if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
-      alert("You can only calculate a flowRate based on a number");
-      return;
-    } else if (typeof Number(amount) === "number") {
-      if (Number(amount) === 0) {
-        return 0;
-      }
-      const amountInWei = ethers.BigNumber.from(amount);
-      const monthlyAmount = ethers.utils.formatEther(amountInWei.toString());
-      const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30;
-      return calculatedFlowRate;
-    }
-  }
-  */}
   
   function calculateFlowRate(amount, period){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
@@ -157,6 +149,7 @@ export const CreateFlow = () => {
       const formattedAmount = ethers.utils.parseEther(amountBN.toString());
 
       if(period == "hour"){
+        console.log(Math.round(formattedAmount/3600));
         return Math.round(formattedAmount/3600);
       }
       else if(period == "day"){
@@ -170,17 +163,23 @@ export const CreateFlow = () => {
 
   function CreateButton({ children, ...props }) {
     return (
-      <Button variant="outlined"
-        sx={{
-          textTransform: "none",
-          color: "success.main", 
-          borderColor: "success.main",
-          ":hover": {borderColor: "success.main"}
-        }}
-        {...props}
-      >
-        {children}
-      </Button>
+      <ThemeProvider theme={theme}>
+        <Button variant="contained"
+          color="success"
+          sx={{
+            height: "45px",
+            width: "100%",
+            color: "white",
+            textTransform: "none",
+            fontFamily: 'Lato',
+            fontWeight: "700",
+            ":hover": {borderColor: "success.main"}
+          }}
+          {...props}
+        >
+          {children}
+        </Button>
+      </ThemeProvider>
     );
   }
 
@@ -201,17 +200,19 @@ export const CreateFlow = () => {
   };
 
   return (
-    <div className="createFlowContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+    <div>
+      <Card className="createFlowCard" sx={{borderRadius: "20px"}}>
         <CardContent>
+          <div className="createFlowTitle">
           {
             txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Create Stream</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Create Stream</Typography>
+            ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
+            : <h5>Send Stream</h5>
           }
+          </div>
 
           <Form className="createFlowForm">
-            <FormGroup className="mb-3">
+            <FormGroup>
               <TextField
                 label="Recipient Wallet Address"
                 name="recipient"
@@ -219,55 +220,67 @@ export const CreateFlow = () => {
                 onChange={handleRecipientChange}
                 placeholder="0x00..."
                 color="success"
-                sx={{width: "70%", marginBottom: "5px"}}
+                sx={{width: "100%", fontFamily: "Inter"}}
               /> 
             </FormGroup>
 
-            <FormGroup className="mb-3">
-              <TextField
-                label="Amount"
-                name="flowRate"
-                value={flowRate}
-                onChange={handleFlowRateChange}
-                placeholder="fDAIx"
-                color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
-              />
-            </FormGroup>
+            <div className="flowRateForm">
+              <FormGroup className="flowAmount">
+                <TextField
+                  label="Amount"
+                  name="flowRate"
+                  value={flowRate}
+                  onChange={handleFlowRateChange}
+                  placeholder="fDAIx"
+                  color="success"
+                  sx={{width: "100%"}}
+                />
+              </FormGroup>
 
-            <FormGroup className="mb-3">
-              <TextField 
-              select
-              defaultValue="hour"
-              value={interval}
-              onChange={handleIntervalChange}
-              color="success"
-              >
-                {
-                  intervals.map((option) => (
-                    <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
-                  ))
-                }
-              </TextField>
-            </FormGroup>
-
-            {
-              recipient == "" || flowRate == "" || txLoading
-              ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
-              : <CreateButton
-                  onClick={() => {
-                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                    setRecipient('');
-                    setFlowRate('');
-                  }}
+              <FormGroup className="flowInterval">
+                <TextField 
+                  select
+                  defaultValue="hour"
+                  value={interval}
+                  onChange={handleIntervalChange}
+                  color="success"
+                  sx={{width: "100%"}}
                 >
-                  Create
-                </CreateButton>
-            }
+                  {
+                    intervals.map((option) => (
+                      <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
+                    ))
+                  }
+                </TextField>
+              </FormGroup>
+            </div>
           </Form>
+
+          <div className="createButtonContainer">
+          {
+            recipient == "" || flowRate == "" || txLoading
+            ? <Button variant="contained" disabled 
+              sx={{textTransform:"none", 
+                width:"100%", 
+                height:"45px", 
+                fontFamily:'Lato', 
+                fontWeight:'700',
+              }}>
+                Send Stream
+              </Button>
+            : <CreateButton
+                onClick={() => {
+                  createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                  setRecipient('');
+                  setFlowRate('');
+                }}
+              >
+                Send Stream
+              </CreateButton>        
+          }
+          </div>
         </CardContent>
       </Card>
-
       {
         txLoading
         ? <TxModal txMsg={txMsg}/>
@@ -278,45 +291,6 @@ export const CreateFlow = () => {
         {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Create Stream</h3>
-      <Form className="createFlowForm">
-        <FormGroup className="mb-3">
-          <FormControl
-            name="recipient"
-            value={recipient}
-            onChange={handleRecipientChange}
-            placeholder="Enter recipient address"
-          ></FormControl>
-        </FormGroup>
-        <FormGroup className="mb-3">
-          <FormControl
-            name="flowRate"
-            value={flowRate}
-            onChange={handleFlowRateChange}
-            placeholder="Enter a flowRate in wei/second"
-          ></FormControl>
-        </FormGroup>
-        <CreateButton
-          onClick={() => {
-            setIsButtonLoading(true);
-            createNewFlow(recipient, flowRate);
-            setTimeout(() => {
-              setIsButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Create Stream
-        </CreateButton>
-      </Form>
-
-      <div className="createFlowCalculation">
-        <p>Your flow will be equal to:</p>
-        <p>
-          <b>${flowRateDisplay !== " " ? flowRateDisplay : 0}</b> DAIx/month
-        </p>
-        </div>*/}
     </div>
   );
 };
