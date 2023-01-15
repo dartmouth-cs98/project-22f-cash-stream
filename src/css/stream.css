@@ -1,6 +1,15 @@
-.streamContainer {
-  margin-top: 10%;
+.streamPage {
+  position: relative;
   margin-left: 20%;
+  height: 100vh;
+}
+
+.streamContainer { 
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .streamContainer a:link{
@@ -13,16 +22,16 @@
   text-decoration: underline;
 }
 
-.createFlowCard{
+.flowCard{
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5%;
+  margin-top: 3%;
   padding-top: 5%;
   padding-bottom: 5%;
   width: 60%;
 }
 
-.createFlowTitle{
+.flowTitle{
   position: relative;
   left: 20px;
   font-family: 'Lato', sans-serif;
@@ -32,14 +41,14 @@
   text-align: left;
 }
 
-.createFlowForm{
+.flowForm{
   margin-top: 3%;
   margin-left: 15%;
   margin-right: 15%;
   margin-bottom: 4%;
 }
 
-.createButtonContainer{
+.flowButtonContainer{
   margin-left: 15%;
   margin-right: 15%;
 }
@@ -58,14 +67,6 @@
   display: inline-block;
   width: 25%;
   padding-left: 1%;
-}
-
-.deleteFlowContainer{
-  margin: 3%;
-}
-
-.deleteFlowForm{
-  margin: 3%;
 }
 
 .displayNone{

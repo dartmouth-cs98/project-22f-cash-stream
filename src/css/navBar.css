@@ -4,6 +4,12 @@
   font-weight: 700;
 }
 
+.title{
+  color: white;
+  font-family: 'Bree Serif';
+  font-size: 1.5em;
+}
+
 .nav-items {
   height: 100%;
   width: 100%;

@@ -24,22 +24,24 @@ export const Stream = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-      <div className="streamContainer">
-        <ToggleButtonGroup
-          color="success"
-          value={alignment}
-          exclusive
-          onChange={handleChange}
-          aria-label="Platform"
-        >
-          <ToggleButton value="create" sx={{textTransform: "none"}}>Create</ToggleButton>
-          <ToggleButton value="delete" sx={{textTransform: "none"}}>Delete</ToggleButton>
-        </ToggleButtonGroup>
-        {
-          alignment === "create" ? 
-          <CreateFlow /> :
-          <DeleteFlow />
-        }
+      <div className="streamPage">
+        <div className="streamContainer">
+          <ToggleButtonGroup
+            color="success"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
+            <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
+          </ToggleButtonGroup>
+          {
+            alignment === "create" ? 
+            <CreateFlow /> :
+            <DeleteFlow />
+          }
+        </div>
       </div>
     </ThemeProvider>
   );

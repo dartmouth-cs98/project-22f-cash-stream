@@ -15,7 +15,6 @@ import { TxModal } from "./Modal";
 import "../css/stream.css";
 //import { width } from "@mui/system";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { typography } from "@mui/system";
 
 const theme = createTheme({
   palette: {
@@ -216,9 +215,9 @@ export const CreateFlow = () => {
 
   return (
     <div>
-      <Card className="createFlowCard" sx={{borderRadius: "20px"}}>
+      <Card className="flowCard" sx={{borderRadius: "20px"}}>
         <CardContent>
-          <div className="createFlowTitle">
+          <div className="flowTitle">
           {
             txLoading
             ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
@@ -226,10 +225,10 @@ export const CreateFlow = () => {
           }
           </div>
 
-          <Form className="createFlowForm">
+          <Form className="flowForm">
             <FormGroup>
               <TextField
-                label="Recipient Wallet Address"
+                label="recipient wallet address"
                 name="recipient"
                 value={recipient}
                 onChange={handleRecipientChange}
@@ -242,7 +241,7 @@ export const CreateFlow = () => {
             <div className="flowRateForm">
               <FormGroup className="flowAmount">
                 <TextField
-                  label="Amount"
+                  label="amount"
                   name="flowRate"
                   value={flowRate}
                   onChange={handleFlowRateChange}
@@ -271,7 +270,7 @@ export const CreateFlow = () => {
             </div>
           </Form>
 
-          <div className="createButtonContainer">
+          <div className="flowButtonContainer">
           {
             recipient == "" || flowRate == "" || txLoading
             ? <Button variant="contained" disabled 

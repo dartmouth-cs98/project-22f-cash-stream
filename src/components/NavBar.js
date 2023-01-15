@@ -8,6 +8,7 @@ export const NavBar = (props) => {
   return (
     <nav class='nav-bar'>
       <a class='nav-logo-and-items'>
+        <p class="title">CashStream</p>
         <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
           <NavLink to ="/"> 

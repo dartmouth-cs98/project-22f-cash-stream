@@ -4,13 +4,21 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import axios from 'axios';
+
+const theme = createTheme({
+  palette: {
+    success: {
+      main: '#10bb35',
+    },
+  },
+});
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -102,17 +110,23 @@ export const DeleteFlow = () => {
 
   function DeleteButton({ children, ...props }) {
     return (
-      <Button variant="outlined" 
+      <ThemeProvider theme={theme}>
+        <Button variant="contained"
+          color="success" 
           sx={{
+            height: "45px",
+            width: "100%",
+            color: "white",
             textTransform: "none",
-            color: "success.main", 
-            borderColor: "success.main",
+            fontFamily: 'Lato',
+            fontWeight: "700",
             ":hover": {borderColor: "success.main"}
           }}
           {...props}
-        >
-        {children}
-      </Button>
+          >
+          {children}
+        </Button>
+      </ThemeProvider>
     );
   }
 
@@ -121,41 +135,54 @@ export const DeleteFlow = () => {
   };
 
   return (
-    <div className="deleteFlowContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+    <div>
+      <Card className="flowCard" sx={{borderRadius: "20px"}}>
         <CardContent>
-          {
-            txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Delete Stream</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Delete Stream</Typography>
-          }
-          
-          <Form className="createFlowForm">
-            <FormGroup className="mb-3">
+          <div className="flowTitle">
+            {
+              txLoading
+              ? <h5 sx={{color: "#424242"}}>Close Stream</h5>
+              : <h5>Close Stream</h5>
+            }
+          </div>
+  
+          <Form className="flowForm">
+            <FormGroup>
               <TextField 
                 name="recipient"
+                label="recipient wallet address"
                 value={recipient}
                 onChange={handleRecipientChange}
-                placeholder="Recipient wallet address"
+                placeholder="0x00..."
                 color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
+                sx={{width: "100%", fontFamily: "Inter"}}
               >  
               </TextField>
             </FormGroup>
+          </Form>
             
+          <div className="flowButtonContainer">
             {
               recipient == "" || txLoading
-              ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Delete</Button>
+              ? <Button variant="contained" disabled 
+                  sx={{textTransform:"none", 
+                  width:"100%", 
+                  height:"45px", 
+                  fontFamily:'Lato', 
+                  fontWeight:'700',
+                }}>
+                  Close Stream
+                </Button>
               : <DeleteButton
                   onClick={() => {
                     deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setRecipient('');
                   }}
                 >
-                  Delete
+                  Close Stream
                 </DeleteButton>
             }
-          </Form>
+          </div>
         </CardContent>
       </Card>
 
@@ -169,31 +196,6 @@ export const DeleteFlow = () => {
         {"Your transaction has been boradcasted! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Delete Stream</h3>
-      <Form className="deleteFlowForm">
-        <FormGroup className="mb-3">
-          <FormControl
-            name="recipient"
-            value={recipient}
-            onChange={handleRecipientChange}
-            placeholder="Enter recipient address"
-          ></FormControl>
-        </FormGroup>
-        <DeleteButton
-          onClick={() => {
-            setIsButtonLoading(true);
-            deleteFlow(recipient);
-            setTimeout(() => {
-              setIsButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Delete Stream
-        </DeleteButton>
-      </Form>
-      */}
     </div>
   );
 };
