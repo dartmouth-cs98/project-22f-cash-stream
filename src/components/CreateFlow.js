@@ -178,7 +178,8 @@ export const CreateFlow = () => {
   function CreateButton({ children, ...props }) {
     return (
       <ThemeProvider theme={theme}>
-        <Button variant="contained"
+        <Button 
+          variant="contained"
           color="success"
           sx={{
             height: "45px",
@@ -277,8 +278,7 @@ export const CreateFlow = () => {
               sx={{textTransform:"none", 
                 width:"100%", 
                 height:"45px", 
-                fontFamily:'Lato', 
-                fontWeight:'700',
+                fontFamily:'Lato',
               }}>
                 Send Stream
               </Button>

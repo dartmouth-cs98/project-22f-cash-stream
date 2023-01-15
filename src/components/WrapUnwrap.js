@@ -24,22 +24,24 @@ export const WrapUnwrap = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline/>
-      <div className="wrapUnwrapContainer">
-        <ToggleButtonGroup
-          color="success"
-          value={alignment}
-          exclusive
-          onChange={handleChange}
-          aria-label="Platform"
-        >
-          <ToggleButton value="wrap" sx={{textTransform: "none"}}>Wrap</ToggleButton>
-          <ToggleButton value="unwrap" sx={{textTransform: "none"}}>Unwrap</ToggleButton>
-        </ToggleButtonGroup>
-        {
-          alignment === "wrap" ? 
-          <Wrap /> :
-          <Unwrap />
-        }
+      <div className="wrapUnwrapPage">
+        <div className="wrapUnwrapContainer">
+          <ToggleButtonGroup
+            color="success"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="wrap" sx={{fontFamily: 'Lato', textTransform: "none"}}>Wrap</ToggleButton>
+            <ToggleButton value="unwrap" sx={{fontFamily: 'Lato', textTransform: "none"}}>Unwrap</ToggleButton>
+          </ToggleButtonGroup>
+          {
+            alignment === "wrap" ? 
+            <Wrap /> :
+            <Unwrap />
+          }
+        </div>
       </div>
     </ThemeProvider>
   );

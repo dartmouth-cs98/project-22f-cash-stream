@@ -9,11 +9,20 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import axios from 'axios';
 import "../css/wrapUnwrap.css";
+
+const theme = createTheme({
+  palette: {
+    success: {
+      main: '#10bb35',
+    },
+  },
+});
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
@@ -167,8 +176,6 @@ async function daiUpgrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
 
 export const Wrap = () => {
   const [amount, setAmount] = useState("");
-  //const [isUpgradeButtonLoading, setIsUpgradeButtonLoading] = useState(false);
-  //const [isApproveButtonLoading, setIsApproveButtonLoading] = useState(false);
   const [exceedsAllowance, setExceedsAllowance] = useState(false); //checks if the number of tokens to wrap exceeds allowance
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
@@ -190,18 +197,34 @@ export const Wrap = () => {
       <div>
       {
         txLoading || amount == ""
-        ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
-        : <Button variant="outlined" 
-            sx={{
-              textTransform: "none",
-              color: "success.main", 
-              borderColor: "success.main",
-              ":hover": {borderColor: "success.main"}
-            }}
-            {...props}
-          >
+        ? <Button variant="contained"
+          disabled 
+          sx={{
+            textTransform: "none",
+            width:"100%", 
+            height:"45px", 
+            fontFamily:'Lato',
+          }}>
             {children}
           </Button>
+        : <ThemeProvider theme={theme}> 
+            <Button 
+              variant="contained" 
+              color="success"
+              sx={{
+                height: "45px",
+                width: "100%",
+                color: "white",
+                textTransform: "none",
+                fontFamily: 'Lato',
+                fontWeight: "700",
+                ":hover": {borderColor: "success.main"}
+              }}
+              {...props}
+            >
+              {children}
+            </Button>
+          </ThemeProvider>
       }
       </div>
     );
@@ -209,15 +232,29 @@ export const Wrap = () => {
 
   function ApproveButton({ children, ...props }) {
     return (
-      <div>
+      <ThemeProvider theme={theme}>
         {        
           txLoading || amount == ""
-          ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
-          : <Button variant="outlined" 
+          ? <Button variant="contained" 
+              disabled 
+              sx={{
+                textTransform: "none",
+                width:"100%", 
+                height:"45px", 
+                fontFamily:'Lato',
+              }}
+            >
+              {children}
+            </Button>
+          : <Button variant="contained" 
+            color="success"
             sx={{
+              height: "45px",
+              width: "100%",
+              color: "white",
               textTransform: "none",
-              color: "success.main", 
-              borderColor: "success.main",
+              fontFamily: 'Lato',
+              fontWeight: "700",
               ":hover": {borderColor: "success.main"}
             }}
             {...props}
@@ -225,7 +262,7 @@ export const Wrap = () => {
             {children}
           </Button>
         }
-      </div>
+      </ThemeProvider>
     );
   }
 
@@ -234,52 +271,59 @@ export const Wrap = () => {
   };
 
   return (
-    <div className="wrapContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+    <div>
+      <Card className="wrapCard" sx={{borderRadius: "20px"}}>
         <CardContent>
-        {
-            txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Wrap</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Wrap</Typography>
-          }
-          <Form>
-            <FormGroup className="wrapForm">
+          <div className="wrapTitle">
+            {
+              txLoading
+              ? <h5 sx={{color: "#424242"}}>Wrap</h5>
+              : <h5>Wrap</h5>
+            }
+          </div>
+
+          <Form className="wrapForm">
+            <FormGroup>
               <TextField 
                 name="amount"
+                label="amount"
                 value={amount}
                 onChange={handleAmountChange}
-                placeholder="0.0"
+                placeholder="fDAI"
                 color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
+                sx={{width: "100%"}}
               />
             </FormGroup>
-
-            { 
-              //display approve button if exceedsAllowance, display upgrade button if not.
-              exceedsAllowance 
-              ? <div>
-                <ApproveButton
-                  onClick={() => {
-                    daiApprove(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                    setAmount("");
-                  }}
-                >
-                  Allow protocol to wrap your fDAI
-                </ApproveButton>
-                <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
-              </div>
-              : <p>
-                <UpgradeButton
-                  onClick={() => {
-                    daiUpgrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                    setAmount("");
-                  }}
-                >
-                  Wrap fDAI to fDAIx
-                </UpgradeButton>
-              </p>
-            }
           </Form>
+          
+          <p className="rateMessage">1fDAI = 1fDAIx</p>
+
+          <div className="wrapButtonContainer">
+          {
+            //display approve button if exceedsAllowance, display upgrade button if not.
+            exceedsAllowance 
+            ? <div>
+              <ApproveButton
+                onClick={() => {
+                  daiApprove(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                  setAmount("");
+                }}
+              >
+                Allow protocol to wrap your fDAI
+              </ApproveButton>
+              <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
+            </div>
+            : <UpgradeButton
+                onClick={() => {
+                  daiUpgrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                  setAmount("");
+                }}
+              >
+                Wrap to fDAIx
+              </UpgradeButton>
+          }
+          </div>
+          
         </CardContent>
       </Card>
       
@@ -293,50 +337,6 @@ export const Wrap = () => {
         {"Your transaction has been boradcasted! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Wrap Token</h3>
-      <Form>
-        <FormGroup className="wrapForm">
-          <FormControl
-            name="amount"
-            value={amount}
-            onChange={handleAmountChange}
-            placeholder="0"
-          ></FormControl>
-        </FormGroup>
-        {
-          exceedsAllowance ? 
-          <p>
-            <ApproveButton
-              onClick={() => {
-                setIsApproveButtonLoading(true);
-                daiApprove(amount);
-                setTimeout(() => {
-                  setIsApproveButtonLoading(false);
-                }, 1000);
-              }}
-            >
-            Allow protocol to wrap your fDAI
-            </ApproveButton>
-            <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
-          </p>: 
-          <p>
-            <UpgradeButton
-              onClick={() => {
-                setIsUpgradeButtonLoading(true);
-                daiUpgrade(amount);
-                setTimeout(() => {
-                  setIsUpgradeButtonLoading(false);
-                }, 1000);
-              }}
-            >
-            Wrap fDAI to fDAIx
-            </UpgradeButton>
-          </p>
-        }
-      </Form>
-      */}
     </div>
   );
 };

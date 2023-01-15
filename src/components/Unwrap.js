@@ -8,11 +8,20 @@ import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import axios from 'axios';
 import "../css/wrapUnwrap.css";
+
+const theme = createTheme({
+  palette: {
+    success: {
+      main: '#10bb35',
+    },
+  },
+});
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -91,7 +100,6 @@ async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxM
 
 export const Unwrap = () => {
   const [amount, setAmount] = useState("");
-  //const [isDowngradeButtonLoading, setIsDowngradeButtonLoading] = useState(false);
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
@@ -102,18 +110,35 @@ export const Unwrap = () => {
       <div>
         {
           txLoading || amount == ""
-          ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
-          : <Button variant="outlined" 
+          ? <Button 
+              variant="contained" 
+              disabled
               sx={{
                 textTransform: "none",
-                color: "success.main", 
-                borderColor: "success.main",
-                ":hover": {borderColor: "success.main"}
-              }}
-              {...props}
-            >
-              {children}
+                width:"100%", 
+                height:"45px", 
+                fontFamily:'Lato',
+              }}>
+                {children}
             </Button>
+          : <ThemeProvider theme={theme}>
+              <Button 
+                variant="contained"
+                color="success" 
+                sx={{
+                  height: "45px",
+                  width: "100%",
+                  color: "white",
+                  textTransform: "none",
+                  fontFamily: 'Lato',
+                  fontWeight: "700",
+                  ":hover": {borderColor: "success.main"}
+                }}
+                {...props}
+              >
+                {children}
+              </Button>
+            </ThemeProvider>
         }
       </div>
     );
@@ -124,36 +149,43 @@ export const Unwrap = () => {
   };
 
   return (
-    <div className="unwrapContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
+    <div>
+      <Card className="wrapCard" sx={{borderRadius: "20px"}}>
         <CardContent>
-        {
-            txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Unwrap</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Unwrap</Typography>
-          }
-          <Form>
-            <FormGroup className="unwrapForm">
+          <div className="wrapTitle">
+            {
+              txLoading
+              ? <h5 sx={{color: "#424242"}}>Unwrap</h5>
+              : <h5>Unwrap</h5>
+            }
+          </div>
+
+          <Form className="wrapForm">
+            <FormGroup>
               <TextField 
                 name="amount"
+                label="amount"
                 value={amount}
                 onChange={handleAmountChange}
-                placeholder="0.0"
+                placeholder="fDAIx"
                 color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
+                sx={{width: "100%"}}
               />
             </FormGroup>
-            <p>
-              <DowngradeButton
-                onClick={() => {
-                  daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                  setAmount("");
-                }}
-              >
-                Unwrap fDAIx to fDAI
-              </DowngradeButton>
-            </p>
           </Form>
+
+          <p className="rateMessage">1fDAIx = 1fDAI</p>
+
+          <div className="wrapButtonContainer">
+            <DowngradeButton
+              onClick={() => {
+                daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                setAmount("");
+              }}
+            >
+              Unwrap to fDAI
+            </DowngradeButton>
+          </div>
         </CardContent>
       </Card>
 

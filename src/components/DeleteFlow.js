@@ -164,12 +164,12 @@ export const DeleteFlow = () => {
           <div className="flowButtonContainer">
             {
               recipient == "" || txLoading
-              ? <Button variant="contained" disabled 
+              ? <Button variant="contained" 
+                  disabled 
                   sx={{textTransform:"none", 
                   width:"100%", 
                   height:"45px", 
                   fontFamily:'Lato', 
-                  fontWeight:'700',
                 }}>
                   Close Stream
                 </Button>

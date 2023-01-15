@@ -1,28 +1,15 @@
-.wrapUnwrapContainer{
-  margin-top: 10%;
+.wrapUnwrapPage {
+  position: relative;
   margin-left: 20%;
-  font-family: sans-serif;
+  height: 100vh;
 }
 
-.wrapContainer{
-  margin: 3%;
-}
-
-.wrapForm{
-  margin: 3%;
-}
-
-.wrapMessage{
-  font-size: smaller;
-  margin: 3%;
-}
-
-.unwrapContainer{
-  margin: 3%;
-}
-
-.unwrapForm{
-  margin: 3%;
+.wrapUnwrapContainer{
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 .wrapUnwrapContainer a:link{
@@ -33,6 +20,48 @@
 .wrapUnwrapContainer a:visited{
   color: white;
   text-decoration: underline;
+}
+
+.wrapCard{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  width: 60%;
+}
+
+.wrapTitle{
+  position: relative;
+  left: 20px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  margin-left: 15%;
+  margin-right: 15%;
+  text-align: left;
+}
+
+.wrapForm{
+  margin-top: 3%;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 4%;
+}
+
+.wrapButtonContainer{
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.rateMessage{
+  color: lightgray;
+  font-family: 'Inter';
+  font-size: smaller;
+}
+
+.wrapMessage{
+  margin-top: 5%;
+  font-size: smaller;
 }
 
 .displayNone{
