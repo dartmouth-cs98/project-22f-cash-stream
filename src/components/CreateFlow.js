@@ -14,15 +14,6 @@ import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import "../css/stream.css";
 //import { width } from "@mui/system";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const theme = createTheme({
-  palette: {
-    success: {
-      main: '#10bb35',
-    },
-  },
-});
 
 const intervals = [
   {
@@ -177,10 +168,10 @@ export const CreateFlow = () => {
 
   function CreateButton({ children, ...props }) {
     return (
-      <ThemeProvider theme={theme}>
+      
         <Button 
           variant="contained"
-          color="success"
+          color="primary"
           sx={{
             height: "45px",
             width: "100%",
@@ -188,13 +179,13 @@ export const CreateFlow = () => {
             textTransform: "none",
             fontFamily: 'Lato',
             fontWeight: "700",
-            ":hover": {borderColor: "success.main"}
+            ":hover": {borderColor: "primary"}
           }}
           {...props}
         >
           {children}
         </Button>
-      </ThemeProvider>
+      
     );
   }
 
@@ -216,7 +207,11 @@ export const CreateFlow = () => {
 
   return (
     <div>
-      <Card className="flowCard" sx={{borderRadius: "20px"}}>
+      <Card className="flowCard" 
+        sx={{
+          bgcolor: "secondary.dark",
+          borderRadius: "20px",
+        }}>
         <CardContent>
           <div className="flowTitle">
           {

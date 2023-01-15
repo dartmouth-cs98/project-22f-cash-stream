@@ -1,17 +1,9 @@
 import {useState} from "react";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { CreateFlow } from "./CreateFlow";
 import { DeleteFlow } from "./DeleteFlow";
 import "../css/stream.css";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 //Stream page (wrapper component for create/delete flow)
 export const Stream = () => {
@@ -22,12 +14,10 @@ export const Stream = () => {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline/>
       <div className="streamPage">
         <div className="streamContainer">
           <ToggleButtonGroup
-            color="success"
+            color="primary"
             value={alignment}
             exclusive
             onChange={handleChange}
@@ -43,6 +33,5 @@ export const Stream = () => {
           }
         </div>
       </div>
-    </ThemeProvider>
   );
 }

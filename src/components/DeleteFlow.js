@@ -4,21 +4,12 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import axios from 'axios';
-
-const theme = createTheme({
-  palette: {
-    success: {
-      main: '#10bb35',
-    },
-  },
-});
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -109,24 +100,23 @@ export const DeleteFlow = () => {
   const [txMsg, setTxMsg] = useState("");
 
   function DeleteButton({ children, ...props }) {
-    return (
-      <ThemeProvider theme={theme}>
-        <Button variant="contained"
-          color="success" 
-          sx={{
-            height: "45px",
-            width: "100%",
-            color: "white",
-            textTransform: "none",
-            fontFamily: 'Lato',
-            fontWeight: "700",
-            ":hover": {borderColor: "success.main"}
-          }}
-          {...props}
-          >
-          {children}
-        </Button>
-      </ThemeProvider>
+    return ( 
+      <Button variant="contained"
+        color="primary" 
+        sx={{
+          height: "45px",
+          width: "100%",
+          color: "white",
+          textTransform: "none",
+          fontFamily: 'Lato',
+          fontWeight: "700",
+          ":hover": {borderColor: "primary.main"}
+        }}
+        {...props}
+        >
+        {children}
+      </Button>
+      
     );
   }
 
@@ -136,7 +126,11 @@ export const DeleteFlow = () => {
 
   return (
     <div>
-      <Card className="flowCard" sx={{borderRadius: "20px"}}>
+      <Card className="flowCard"
+        sx={{
+          bgcolor: "secondary.dark",
+          borderRadius: "20px",
+        }}>
         <CardContent>
           <div className="flowTitle">
             {

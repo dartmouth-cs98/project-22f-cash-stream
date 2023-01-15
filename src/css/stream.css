@@ -29,6 +29,8 @@
   padding-top: 5%;
   padding-bottom: 5%;
   width: 60%;
+  border: 0.5px solid #343434;
+  background-color: black;
 }
 
 .flowTitle{

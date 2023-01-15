@@ -7,22 +7,12 @@ import { daiABI } from "../config";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import axios from 'axios';
 import "../css/wrapUnwrap.css";
-
-const theme = createTheme({
-  palette: {
-    success: {
-      main: '#10bb35',
-    },
-  },
-});
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
@@ -207,24 +197,22 @@ export const Wrap = () => {
           }}>
             {children}
           </Button>
-        : <ThemeProvider theme={theme}> 
-            <Button 
-              variant="contained" 
-              color="success"
-              sx={{
-                height: "45px",
-                width: "100%",
-                color: "white",
-                textTransform: "none",
-                fontFamily: 'Lato',
-                fontWeight: "700",
-                ":hover": {borderColor: "success.main"}
-              }}
-              {...props}
-            >
-              {children}
-            </Button>
-          </ThemeProvider>
+        : <Button 
+            variant="contained" 
+            color="primary"
+            sx={{
+              height: "45px",
+              width: "100%",
+              color: "white",
+              textTransform: "none",
+              fontFamily: 'Lato',
+              fontWeight: "700",
+              ":hover": {borderColor: "primary.main"}
+            }}
+            {...props}
+          >
+            {children}
+          </Button>
       }
       </div>
     );
@@ -232,7 +220,7 @@ export const Wrap = () => {
 
   function ApproveButton({ children, ...props }) {
     return (
-      <ThemeProvider theme={theme}>
+      <>
         {        
           txLoading || amount == ""
           ? <Button variant="contained" 
@@ -247,7 +235,7 @@ export const Wrap = () => {
               {children}
             </Button>
           : <Button variant="contained" 
-            color="success"
+            color="primary"
             sx={{
               height: "45px",
               width: "100%",
@@ -255,14 +243,14 @@ export const Wrap = () => {
               textTransform: "none",
               fontFamily: 'Lato',
               fontWeight: "700",
-              ":hover": {borderColor: "success.main"}
+              ":hover": {borderColor: "primary.main"}
             }}
             {...props}
           >
             {children}
           </Button>
         }
-      </ThemeProvider>
+      </>
     );
   }
 
@@ -272,7 +260,11 @@ export const Wrap = () => {
 
   return (
     <div>
-      <Card className="wrapCard" sx={{borderRadius: "20px"}}>
+      <Card className="wrapCard" 
+        sx={{
+          bgcolor: "secondary.dark",
+          borderRadius: "20px",
+        }}>
         <CardContent>
           <div className="wrapTitle">
             {
@@ -295,8 +287,6 @@ export const Wrap = () => {
               />
             </FormGroup>
           </Form>
-          
-          <p className="rateMessage">1fDAI = 1fDAIx</p>
 
           <div className="wrapButtonContainer">
           {

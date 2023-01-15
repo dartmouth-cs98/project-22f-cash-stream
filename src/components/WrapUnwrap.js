@@ -1,17 +1,9 @@
 import {useState} from "react";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Wrap } from "./Wrap";
 import { Unwrap } from "./Unwrap";
 import "../css/wrapUnwrap.css";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 //Stream page (wrapper component for wrap/unwrap)
 export const WrapUnwrap = () => {
@@ -22,8 +14,6 @@ export const WrapUnwrap = () => {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline/>
       <div className="wrapUnwrapPage">
         <div className="wrapUnwrapContainer">
           <ToggleButtonGroup
@@ -43,6 +33,5 @@ export const WrapUnwrap = () => {
           }
         </div>
       </div>
-    </ThemeProvider>
   );
 }

@@ -6,22 +6,12 @@ import { ethers } from "ethers";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import axios from 'axios';
 import "../css/wrapUnwrap.css";
-
-const theme = createTheme({
-  palette: {
-    success: {
-      main: '#10bb35',
-    },
-  },
-});
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -121,24 +111,22 @@ export const Unwrap = () => {
               }}>
                 {children}
             </Button>
-          : <ThemeProvider theme={theme}>
-              <Button 
-                variant="contained"
-                color="success" 
-                sx={{
-                  height: "45px",
-                  width: "100%",
-                  color: "white",
-                  textTransform: "none",
-                  fontFamily: 'Lato',
-                  fontWeight: "700",
-                  ":hover": {borderColor: "success.main"}
-                }}
-                {...props}
-              >
-                {children}
-              </Button>
-            </ThemeProvider>
+          : <Button 
+              variant="contained"
+              color="primary" 
+              sx={{
+                height: "45px",
+                width: "100%",
+                color: "white",
+                textTransform: "none",
+                fontFamily: 'Lato',
+                fontWeight: "700",
+                ":hover": {borderColor: "primary.main"}
+              }}
+              {...props}
+            >
+              {children}
+            </Button>
         }
       </div>
     );
@@ -150,7 +138,11 @@ export const Unwrap = () => {
 
   return (
     <div>
-      <Card className="wrapCard" sx={{borderRadius: "20px"}}>
+      <Card className="wrapCard" 
+        sx={{
+          bgcolor: "secondary.dark",
+          borderRadius: "20px",
+        }}>
         <CardContent>
           <div className="wrapTitle">
             {
@@ -173,8 +165,6 @@ export const Unwrap = () => {
               />
             </FormGroup>
           </Form>
-
-          <p className="rateMessage">1fDAIx = 1fDAI</p>
 
           <div className="wrapButtonContainer">
             <DowngradeButton
@@ -199,32 +189,6 @@ export const Unwrap = () => {
         {"Your transaction has been boradcasted! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Unwrap Token</h3>
-      <Form>
-        <FormGroup className="unwrapForm">
-          <FormControl
-            name="amount"
-            value={amount}
-            onChange={handleAmountChange}
-            placeholder="0"
-          ></FormControl>
-        </FormGroup>
-
-        <DowngradeButton
-          onClick={() => {
-            setIsDowngradeButtonLoading(true);
-            daiDowngrade(amount);
-            setTimeout(() => {
-              setIsDowngradeButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Unwrap fDAIx to fDAI
-        </DowngradeButton>
-      </Form>
-      */}
     </div>
   );
 };
