@@ -1,56 +1,15 @@
 /* The styling on this file is from: 
  * https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
  */
-
- .connectButton{
-  padding: 18px 30px;
-  width: 100%;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;  
-  color: white;
-  background-color: rgb(54, 187, 74);
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.connectedWalletInfo{
-  padding: 20px;
-  margin-left: 12px;
-  margin-right: 10px;
-  display: flex;
-  align-items: left;
-  border-radius: 12px;
-  justify-content: space-around;
-  font-weight: bold;
-}
-
-.connectedWalletInfo:hover {
-  transition: 0.2s ease-in;
-  background-color: black;
-  border: solid white 1px;
-  display: flex;
-}
-
-.identicon{
-  object-fit: cover;
-  border: solid white 2px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-}
-
-.connectWallet {
-  margin: 10px;
+ .connectWallet {
   border-radius: 12px;
   padding: 16px 35px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.2s;
-  color: rgb(54, 187, 74);
+  background-color: #10bb35;
+  color: white;
+  margin-bottom: 25px;
 }
 
 .connectWallet:hover{
@@ -63,4 +22,49 @@
 
 .icon {
   margin-right: 15px;
+}
+
+.connectedWallet {
+  color: wheat;
+  width: 100%;
+}
+
+.connectedWalletInfo{
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  width: 100%;
+  color: white;
+  justify-content: space-around;
+  align-items: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.connectedWalletInfo:hover {
+  transition: 0.2s ease-in;
+  background-color: black;
+  border: solid white 1px;
+  display: flex;
+}
+
+.identicon{
+  object-fit: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  border: solid white 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: black; */
+}
+
+.walletInfo *{
+  color: greenyellow;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
