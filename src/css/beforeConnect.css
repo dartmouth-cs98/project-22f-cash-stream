@@ -9,7 +9,7 @@
 .bcMessage {
   width: 100%;
   background-color: #121212;
-  border: 0.5px solid #343434;
+  border-bottom: 0.5px solid #343434;
   padding-top: 20px;
   padding-bottom: 20px;
 }

@@ -10,8 +10,8 @@ import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import axios from 'axios';
-import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
+import { SnackBar } from "./Snackbar";
 import "../css/stream.css";
 //import { width } from "@mui/system";
 
@@ -47,7 +47,7 @@ async function checkTxStatus(resolve, reject){
   }
 }
 
-async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
+async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxMsg) {
 
   console.log(recipient);
 
@@ -108,7 +108,7 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 
       setTxLoading(false);
       setTxCompleted(true);
-      setTxHash(tx.transactionHash);
+      //setTxHash(tx.transactionHash);
     });
   } catch (error) {
     console.error(error);
@@ -123,7 +123,7 @@ export const CreateFlow = () => {
   const [interval, setInterval] = useState("month");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
+  //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
   
   function calculateFlowRate(amount, period){
@@ -168,24 +168,22 @@ export const CreateFlow = () => {
 
   function CreateButton({ children, ...props }) {
     return (
-      
-        <Button 
-          variant="contained"
-          color="primary"
-          sx={{
-            height: "45px",
-            width: "100%",
-            color: "white",
-            textTransform: "none",
-            fontFamily: 'Lato',
-            fontWeight: "700",
-            ":hover": {borderColor: "primary"}
-          }}
-          {...props}
-        >
-          {children}
-        </Button>
-      
+      <Button 
+        variant="contained"
+        color="primary"
+        sx={{
+          height: "45px",
+          width: "100%",
+          color: "white",
+          textTransform: "none",
+          fontFamily: 'Lato',
+          fontWeight: "700",
+          ":hover": {borderColor: "primary"}
+        }}
+        {...props}
+      >
+        {children}
+      </Button>
     );
   }
 
@@ -206,90 +204,92 @@ export const CreateFlow = () => {
   };
 
   return (
-    <div>
-      <Card className="flowCard" 
-        sx={{
-          bgcolor: "secondary.dark",
-          borderRadius: "20px",
-        }}>
-        <CardContent>
-          <div className="flowTitle">
-          {
-            txLoading
-            ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
-            : <h5>Send Stream</h5>
-          }
-          </div>
-
-          <Form className="flowForm">
-            <FormGroup>
-              <TextField
-                label="recipient wallet address"
-                name="recipient"
-                value={recipient}
-                onChange={handleRecipientChange}
-                placeholder="0x00..."
-                color="success"
-                sx={{width: "100%", fontFamily: "Inter"}}
-              /> 
-            </FormGroup>
-
-            <div className="flowRateForm">
-              <FormGroup className="flowAmount">
-                <TextField
-                  label="amount"
-                  name="flowRate"
-                  value={flowRate}
-                  onChange={handleFlowRateChange}
-                  placeholder="fDAIx"
-                  color="success"
-                  sx={{width: "100%"}}
-                />
-              </FormGroup>
-
-              <FormGroup className="flowInterval">
-                <TextField 
-                  select
-                  defaultValue="hour"
-                  value={interval}
-                  onChange={handleIntervalChange}
-                  color="success"
-                  sx={{width: "100%"}}
-                >
-                  {
-                    intervals.map((option) => (
-                      <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
-                    ))
-                  }
-                </TextField>
-              </FormGroup>
+    <>
+      <div className="streamContainer">
+        <Card className="flowCard" 
+          sx={{
+            bgcolor: "secondary.dark",
+            borderRadius: "20px",
+          }}>
+          <CardContent>
+            <div className="flowTitle">
+            {
+              txLoading
+              ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
+              : <h5>Send Stream</h5>
+            }
             </div>
-          </Form>
 
-          <div className="flowButtonContainer">
-          {
-            recipient == "" || flowRate == "" || txLoading
-            ? <Button variant="contained" disabled 
-              sx={{textTransform:"none", 
-                width:"100%", 
-                height:"45px", 
-                fontFamily:'Lato',
-              }}>
-                Send Stream
-              </Button>
-            : <CreateButton
-                onClick={() => {
-                  createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                  setRecipient('');
-                  setFlowRate('');
-                }}
-              >
-                Send Stream
-              </CreateButton>        
-          }
-          </div>
-        </CardContent>
-      </Card>
+            <Form className="flowForm">
+              <FormGroup>
+                <TextField
+                  label="recipient wallet address"
+                  name="recipient"
+                  value={recipient}
+                  onChange={handleRecipientChange}
+                  placeholder="0x00..."
+                  color="success"
+                  sx={{width: "100%", fontFamily: "Inter"}}
+                /> 
+              </FormGroup>
+
+              <div className="flowRateForm">
+                <FormGroup className="flowAmount">
+                  <TextField
+                    label="amount"
+                    name="flowRate"
+                    value={flowRate}
+                    onChange={handleFlowRateChange}
+                    placeholder="fDAIx"
+                    color="success"
+                    sx={{width: "100%"}}
+                  />
+                </FormGroup>
+
+                <FormGroup className="flowInterval">
+                  <TextField 
+                    select
+                    defaultValue="hour"
+                    value={interval}
+                    onChange={handleIntervalChange}
+                    color="success"
+                    sx={{width: "100%"}}
+                  >
+                    {
+                      intervals.map((option) => (
+                        <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
+                      ))
+                    }
+                  </TextField>
+                </FormGroup>
+              </div>
+            </Form>
+
+            <div className="flowButtonContainer">
+            {
+              recipient == "" || flowRate == "" || txLoading
+              ? <Button variant="contained" disabled 
+                sx={{textTransform:"none", 
+                  width:"100%", 
+                  height:"45px", 
+                  fontFamily:'Lato',
+                }}>
+                  Send Stream
+                </Button>
+              : <CreateButton
+                  onClick={() => {
+                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxMsg);
+                    setRecipient('');
+                    setFlowRate('');
+                  }}
+                >
+                  Send Stream
+                </CreateButton>        
+            }
+            </div>
+          </CardContent>
+        </Card>
+      </div>
       {
         txLoading
         ? <TxModal txMsg={txMsg}/>
@@ -300,6 +300,6 @@ export const CreateFlow = () => {
         {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-    </div>
+    </>
   );
 };

@@ -4,6 +4,22 @@
   height: 100vh;
 }
 
+.streamPage a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.streamPage a:visited{
+  color: white;
+  text-decoration: underline;
+}
+
+.streamToggle{
+  position: absolute;
+  width: 100%;
+  top: 10%;
+}
+
 .streamContainer { 
   position: absolute;
   width: 100%;
@@ -12,23 +28,13 @@
   transform: translateY(-50%);
 }
 
-.streamContainer a:link{
-  color: white;
-  text-decoration: underline;
-}
-
-.streamContainer a:visited{
-  color: white;
-  text-decoration: underline;
-}
-
 .flowCard{
   margin-left: auto;
   margin-right: auto;
   margin-top: 3%;
   padding-top: 5%;
   padding-bottom: 5%;
-  width: 60%;
+  width: 55%;
   border: 0.5px solid #a9a9a9;
   background-color: black;
 }

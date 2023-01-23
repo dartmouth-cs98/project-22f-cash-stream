@@ -10,10 +10,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 //This is a snackbar to display message that the transaction has been broadcasted 
 //(for creating/deleting streams and wrapping/unwrapping tokens)
 export const SnackBar = (props) => {
-  
-  //set position (bottom right of the screen)
-  const vertical = 'bottom';
-  const horizontal = 'right';
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -23,8 +19,8 @@ export const SnackBar = (props) => {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
-      <Snackbar open={props.openSnackBar} autoHideDuration={8000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
+    <Stack spacing={2} sx={{width: '100%'}}>
+      <Snackbar open={props.openSnackBar} autoHideDuration={8000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
         <Alert onClose={handleClose} severity="success" children={props.children}/>
       </Snackbar>
     </Stack>

@@ -14,24 +14,24 @@ export const Stream = () => {
   };
 
   return (
-      <div className="streamPage">
-        <div className="streamContainer">
-          <ToggleButtonGroup
-            color="primary"
-            value={alignment}
-            exclusive
-            onChange={handleChange}
-            aria-label="Platform"
-          >
-            <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
-            <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
-          </ToggleButtonGroup>
-          {
-            alignment === "create" ? 
-            <CreateFlow /> :
-            <DeleteFlow />
-          }
-        </div>
-      </div>
+    <div className="streamPage">
+      <div className="streamToggle">
+        <ToggleButtonGroup
+          color="primary"
+          value={alignment}
+          exclusive
+          onChange={handleChange}
+          aria-label="Platform"
+        >
+          <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
+          <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
+        </ToggleButtonGroup>
+      </div>  
+      {
+        alignment === "create" 
+        ? <CreateFlow/>
+        : <DeleteFlow/>
+      }
+    </div>
   );
 }
