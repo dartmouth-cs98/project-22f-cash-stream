@@ -4,22 +4,28 @@
   height: 100vh;
 }
 
+.wrapUnwrapPage a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.wrapUnwrapPage a:visited{
+  color: white;
+  text-decoration: underline;
+}
+
+.wrapToggle{
+  position: absolute;
+  width: 100%;
+  top: 12%;
+}
+
 .wrapUnwrapContainer{
   position: absolute;
   width: 100%;
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-}
-
-.wrapUnwrapContainer a:link{
-  color: white;
-  text-decoration: underline;
-}
-
-.wrapUnwrapContainer a:visited{
-  color: white;
-  text-decoration: underline;
 }
 
 .wrapCard{

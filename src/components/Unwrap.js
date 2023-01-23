@@ -137,47 +137,49 @@ export const Unwrap = () => {
   };
 
   return (
-    <div>
-      <Card className="wrapCard" 
-        sx={{
-          bgcolor: "secondary.dark",
-          borderRadius: "20px",
-        }}>
-        <CardContent>
-          <div className="wrapTitle">
-            {
-              txLoading
-              ? <h5 sx={{color: "#424242"}}>Unwrap</h5>
-              : <h5>Unwrap</h5>
-            }
-          </div>
+    <>
+      <div className="wrapUnwrapContainer">
+        <Card className="wrapCard" 
+          sx={{
+            bgcolor: "secondary.dark",
+            borderRadius: "20px",
+          }}>
+          <CardContent>
+            <div className="wrapTitle">
+              {
+                txLoading
+                ? <h5 sx={{color: "#424242"}}>Unwrap</h5>
+                : <h5>Unwrap</h5>
+              }
+            </div>
 
-          <Form className="wrapForm">
-            <FormGroup>
-              <TextField 
-                name="amount"
-                label="amount"
-                value={amount}
-                onChange={handleAmountChange}
-                placeholder="fDAIx"
-                color="success"
-                sx={{width: "100%"}}
-              />
-            </FormGroup>
-          </Form>
+            <Form className="wrapForm">
+              <FormGroup>
+                <TextField 
+                  name="amount"
+                  label="amount"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  placeholder="fDAIx"
+                  color="success"
+                  sx={{width: "100%"}}
+                />
+              </FormGroup>
+            </Form>
 
-          <div className="wrapButtonContainer">
-            <DowngradeButton
-              onClick={() => {
-                daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                setAmount("");
-              }}
-            >
-              Unwrap to fDAI
-            </DowngradeButton>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="wrapButtonContainer">
+              <DowngradeButton
+                onClick={() => {
+                  daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                  setAmount("");
+                }}
+              >
+                Unwrap to fDAI
+              </DowngradeButton>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {
         txLoading
@@ -189,6 +191,6 @@ export const Unwrap = () => {
         {"Your transaction has been boradcasted! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-    </div>
+    </>
   );
 };

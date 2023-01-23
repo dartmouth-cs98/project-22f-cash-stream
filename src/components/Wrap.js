@@ -259,63 +259,64 @@ export const Wrap = () => {
   };
 
   return (
-    <div>
-      <Card className="wrapCard" 
-        sx={{
-          bgcolor: "secondary.dark",
-          borderRadius: "20px",
-        }}>
-        <CardContent>
-          <div className="wrapTitle">
-            {
-              txLoading
-              ? <h5 sx={{color: "#424242"}}>Wrap</h5>
-              : <h5>Wrap</h5>
-            }
-          </div>
-
-          <Form className="wrapForm">
-            <FormGroup>
-              <TextField 
-                name="amount"
-                label="amount"
-                value={amount}
-                onChange={handleAmountChange}
-                placeholder="fDAI"
-                color="success"
-                sx={{width: "100%"}}
-              />
-            </FormGroup>
-          </Form>
-
-          <div className="wrapButtonContainer">
-          {
-            //display approve button if exceedsAllowance, display upgrade button if not.
-            exceedsAllowance 
-            ? <div>
-              <ApproveButton
-                onClick={() => {
-                  daiApprove(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                  setAmount("");
-                }}
-              >
-                Allow protocol to wrap your fDAI
-              </ApproveButton>
-              <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
+    <>
+      <div className="wrapUnwrapContainer">
+        <Card className="wrapCard" 
+          sx={{
+            bgcolor: "secondary.dark",
+            borderRadius: "20px",
+          }}>
+          <CardContent>
+            <div className="wrapTitle">
+              {
+                txLoading
+                ? <h5 sx={{color: "#424242"}}>Wrap</h5>
+                : <h5>Wrap</h5>
+              }
             </div>
-            : <UpgradeButton
-                onClick={() => {
-                  daiUpgrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                  setAmount("");
-                }}
-              >
-                Wrap to fDAIx
-              </UpgradeButton>
-          }
-          </div>
-          
-        </CardContent>
-      </Card>
+
+            <Form className="wrapForm">
+              <FormGroup>
+                <TextField 
+                  name="amount"
+                  label="amount"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  placeholder="fDAI"
+                  color="success"
+                  sx={{width: "100%"}}
+                />
+              </FormGroup>
+            </Form>
+
+            <div className="wrapButtonContainer">
+            {
+              //display approve button if exceedsAllowance, display upgrade button if not.
+              exceedsAllowance 
+              ? <div>
+                <ApproveButton
+                  onClick={() => {
+                    daiApprove(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    setAmount("");
+                  }}
+                >
+                  Allow protocol to wrap your fDAI
+                </ApproveButton>
+                <p className="wrapMessage">The protocol can currently wrap up to {allowance} tokens</p>
+              </div>
+              : <UpgradeButton
+                  onClick={() => {
+                    daiUpgrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    setAmount("");
+                  }}
+                >
+                  Wrap to fDAIx
+                </UpgradeButton>
+            }
+            </div>    
+          </CardContent>
+        </Card>
+      </div>
       
       {
         txLoading
@@ -327,6 +328,6 @@ export const Wrap = () => {
         {"Your transaction has been boradcasted! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-    </div>
+    </>
   );
 };

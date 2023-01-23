@@ -13,10 +13,16 @@
 }
 
 .name{
+  display: block;
   padding: 10px;
   color: white;
   font-family: 'Bree Serif', sans-serif;
   font-size: 1.5em;
+  margin-bottom: 5%;
+}
+
+a :hover{
+  color: white;
 }
 
 .nav-items {

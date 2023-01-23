@@ -11,12 +11,12 @@ export const NavBar = (props) => {
   return(
     <nav class='nav-bar'>
       <a class='nav-logo-items'>
-        <p class="name">CashStream</p>
+        <a class="name" href="/">CashStream</a>
         <ConnectWallet connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
-          <NavLink to ="/">
+          <NavLink to ="/dashboard">
             {
-              location.pathname == "/"
+              location.pathname == "/dashboard"
               ? <p className="nav-item-clicked"><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
               : <p className="nav-item"><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
             }
