@@ -4,7 +4,9 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import "../../css/flowInfo.css"
 import { DashboardTable } from './Dashboard';
 import { ConnectWallet } from "../ConnectWallet";
+import { BeforeConnect } from "../BeforeConnect";
 import axios from 'axios';
+
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
@@ -169,19 +171,7 @@ class FlowInfo extends Component {
         {
         this.props.connected
         ? <div className="flowInfoContainer"> {DashboardTable(this.state.tokensInfo)}</div>
-        : <div className="beforeConnection">
-          <div className='beforeConnectionContainer'>
-            <div className='animatedNameContainer'>
-              <p>Money flows with</p>
-              <div className='animatedName'>
-                <h1>CashStream</h1>
-                <h1>CashStream</h1>
-              </div>
-            </div>
-          </div>
-          
-          <p>Connect to Web3Provider to get started!</p>
-        </div>
+        : <BeforeConnect/>
         }
 
           {/* <button onClick={this.getTokensInfo}>
