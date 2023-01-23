@@ -7,7 +7,7 @@ export const TxModal = (props) => {
   return (
       <Modal
         open={true}
-        onClose={true}
+        //onClose={true}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{marginLeft: "20%"}}
@@ -26,7 +26,7 @@ export const TxModal = (props) => {
           outline: 0
         }}>
           <div>
-            <Typography sx={{textAlign: 'center'}}>{props.txMsg}</Typography>
+            <Typography sx={{fontFamily: 'Lato', textAlign: 'center'}}>{props.txMsg}</Typography>
             <LinearProgress color="success" sx={{marginTop: '20px'}}/>
           </div>
         </Box>

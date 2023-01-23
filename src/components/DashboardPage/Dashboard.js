@@ -11,17 +11,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 // Watch out for this react-icons path
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 function Row(props) {
   const { row } = props;
@@ -108,35 +100,32 @@ Row.propTypes = {
 
 
 export const DashboardTable = (rows) => {
-
   return (
-    <ThemeProvider theme={darkTheme}>
-        <h4>
-          Goerli Network 
-          {/*console.log(rows)*/}
-        </h4>
-
-      <CssBaseline/>
+    <div>
+      <h4>
+        Goerli Network 
+        {/*console.log(rows)*/}
+      </h4>
       
       <TableContainer component={Paper} class='dashboard'>
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tokens</TableCell>
-                  <TableCell align="center">Balance</TableCell>
-                  <TableCell align="center">Inflow</TableCell>
-                  <TableCell align="center">Outflow</TableCell>
-                  <TableCell align="center">Netflow</TableCell>
-                  <TableCell align="center"><BsArrowDownUp/></TableCell> {/* Spacer for the Expand/Collapse Arrow */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <Row key={row.name} row={row} /> 
-                ))}
-              </TableBody>
-            </Table>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Tokens</TableCell>
+              <TableCell align="center">Balance</TableCell>
+              <TableCell align="center">Inflow</TableCell>
+              <TableCell align="center">Outflow</TableCell>
+              <TableCell align="center">Netflow</TableCell>
+              <TableCell align="center"><BsArrowDownUp/></TableCell> {/* Spacer for the Expand/Collapse Arrow */}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row key={row.name} row={row} /> 
+            ))}
+          </TableBody>
+        </Table>
       </TableContainer>
-    </ThemeProvider>
+    </div>
   );
 }

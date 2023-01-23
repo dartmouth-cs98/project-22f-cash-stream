@@ -6,6 +6,23 @@ import FlowInfo from "./components/DashboardPage/FlowInfo";
 import { Stream } from "./components/Stream";
 import { WrapUnwrap } from "./components/WrapUnwrap";
 import { Subscriptions } from "./components/ServicesPage/Subscriptions";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline } from "@mui/material";
+import { BeforeConnect } from "./components/BeforeConnect";
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: "#10bb35",
+    },
+    secondary: {
+      main: "#343434",
+      light: "#111111",
+      dark: "#000000"
+    }
+  },
+});
 
 export default function App() {
 
@@ -18,15 +35,36 @@ export default function App() {
   
   return (
     <div className="App">
-    <BrowserRouter>
-      <NavBar connected={connected} setConnected={setConnected}/>
-      <Routes>
-        <Route exact path="/" element={<FlowInfo connected={connected} setConnected={setConnected}/>}></Route>
-        <Route exact path="/stream" element={<Stream/>}></Route>
-        <Route exact path="/wrap" element={<WrapUnwrap />}></Route>
-        <Route exact path="/subscriptions" element={<Subscriptions />}></Route>
-      </Routes>
-    </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <BrowserRouter>
+          <NavBar connected={connected} setConnected={setConnected}/>
+          <Routes>
+            <Route exact path="/dashboard" element={
+                <FlowInfo connected={connected} setConnected={setConnected}/>
+              }>  
+            </Route>
+            <Route exact path="/stream" element={
+              connected 
+              ? <Stream/>
+              : <BeforeConnect/>
+              }>
+            </Route>
+            <Route exact path="/wrap" element={
+              connected
+              ? <WrapUnwrap/>
+              : <BeforeConnect/>
+              }>  
+            </Route>
+            <Route exact path="/subscriptions" element={
+                connected
+                ? <Subscriptions/>
+                : <BeforeConnect/>
+              }>  
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
   </div>
   );
 }

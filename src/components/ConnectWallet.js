@@ -75,7 +75,7 @@ export const ConnectWallet = (props) => {
   }, [props.connected]);
 
   return(
-    <div >
+    <div>
         {!props.connected
         ? (
           <div className="connectWallet" onClick={connectWallet}><FontAwesomeIcon icon={faWallet} className="icon"/>Connect Wallet</div>

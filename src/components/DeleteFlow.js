@@ -4,7 +4,6 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
@@ -29,7 +28,7 @@ async function checkTxStatus(resolve, reject){
   }
 }
 
-async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
+async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxMsg) {
 
   console.log(recipient);
 
@@ -84,7 +83,7 @@ async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash, se
 
     setTxLoading(false);
     setTxCompleted(true);
-    setTxHash(tx.transactionHash);
+    //setTxHash(tx.transactionHash);
     });
   } catch (error) {
     console.error(error);
@@ -97,22 +96,27 @@ export const DeleteFlow = () => {
   const [recipient, setRecipient] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
+  //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
 
   function DeleteButton({ children, ...props }) {
-    return (
-      <Button variant="outlined" 
-          sx={{
-            textTransform: "none",
-            color: "success.main", 
-            borderColor: "success.main",
-            ":hover": {borderColor: "success.main"}
-          }}
-          {...props}
+    return ( 
+      <Button variant="contained"
+        color="primary" 
+        sx={{
+          height: "45px",
+          width: "100%",
+          color: "white",
+          textTransform: "none",
+          fontFamily: 'Lato',
+          fontWeight: "700",
+          ":hover": {borderColor: "primary.main"}
+        }}
+        {...props}
         >
         {children}
       </Button>
+      
     );
   }
 
@@ -121,43 +125,62 @@ export const DeleteFlow = () => {
   };
 
   return (
-    <div className="deleteFlowContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
-        <CardContent>
-          {
-            txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Delete Stream</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Delete Stream</Typography>
-          }
-          
-          <Form className="createFlowForm">
-            <FormGroup className="mb-3">
-              <TextField 
-                name="recipient"
-                value={recipient}
-                onChange={handleRecipientChange}
-                placeholder="Recipient wallet address"
-                color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
-              >  
-              </TextField>
-            </FormGroup>
-            
-            {
-              recipient == "" || txLoading
-              ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Delete</Button>
-              : <DeleteButton
-                  onClick={() => {
-                    deleteFlow(recipient, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
-                    setRecipient('');
-                  }}
-                >
-                  Delete
-                </DeleteButton>
-            }
-          </Form>
-        </CardContent>
-      </Card>
+    <>
+      <div className="streamContainer">
+        <Card className="flowCard"
+          sx={{
+            bgcolor: "secondary.dark",
+            borderRadius: "20px",
+          }}>
+          <CardContent>
+            <div className="flowTitle">
+              {
+                txLoading
+                ? <h5 sx={{color: "#424242"}}>Close Stream</h5>
+                : <h5>Close Stream</h5>
+              }
+            </div>
+    
+            <Form className="flowForm">
+              <FormGroup>
+                <TextField 
+                  name="recipient"
+                  label="recipient wallet address"
+                  value={recipient}
+                  onChange={handleRecipientChange}
+                  placeholder="0x00..."
+                  color="success"
+                  sx={{width: "100%", fontFamily: "Inter"}}
+                >  
+                </TextField>
+              </FormGroup>
+            </Form>
+              
+            <div className="flowButtonContainer">
+              {
+                recipient == "" || txLoading
+                ? <Button variant="contained" 
+                    disabled 
+                    sx={{textTransform:"none", 
+                    width:"100%", 
+                    height:"45px", 
+                    fontFamily:'Lato', 
+                  }}>
+                    Close Stream
+                  </Button>
+                : <DeleteButton
+                    onClick={() => {
+                      deleteFlow(recipient, setTxLoading, setTxCompleted, setTxMsg);
+                      setRecipient('');
+                    }}
+                  >
+                    Close Stream
+                  </DeleteButton>
+              }
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {
         txLoading
@@ -166,34 +189,9 @@ export const DeleteFlow = () => {
       }
 
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
-        {"Your transaction has been boradcasted! View on block explorer "}
+        {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Delete Stream</h3>
-      <Form className="deleteFlowForm">
-        <FormGroup className="mb-3">
-          <FormControl
-            name="recipient"
-            value={recipient}
-            onChange={handleRecipientChange}
-            placeholder="Enter recipient address"
-          ></FormControl>
-        </FormGroup>
-        <DeleteButton
-          onClick={() => {
-            setIsButtonLoading(true);
-            deleteFlow(recipient);
-            setTimeout(() => {
-              setIsButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Delete Stream
-        </DeleteButton>
-      </Form>
-      */}
-    </div>
+    </>
   );
 };
