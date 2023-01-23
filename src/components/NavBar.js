@@ -3,11 +3,16 @@ import { ConnectWallet } from "./ConnectWallet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTableColumns, faBarsStaggered, faGift } from '@fortawesome/free-solid-svg-icons'
 import "../css/navBar.css";
+import { ConnectWalletWagmi} from "./ConnectWalletWagmi"
+
+
 
 export const NavBar = (props) => {
   return (
     <nav class='nav-bar'>
       <a class='nav-logo-and-items'>
+        <ConnectWalletWagmi/>
+        
         <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
           <NavLink to ="/"> 
