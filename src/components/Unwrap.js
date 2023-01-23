@@ -6,7 +6,6 @@ import { ethers } from "ethers";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
@@ -91,7 +90,6 @@ async function daiDowngrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxM
 
 export const Unwrap = () => {
   const [amount, setAmount] = useState("");
-  //const [isDowngradeButtonLoading, setIsDowngradeButtonLoading] = useState(false);
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
@@ -102,13 +100,28 @@ export const Unwrap = () => {
       <div>
         {
           txLoading || amount == ""
-          ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>{children}</Button>
-          : <Button variant="outlined" 
+          ? <Button 
+              variant="contained" 
+              disabled
               sx={{
                 textTransform: "none",
-                color: "success.main", 
-                borderColor: "success.main",
-                ":hover": {borderColor: "success.main"}
+                width:"100%", 
+                height:"45px", 
+                fontFamily:'Lato',
+              }}>
+                {children}
+            </Button>
+          : <Button 
+              variant="contained"
+              color="primary" 
+              sx={{
+                height: "45px",
+                width: "100%",
+                color: "white",
+                textTransform: "none",
+                fontFamily: 'Lato',
+                fontWeight: "700",
+                ":hover": {borderColor: "primary.main"}
               }}
               {...props}
             >
@@ -124,38 +137,49 @@ export const Unwrap = () => {
   };
 
   return (
-    <div className="unwrapContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
-        <CardContent>
-        {
-            txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Unwrap</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Unwrap</Typography>
-          }
-          <Form>
-            <FormGroup className="unwrapForm">
-              <TextField 
-                name="amount"
-                value={amount}
-                onChange={handleAmountChange}
-                placeholder="0.0"
-                color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
-              />
-            </FormGroup>
-            <p>
+    <>
+      <div className="wrapUnwrapContainer">
+        <Card className="wrapCard" 
+          sx={{
+            bgcolor: "secondary.dark",
+            borderRadius: "20px",
+          }}>
+          <CardContent>
+            <div className="wrapTitle">
+              {
+                txLoading
+                ? <h5 sx={{color: "#424242"}}>Unwrap</h5>
+                : <h5>Unwrap</h5>
+              }
+            </div>
+
+            <Form className="wrapForm">
+              <FormGroup>
+                <TextField 
+                  name="amount"
+                  label="amount"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  placeholder="fDAIx"
+                  color="success"
+                  sx={{width: "100%"}}
+                />
+              </FormGroup>
+            </Form>
+
+            <div className="wrapButtonContainer">
               <DowngradeButton
                 onClick={() => {
                   daiDowngrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                   setAmount("");
                 }}
               >
-                Unwrap fDAIx to fDAI
+                Unwrap to fDAI
               </DowngradeButton>
-            </p>
-          </Form>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {
         txLoading
@@ -167,32 +191,6 @@ export const Unwrap = () => {
         {"Your transaction has been boradcasted! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Unwrap Token</h3>
-      <Form>
-        <FormGroup className="unwrapForm">
-          <FormControl
-            name="amount"
-            value={amount}
-            onChange={handleAmountChange}
-            placeholder="0"
-          ></FormControl>
-        </FormGroup>
-
-        <DowngradeButton
-          onClick={() => {
-            setIsDowngradeButtonLoading(true);
-            daiDowngrade(amount);
-            setTimeout(() => {
-              setIsDowngradeButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Unwrap fDAIx to fDAI
-        </DowngradeButton>
-      </Form>
-      */}
-    </div>
+    </>
   );
 };

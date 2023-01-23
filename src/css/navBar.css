@@ -1,18 +1,46 @@
-.nav-bar{
+.nav-bar {
   width: 20%;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  background-color: black;
+  height: 100vh;
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 0.5px solid #343434;
+}
+
+.name{
+  display: block;
+  padding: 10px;
+  color: white;
+  font-family: 'Bree Serif', sans-serif;
+  font-size: 1.5em;
+  margin-bottom: 5%;
+}
+
+a :hover{
+  color: white;
 }
 
 .nav-items {
+  margin-top: 15px;
   height: 100%;
   width: 100%;
+  /*
   display: flex;
   flex-direction: column;
+  */
   justify-content: space-around;
   align-items: center;
+  color: white;
 }
 
 .nav-item {
-  margin: 10px;
+  width: 100%;
+  /*margin: 10px;*/
   border-radius: 12px;
   padding: 16px 40px;
   font-size: 16px;
@@ -20,7 +48,21 @@
   transition: 0.2s;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  animation: float 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) ;
+  animation: float 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+} 
+
+.nav-item-clicked {
+  width: 100%;
+  /*margin: 10px;*/
+  border-radius: 12px;
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.2s;
+  color: rgba(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.065);
+  cursor: pointer;
+  animation: float 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 } 
 
 .nav-item:hover{
@@ -31,10 +73,10 @@
   z-index: 999;
 }
 
-.activeNavLink {
-  background-color: red;
-}
-
 .icon {
   margin-right: 15px;
+}
+
+.activeNavLink {
+  background-color: red;
 }

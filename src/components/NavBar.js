@@ -1,30 +1,50 @@
 import { NavLink } from 'react-router-dom';
 import { ConnectWallet } from "./ConnectWallet";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTableColumns, faBarsStaggered, faGift } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTableColumns, faBarsStaggered, faGift, faSquarePlus} from '@fortawesome/free-solid-svg-icons';
+import { useLocation } from 'react-router-dom';
 import "../css/navBar.css";
 
 export const NavBar = (props) => {
-  return (
+  const location = useLocation();
+
+  return(
     <nav class='nav-bar'>
-      <a class='nav-logo-and-items'>
-        <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
+      <a class='nav-logo-items'>
+        <a class="name" href="/">CashStream</a>
+        <ConnectWallet connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
-          <NavLink to ="/"> 
-            <p class='nav-item'><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
+          <NavLink to ="/dashboard">
+            {
+              location.pathname == "/dashboard"
+              ? <p className="nav-item-clicked"><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
+              : <p className="nav-item"><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
+            }
           </NavLink>
-          <NavLink to ="/stream"> 
-            <p class='nav-item'><FontAwesomeIcon icon={faBarsStaggered} className="icon"/>Send Stream</p>
+          <NavLink to ="/stream">
+            {
+              location.pathname == "/stream"
+              ? <p className='nav-item-clicked'><FontAwesomeIcon icon={faBarsStaggered} className="icon"/>Send Stream</p>
+              : <p className='nav-item'><FontAwesomeIcon icon={faBarsStaggered} className="icon"/>Send Stream</p>
+            }
           </NavLink>
-          <NavLink to ="/wrap"> 
-            <p class='nav-item'><FontAwesomeIcon icon={faGift} className="icon"/>Wrap/Unwrap</p>
+          <NavLink to ="/wrap">
+            {
+              location.pathname == "/wrap"
+              ? <p className='nav-item-clicked'><FontAwesomeIcon icon={faGift} className="icon"/>Wrap/Unwrap</p>
+              : <p className='nav-item'><FontAwesomeIcon icon={faGift} className="icon"/>Wrap/Unwrap</p>
+            }
           </NavLink>
-          <NavLink activeStyle={{ color:'red' }} to ="/subscriptions"> 
-            <p class='nav-item'> Subscriptions </p>
+          <NavLink to ="/subscriptions">
+            {
+              location.pathname == "/subscriptions"
+              ? <p className='nav-item-clicked'><FontAwesomeIcon icon={faSquarePlus} className="icon"/>Subscriptions</p>
+              : <p className='nav-item'><FontAwesomeIcon icon={faSquarePlus} className="icon"/>Subscriptions</p>
+            }
           </NavLink>
         </div>
       </a>
-    </nav> 
+    </nav>
   );  
 }
 export default NavBar;

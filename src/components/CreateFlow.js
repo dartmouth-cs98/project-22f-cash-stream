@@ -4,14 +4,31 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+//import Typography from '@mui/material/Typography';
+import { MenuItem } from "@mui/material";
 import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import axios from 'axios';
-import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
+import { SnackBar } from "./Snackbar";
 import "../css/stream.css";
+//import { width } from "@mui/system";
+
+const intervals = [
+  {
+    value: 'month',
+    label: '/ month',
+  },
+  {
+    value: 'day',
+    label: '/ day',
+  },
+  {
+    value: 'hour',
+    label: '/ hour',
+  },
+];
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -30,7 +47,7 @@ async function checkTxStatus(resolve, reject){
   }
 }
 
-async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
+async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxMsg) {
 
   console.log(recipient);
 
@@ -91,7 +108,7 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 
       setTxLoading(false);
       setTxCompleted(true);
-      setTxHash(tx.transactionHash);
+      //setTxHash(tx.transactionHash);
     });
   } catch (error) {
     console.error(error);
@@ -102,38 +119,66 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
 
 export const CreateFlow = () => {
   const [recipient, setRecipient] = useState("");
-  //const [isButtonLoading, setIsButtonLoading] = useState(false); //spinner for loading when the button is pressed.
   const [flowRate, setFlowRate] = useState("");
-  const [flowRateDisplay, setFlowRateDisplay] = useState("");
+  const [interval, setInterval] = useState("month");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
+  //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
-
-  //convert wei/sec to fDAIx/month
-  function calculateFlowRate(amount) {
+  
+  function calculateFlowRate(amount, period){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       alert("You can only calculate a flowRate based on a number");
       return;
-    } else if (typeof Number(amount) === "number") {
+    }
+    else{
       if (Number(amount) === 0) {
         return 0;
       }
-      const amountInWei = ethers.BigNumber.from(amount);
-      const monthlyAmount = ethers.utils.formatEther(amountInWei.toString());
-      const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30;
-      return calculatedFlowRate;
+      const amountBN = ethers.BigNumber.from(amount);
+      const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+      var flowRate = 0;
+
+      if(period == "hour"){
+        console.log(Math.round(formattedAmount/3600));
+        flowRate = Math.round(formattedAmount/3600);
+      }
+      else if(period == "day"){
+        flowRate = Math.round(formattedAmount/3600/24);
+      }
+      else if(period == "month"){
+        flowRate = Math.round(formattedAmount/3600/24/30);
+      }
+
+      if(flowRate == 0){
+        alert("The flowrate is too small. Enter a greater amount.");
+        return;
+      }
+
+      if (flowRate > Number.MAX_SAFE_INTEGER){
+        //max safe integer is 2^53-1, 9007199254740000.
+        //Amount greater than 32.425917/hour, 778.22202/day, and 2334666.66/month will throw an overflow error.
+        alert("The flowrate cannot exceed the maximum safe integer value (32/hr, 778/day, 23346/month). Enter a smaller amount. ");
+        return;
+      }
+
+      return flowRate;
     }
   }
 
   function CreateButton({ children, ...props }) {
     return (
-      <Button variant="outlined"
+      <Button 
+        variant="contained"
+        color="primary"
         sx={{
+          height: "45px",
+          width: "100%",
+          color: "white",
           textTransform: "none",
-          color: "success.main", 
-          borderColor: "success.main",
-          ":hover": {borderColor: "success.main"}
+          fontFamily: 'Lato',
+          fontWeight: "700",
+          ":hover": {borderColor: "primary"}
         }}
         {...props}
       >
@@ -142,8 +187,6 @@ export const CreateFlow = () => {
     );
   }
 
-  
-
   const handleRecipientChange = (e) => {
     setRecipient(() => ([e.target.name] = e.target.value));
   };
@@ -151,63 +194,102 @@ export const CreateFlow = () => {
   const handleFlowRateChange = (e) => {
     try {
       setFlowRate(() => ([e.target.name] = e.target.value));
-      let newFlowRateDisplay = calculateFlowRate(e.target.value);
-      setFlowRateDisplay(newFlowRateDisplay.toString());
     } catch {
-      console.error("Flowrate invalid.")
+      console.error("Flowrate invalid.");
     }
   };
 
+  const handleIntervalChange = (e) => {
+    setInterval(() => ([e.target.name] = e.target.value));
+  };
+
   return (
-    <div className="createFlowContainer">
-      <Card sx={{ width: "60%", borderRadius: "15px", marginLeft: "auto", marginRight: "auto"}}>
-        <CardContent>
-          {
-            txLoading
-            ? <Typography variant="h6" component="div" sx={{marginTop: "20px", color: "#424242"}}>Create Stream</Typography>
-            : <Typography variant="h6" component="div" sx={{marginTop: "20px"}}>Create Stream</Typography>
-          }
+    <>
+      <div className="streamContainer">
+        <Card className="flowCard" 
+          sx={{
+            bgcolor: "secondary.dark",
+            borderRadius: "20px",
+          }}>
+          <CardContent>
+            <div className="flowTitle">
+            {
+              txLoading
+              ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
+              : <h5>Send Stream</h5>
+            }
+            </div>
 
-          <Form className="createFlowForm">
-            <FormGroup className="mb-3">
-              <TextField 
-                name="recipient"
-                value={recipient}
-                onChange={handleRecipientChange}
-                placeholder="Recipient wallet address"
-                color="success"
-                sx={{width: "70%", marginBottom: "5px"}}
-              /> 
-            </FormGroup>
+            <Form className="flowForm">
+              <FormGroup>
+                <TextField
+                  label="recipient wallet address"
+                  name="recipient"
+                  value={recipient}
+                  onChange={handleRecipientChange}
+                  placeholder="0x00..."
+                  color="success"
+                  sx={{width: "100%", fontFamily: "Inter"}}
+                /> 
+              </FormGroup>
 
-            <FormGroup className="mb-3">
-              <TextField 
-                name="flowRate"
-                value={flowRate}
-                onChange={handleFlowRateChange}
-                placeholder="Flow rate in wei/second"
-                color="success"
-                sx={{width: "70%", marginBottom: "10px"}}
-              />
-            </FormGroup>
-            
+              <div className="flowRateForm">
+                <FormGroup className="flowAmount">
+                  <TextField
+                    label="amount"
+                    name="flowRate"
+                    value={flowRate}
+                    onChange={handleFlowRateChange}
+                    placeholder="fDAIx"
+                    color="success"
+                    sx={{width: "100%"}}
+                  />
+                </FormGroup>
+
+                <FormGroup className="flowInterval">
+                  <TextField 
+                    select
+                    defaultValue="hour"
+                    value={interval}
+                    onChange={handleIntervalChange}
+                    color="success"
+                    sx={{width: "100%"}}
+                  >
+                    {
+                      intervals.map((option) => (
+                        <MenuItem key={option.value} value={option.value}> {option.label}</MenuItem>
+                      ))
+                    }
+                  </TextField>
+                </FormGroup>
+              </div>
+            </Form>
+
+            <div className="flowButtonContainer">
             {
               recipient == "" || flowRate == "" || txLoading
-              ? <Button variant="outlined" color="success" disabled sx={{textTransform: "none"}}>Create</Button>
+              ? <Button variant="contained" disabled 
+                sx={{textTransform:"none", 
+                  width:"100%", 
+                  height:"45px", 
+                  fontFamily:'Lato',
+                }}>
+                  Send Stream
+                </Button>
               : <CreateButton
                   onClick={() => {
-                    createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxMsg);
                     setRecipient('');
                     setFlowRate('');
                   }}
                 >
-                  Create
-                </CreateButton>
+                  Send Stream
+                </CreateButton>        
             }
-          </Form>
-        </CardContent>
-      </Card>
-
+            </div>
+          </CardContent>
+        </Card>
+      </div>
       {
         txLoading
         ? <TxModal txMsg={txMsg}/>
@@ -218,45 +300,6 @@ export const CreateFlow = () => {
         {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.
       </SnackBar>
-
-      {/*
-      <h3>Create Stream</h3>
-      <Form className="createFlowForm">
-        <FormGroup className="mb-3">
-          <FormControl
-            name="recipient"
-            value={recipient}
-            onChange={handleRecipientChange}
-            placeholder="Enter recipient address"
-          ></FormControl>
-        </FormGroup>
-        <FormGroup className="mb-3">
-          <FormControl
-            name="flowRate"
-            value={flowRate}
-            onChange={handleFlowRateChange}
-            placeholder="Enter a flowRate in wei/second"
-          ></FormControl>
-        </FormGroup>
-        <CreateButton
-          onClick={() => {
-            setIsButtonLoading(true);
-            createNewFlow(recipient, flowRate);
-            setTimeout(() => {
-              setIsButtonLoading(false);
-            }, 1000);
-          }}
-        >
-          Create Stream
-        </CreateButton>
-      </Form>
-
-      <div className="createFlowCalculation">
-        <p>Your flow will be equal to:</p>
-        <p>
-          <b>${flowRateDisplay !== " " ? flowRateDisplay : 0}</b> DAIx/month
-        </p>
-        </div>*/}
-    </div>
+    </>
   );
 };

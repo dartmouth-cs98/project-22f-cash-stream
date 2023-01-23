@@ -1,46 +1,84 @@
-.streamContainer {
-  margin-top: 10%;
-  font-family: sans-serif;
+.streamPage {
+  position: relative;
   margin-left: 20%;
+  height: 100vh;
 }
 
-.createFlowContainer {
-  margin: 3%;
+.streamPage a:link{
+  color: white;
+  text-decoration: underline;
 }
 
-.createFlowForm{
-  margin: 3%;
+.streamPage a:visited{
+  color: white;
+  text-decoration: underline;
 }
 
-.createFlowCalculation {
-  border: 2px solid green;
-  padding: 2.5%;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: 2.5%;
-  margin-bottom: 2.5%;
+.streamToggle{
+  position: absolute;
+  width: 100%;
+  top: 12%;
 }
 
-.deleteFlowContainer{
-  margin: 3%;
+.streamContainer { 
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
-.deleteFlowForm{
-  margin: 3%;
+.flowCard{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  width: 55%;
+  border: 0.5px solid #a9a9a9;
+  background-color: black;
+}
+
+.flowTitle{
+  position: relative;
+  left: 20px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  margin-left: 15%;
+  margin-right: 15%;
+  text-align: left;
+}
+
+.flowForm{
+  margin-top: 3%;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 4%;
+}
+
+.flowButtonContainer{
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.flowRateForm{
+  margin-top: 3%;
+}
+
+.flowAmount{
+  display: inline-block;
+  width: 75%;
+  padding-right: 1%;
+}
+
+.flowInterval{
+  display: inline-block;
+  width: 25%;
+  padding-left: 1%;
 }
 
 .displayNone{
   display: none;
-}
-
-.streamContainer a:link{
-  color: white;
-  text-decoration: underline;
-}
-
-.streamContainer a:visited{
-  color: white;
-  text-decoration: underline;
 }
 
 .txMsg{
