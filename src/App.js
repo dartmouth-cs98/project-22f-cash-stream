@@ -6,6 +6,7 @@ import FlowInfo from "./components/DashboardPage/FlowInfo";
 import { Stream } from "./components/Stream";
 import { WrapUnwrap } from "./components/WrapUnwrap";
 import { Subscriptions } from "./components/ServicesPage/Subscriptions";
+import { Main } from "./components/Main";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from "@mui/material";
 import { BeforeConnect } from "./components/BeforeConnect";
@@ -40,6 +41,7 @@ export default function App() {
         <BrowserRouter>
           <NavBar connected={connected} setConnected={setConnected}/>
           <Routes>
+            <Route exact path="/" element={<Main/>}></Route>
             <Route exact path="/dashboard" element={
                 <FlowInfo connected={connected} setConnected={setConnected}/>
               }>  

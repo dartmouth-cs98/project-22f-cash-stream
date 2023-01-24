@@ -1,0 +1,66 @@
+.mainPage{
+  position: relative;
+  margin-left: 20%;
+  height: 100vh;
+}
+
+.mainContainer{
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-family: 'Lato', sans-serif;
+}
+
+.mainSlogan{
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 4%;
+}
+
+.mainInfo{
+  display: inline-block;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.mainInfoItem{
+  margin-bottom: 25px;
+}
+
+.mainInfoItem img{
+  display: inline-block;
+  margin-right: 30px;
+  margin-bottom: 35px;
+  width: 40px;
+  height: 40px;
+}
+
+.mainInfoText{
+  display: inline-block;
+}
+
+.header{
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 3px;
+}
+
+.content{
+  font-size: 13px;
+  font-weight: 300;
+  margin-left: 25px;
+  color: gray;
+}
+
+.link{
+  font-size: 13px;
+  font-weight: 300;
+  color: gray;
+  text-decoration: underline;
+}
+
+.icon{
+  margin-right: 10px;
+}
