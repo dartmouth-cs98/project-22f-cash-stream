@@ -4,18 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableColumns, faBarsStaggered, faGift, faSquarePlus} from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
 import "../css/navBar.css";
-import { ConnectWalletWagmi} from "./ConnectWalletWagmi"
-
-
 
 export const NavBar = (props) => {
   const location = useLocation();
-
   return(
     <nav class='nav-bar'>
       <a class='nav-logo-and-items'>
-        <ConnectWalletWagmi/>
-        
+        <a class="name" href="/">CashStream</a>
         <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
           <NavLink to ="/dashboard">
