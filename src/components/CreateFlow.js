@@ -13,6 +13,8 @@ import axios from 'axios';
 import { TxModal } from "./Modal";
 import { SnackBar } from "./Snackbar";
 import "../css/stream.css";
+import ether from '../img/ether.png';
+import dai from '../img/dai.png';
 //import { width } from "@mui/system";
 
 const intervals = [
@@ -121,6 +123,7 @@ export const CreateFlow = () => {
   const [recipient, setRecipient] = useState("");
   const [flowRate, setFlowRate] = useState("");
   const [interval, setInterval] = useState("month");
+  const [token, setToken] = useState("ETHx");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
@@ -198,6 +201,10 @@ export const CreateFlow = () => {
       console.error("Flowrate invalid.");
     }
   };
+  
+  const handleTokenChange = (e) => {
+    setToken(() => ([e.target.name] = e.target.value));
+  };
 
   const handleIntervalChange = (e) => {
     setInterval(() => ([e.target.name] = e.target.value));
@@ -212,12 +219,32 @@ export const CreateFlow = () => {
             borderRadius: "20px",
           }}>
           <CardContent>
-            <div className="flowTitle">
-            {
-              txLoading
-              ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
-              : <h5>Send Stream</h5>
-            }
+            <div className="titleContainer">
+              <div className="flowTitle">
+              {
+                txLoading
+                ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
+                : <h5>Send Stream</h5>
+              }
+              </div>
+              <Form className="token">
+                <FormGroup>
+                  <TextField 
+                    select
+                    defaultValue="ETHx"
+                    value={token}
+                    onChange={handleTokenChange}
+                    color="success"
+                  >
+                    <MenuItem key={'ETHx'} value={'ETHx'}>
+                      ETHx
+                    </MenuItem>
+                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
+                      fDAIx
+                    </MenuItem>
+                  </TextField>
+                </FormGroup>
+              </Form>
             </div>
 
             <Form className="flowForm">

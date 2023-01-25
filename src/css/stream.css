@@ -32,21 +32,49 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 3%;
-  padding-top: 5%;
+  padding-top: 4%;
   padding-bottom: 5%;
   width: 55%;
   border: 0.5px solid #a9a9a9;
   background-color: black;
 }
 
+.titleContainer{
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
 .flowTitle{
+  position: relative;
+  display: inline-block;
+  left: 20px;
+  top: 30px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  text-align: left;
+  width: 75%;
+}
+
+.closeTitle{
   position: relative;
   left: 20px;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
+  text-align: left;
   margin-left: 15%;
   margin-right: 15%;
-  text-align: left;
+}
+
+.token{
+  width: 25%;
+  display: inline-block;
+  text-align: right;
+}
+
+.token img{
+  margin-right: 5px;
+  height: 15px;
+  width: 15px;
 }
 
 .flowForm{
