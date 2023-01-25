@@ -2,13 +2,17 @@
 //https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 
 import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { Framework } from "@superfluid-finance/sdk-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import "../css/connectWallet.css";
+import store from "../app/store";
 
 export const ConnectWallet = (props) => {
   
   const [currentAccount, setCurrentAccount] = useState("");
+  let accounts;
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -17,7 +21,9 @@ export const ConnectWallet = (props) => {
         alert("Get MetaMask!");
         return;
       }
-      const accounts = await ethereum.request({
+      // const accounts = await ethereum.request({
+      accounts = await ethereum.request({
+
         method: "eth_requestAccounts"
       });
       console.log("Connected", accounts[0]);
@@ -29,6 +35,8 @@ export const ConnectWallet = (props) => {
       // setupEventListener()
     } catch (error) {
       console.log(error);
+    } finally {
+      updateReduxState(accounts);
     }
   };
   
@@ -73,6 +81,43 @@ export const ConnectWallet = (props) => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [props.connected]);
+
+
+  /*
+   * Function to update Redux state with our now-connected wallet info.
+   */ 
+  const updateReduxState = async(accounts) => {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(provider);
+    console.log(typeof(provider))
+
+    const signer = provider.getSigner();
+    console.log(signer);
+    console.log(typeof(signer))
+
+    const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    console.log(typeof(chainId))
+    const sf = await Framework.create({
+        chainId: Number(chainId),
+        provider: provider
+    });
+    console.log(typeof(sf))
+
+    const connectWalletAction = {
+      type: 'wallet/connect',
+      payload: {
+        provider: provider,
+        signer: signer,
+        chainId: chainId, // string
+        sf: sf, // Framework
+        account: accounts[0]
+      }
+    }
+
+    store.dispatch(connectWalletAction);
+    console.log('dispatched action??')
+  }
 
   return(
     <div>
