@@ -4,6 +4,16 @@
   height: 100vh;
 }
 
+.mainPage a:hover{
+  color: gray;
+  text-decoration: underline;
+}
+
+.mainPage a:visited{
+  color: gray;
+  text-decoration: underline;
+}
+
 .mainContainer{
   position: absolute;
   width: 100%;
@@ -51,14 +61,15 @@
   font-size: 13px;
   font-weight: 300;
   margin-left: 25px;
-  color: gray;
+  color: lightgray;
 }
 
 .link{
   font-size: 13px;
   font-weight: 300;
-  color: gray;
+  color: lightgray;
   text-decoration: underline;
+  display: block;
 }
 
 .icon{

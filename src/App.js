@@ -10,6 +10,7 @@ import { Main } from "./components/Main";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from "@mui/material";
 import { BeforeConnect } from "./components/BeforeConnect";
+import { UserGuide } from "./components/UserGuide";
 
 const theme = createTheme({
   palette: {
@@ -47,6 +48,7 @@ export default function App() {
           <NavBar connected={connected} setConnected={setConnected}/>
           <Routes>
             <Route exact path="/" element={<Main/>}></Route>
+            <Route exact path="/userguide" element={<UserGuide/>}></Route>
             <Route exact path="/dashboard" element={
                 <FlowInfo connected={connected} setConnected={setConnected}/>
               }>  

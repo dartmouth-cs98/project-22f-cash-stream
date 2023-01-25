@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 export const Main = () => {
+
   return(
     <div className="mainPage">
       <div className="mainContainer">
@@ -35,7 +36,10 @@ export const Main = () => {
             </div>
           </div>     
         </div>
-        <p className="link"><FontAwesomeIcon icon={faCircleInfo} className="icon"/>Click here to learn more about how CashStream works!</p>
+        <a href="/userguide" className="link">
+          <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
+          Click here to learn more about how CashStream works!
+        </a>
       </div>
     </div>
   )
