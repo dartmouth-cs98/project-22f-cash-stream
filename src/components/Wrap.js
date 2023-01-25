@@ -267,14 +267,7 @@ export const Wrap = () => {
             borderRadius: "20px",
           }}>
           <CardContent>
-            <div className="wrapTitle">
-              {
-                txLoading
-                ? <h5 sx={{color: "#424242"}}>Wrap</h5>
-                : <h5>Wrap</h5>
-              }
-            </div>
-
+            <div className="wrapTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Wrap</h5> : <h5>Wrap</h5>}</div>
             <Form className="wrapForm">
               <FormGroup>
                 <TextField 

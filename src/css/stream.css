@@ -32,7 +32,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 3%;
-  padding-top: 4%;
+  padding-top: 5%;
   padding-bottom: 5%;
   width: 55%;
   border: 0.5px solid #a9a9a9;
@@ -52,7 +52,7 @@
   font-family: 'Lato', sans-serif;
   font-weight: 700;
   text-align: left;
-  width: 75%;
+  width: 70%;
 }
 
 .closeTitle{
@@ -66,13 +66,13 @@
 }
 
 .token{
-  width: 25%;
-  display: inline-block;
+  width: 30%;
   text-align: right;
+  display: inline-block;
 }
 
 .token img{
-  margin-right: 5px;
+  margin-right: 3px;
   height: 15px;
   width: 15px;
 }

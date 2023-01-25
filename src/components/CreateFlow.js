@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import axios from 'axios';
 import { TxModal } from "./Modal";
 import { SnackBar } from "./Snackbar";
+import { InputAdornment } from '@mui/material';
 import "../css/stream.css";
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
@@ -220,13 +221,7 @@ export const CreateFlow = () => {
           }}>
           <CardContent>
             <div className="titleContainer">
-              <div className="flowTitle">
-              {
-                txLoading
-                ? <h5 sx={{color: "#424242"}}>Send Stream</h5>
-                : <h5>Send Stream</h5>
-              }
-              </div>
+              <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Send Stream</h5> : <h5>Send Stream</h5>}</div>
               <Form className="token">
                 <FormGroup>
                   <TextField 
@@ -235,6 +230,13 @@ export const CreateFlow = () => {
                     value={token}
                     onChange={handleTokenChange}
                     color="success"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {token === "ETHx"?<img src={ether}/>:<img src={dai}/>}
+                        </InputAdornment>
+                      ),
+                    }}
                   >
                     <MenuItem key={'ETHx'} value={'ETHx'}>
                       ETHx

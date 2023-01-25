@@ -133,15 +133,7 @@ export const DeleteFlow = () => {
             borderRadius: "20px",
           }}>
           <CardContent>
-
-            <div className="closeTitle">
-              {
-                txLoading
-                ? <h5 sx={{color: "#424242"}}>Close Stream</h5>
-                : <h5>Close Stream</h5>
-              }
-            </div>
-    
+            <div className="closeTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
             <Form className="flowForm">
               <FormGroup>
                 <TextField 
