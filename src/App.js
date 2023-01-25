@@ -23,6 +23,11 @@ const theme = createTheme({
       dark: "#000000"
     }
   },
+  typography: {
+    fontFamily: [
+      'Lato'
+    ].join(','),
+  },
 });
 
 export default function App() {

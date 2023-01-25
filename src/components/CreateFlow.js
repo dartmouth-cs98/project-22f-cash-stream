@@ -229,7 +229,7 @@ export const CreateFlow = () => {
                   onChange={handleRecipientChange}
                   placeholder="0x00..."
                   color="success"
-                  sx={{width: "100%", fontFamily: "Inter"}}
+                  sx={{width: "100%"}}
                 /> 
               </FormGroup>
 
