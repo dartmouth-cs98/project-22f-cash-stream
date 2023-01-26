@@ -10,8 +10,12 @@ import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
+import { InputAdornment } from '@mui/material';
+import { MenuItem } from "@mui/material";
 import axios from 'axios';
 import "../css/wrapUnwrap.css";
+import ether from '../img/ether.png';
+import dai from '../img/dai.png';
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -94,6 +98,7 @@ export const Unwrap = () => {
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
+  const [token, setToken] = useState("ETHx");
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
@@ -136,6 +141,10 @@ export const Unwrap = () => {
     setAmount(() => ([e.target.name] = e.target.value));
   };
 
+  const handleTokenChange = (e) => {
+    setToken(() => ([e.target.name] = e.target.value));
+  };
+
   return (
     <>
       <div className="wrapUnwrapContainer">
@@ -145,7 +154,34 @@ export const Unwrap = () => {
             borderRadius: "20px",
           }}>
           <CardContent>
-            <div className="wrapTitle">{txLoading?<h5 sx={{color: "#424242"}}>Unwrap</h5>:<h5>Unwrap</h5>}</div>
+            <div className="titleContainer">
+              <div className="wrapTitle">{txLoading?<h5 sx={{color: "#424242"}}>Unwrap</h5>:<h5>Unwrap</h5>}</div>
+              <Form className="token">
+                <FormGroup>
+                  <TextField 
+                    select
+                    defaultValue="ETHx"
+                    value={token}
+                    onChange={handleTokenChange}
+                    color="success"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {token === "ETHx"?<img src={ether}/>:<img src={dai}/>}
+                        </InputAdornment>
+                      ),
+                    }}
+                  >
+                    <MenuItem key={'ETHx'} value={'ETHx'}>
+                      ETHx
+                    </MenuItem>
+                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
+                      fDAIx
+                    </MenuItem>
+                  </TextField>
+                </FormGroup>
+              </Form>
+            </div>
             <Form className="wrapForm">
               <FormGroup>
                 <TextField 
