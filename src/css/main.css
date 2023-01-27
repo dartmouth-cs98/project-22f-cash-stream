@@ -1,53 +1,55 @@
 .mainPage{
   position: relative;
-  margin-left: 20%;
   height: 100vh;
 }
 
 .mainPage a:hover{
-  color: gray;
+  color: lightgray;
   text-decoration: underline;
 }
 
 .mainPage a:visited{
-  color: gray;
+  color: lightgray;
   text-decoration: underline;
 }
 
-.mainContainer{
+.infoContainer{
+  display: inline-block;
   position: absolute;
-  width: 100%;
-  top: 50%;
+  width: 45%;
+  top: 55%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   font-family: 'Lato', sans-serif;
+  padding-top: 3%;
+  padding-bottom: 3%;
 }
 
-.mainSlogan{
+.infoSlogan{
   font-weight: 700;
-  font-size: 22px;
-  margin-bottom: 4%;
+  font-size: 19px;
+  margin-bottom: 8%;
 }
 
-.mainInfo{
+.info{
   display: inline-block;
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
-.mainInfoItem{
+.infoItem{
   margin-bottom: 25px;
 }
 
-.mainInfoItem img{
+.infoItem img{
   display: inline-block;
   margin-right: 30px;
   margin-bottom: 35px;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
 }
 
-.mainInfoText{
+.infoText{
   display: inline-block;
 }
 
@@ -58,7 +60,7 @@
 }
 
 .content{
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 300;
   margin-left: 25px;
   color: lightgray;
@@ -74,4 +76,74 @@
 
 .icon{
   margin-right: 10px;
+}
+
+.graphicContainer{
+  width: 100%;
+}
+
+.bcMessage {
+  width: 100%;
+  background-color: #121212;
+  border-bottom: 0.5px solid #343434;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.bcMessage p {
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  margin-bottom: 0%;
+}
+
+.bcMessage img{
+  display: inline-block;
+  margin-right: 15px;
+}
+
+/*animation from tutorial: https://www.youtube.com/watch?v=Tf6qm5JMUXQ*/
+.animatedNameContainer {
+  position: absolute;
+  left: 25%;
+  top: 48%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.animatedNameContainer p{
+  -ms-transform: translateX(-20%);
+  transform: translateX(-20%);
+}
+
+.mainConnect{
+  -ms-transform: translate(-50%, 150%);
+  transform: translate(-50%, 150%);
+}
+
+.animatedName h1 {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  margin-top: 10px;
+  font-family: 'Bree Serif', sans-serif;
+  font-size: 3em;
+  font-weight: 700;
+}
+
+.animatedName h1:nth-child(1) {
+  color: white;
+}
+
+.animatedName h1:nth-child(2) {
+  color: #10bb35;
+  animation: animate 3s ease-in-out infinite;
+}
+
+@-webkit-keyframes animate
+{
+  0%,100% {
+    clip-path: polygon(0 65%, 11% 73%, 25% 76%, 37% 73%, 49% 65%, 60% 56%, 74% 49%, 88% 53%, 100% 64%, 100% 100%, 0% 100%);
+  }
+  50% {
+    clip-path: polygon(0 65%, 11% 55%, 23% 50%, 35% 55%, 49% 65%, 60% 74%, 75% 79%, 89% 75%, 100% 64%, 100% 100%, 0% 100%);
+  }
 }

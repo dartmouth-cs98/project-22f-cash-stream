@@ -9,7 +9,6 @@ import { Subscriptions } from "./components/ServicesPage/Subscriptions";
 import { Main } from "./components/Main";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from "@mui/material";
-import { BeforeConnect } from "./components/BeforeConnect";
 import { UserGuide } from "./components/UserGuide";
 
 const theme = createTheme({
@@ -32,7 +31,6 @@ const theme = createTheme({
 });
 
 export default function App() {
-
   let [connected, setConnected] = useState(false);
   
   useEffect(() => {
@@ -45,32 +43,37 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <BrowserRouter>
-          <NavBar connected={connected} setConnected={setConnected}/>
+          {
+            connected
+            ? <NavBar connected={connected} setConnected={setConnected}/>
+            : <></>
+          }
           <Routes>
-            <Route exact path="/" element={<Main/>}></Route>
-            <Route exact path="/userguide" element={<UserGuide/>}></Route>
-            <Route exact path="/dashboard" element={
-                <FlowInfo connected={connected} setConnected={setConnected}/>
+            <Route exact path="/" element={
+                connected
+                ? <FlowInfo connected={connected} setConnected={setConnected}/>
+                : <Main connected={connected} setConnected={setConnected}/>
               }>  
             </Route>
             <Route exact path="/stream" element={
-              connected 
-              ? <Stream/>
-              : <BeforeConnect/>
+                connected
+                ? <Stream/>
+                : <Main connected={connected} setConnected={setConnected}/>
               }>
             </Route>
             <Route exact path="/wrap" element={
               connected
               ? <WrapUnwrap/>
-              : <BeforeConnect/>
-              }>  
+              : <Main connected={connected} setConnected={setConnected}/>
+              }>
             </Route>
             <Route exact path="/subscriptions" element={
-                connected
-                ? <Subscriptions/>
-                : <BeforeConnect/>
-              }>  
+              connected
+              ? <Subscriptions/>
+              : <Main connected={connected} setConnected={setConnected}/>
+              }>
             </Route>
+            <Route exact path="/userguide" element={<UserGuide/>}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
