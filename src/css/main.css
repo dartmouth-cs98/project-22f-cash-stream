@@ -105,7 +105,7 @@
 /*animation from tutorial: https://www.youtube.com/watch?v=Tf6qm5JMUXQ*/
 .animatedNameContainer {
   position: absolute;
-  left: 25%;
+  left: 26%;
   top: 48%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);

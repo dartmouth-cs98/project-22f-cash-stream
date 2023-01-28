@@ -55,16 +55,6 @@
   width: 70%;
 }
 
-.closeTitle{
-  position: relative;
-  left: 20px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  text-align: left;
-  margin-left: 15%;
-  margin-right: 15%;
-}
-
 .token{
   width: 30%;
   text-align: right;

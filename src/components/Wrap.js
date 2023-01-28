@@ -14,6 +14,8 @@ import { TxModal } from "./Modal";
 import { InputAdornment } from '@mui/material';
 import { MenuItem } from "@mui/material";
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../css/wrapUnwrap.css";
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
@@ -21,6 +23,9 @@ import dai from '../img/dai.png';
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
+const ETH_contract_address = "0x0000000000000000000000000000000000000000";
+const ETHx_contract_address = "0x5943F705aBb6834Cad767e6E4bB258Bc48D9C947";
+
 let allowance = "0"; //number of tokens the protocol is allowed to wrap
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -119,7 +124,7 @@ async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
 }
 
 //wrap tokens to supertokens
-async function daiUpgrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
+async function daiUpgrade(amt, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
 
   const sf = await Framework.create({
     chainId: 5,
@@ -129,15 +134,21 @@ async function daiUpgrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const signer = provider.getSigner();
-  const DAIx = await sf.loadSuperToken("fDAIx");
+  var superToken = '';
+  if (token == "fDAIx"){
+    superToken = await sf.loadSuperToken("fDAIx");
+  }
+  else{
+    superToken = await sf.loadSuperToken("ETHx");
+  }
 
   try {
-    console.log(`upgrading ${amt} DAI to DAIx`);
+    console.log(`upgrading ${amt} ${token}`);
     setTxLoading(true);
     setTxMsg("Transaction being broadcasted...");
     
     const amtToUpgrade = ethers.utils.parseEther(amt.toString());
-    const upgradeOperation = DAIx.upgrade({
+    const upgradeOperation = superToken.upgrade({
       amount: amtToUpgrade.toString()
     });
 
@@ -145,7 +156,7 @@ async function daiUpgrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
     await upgradeTxn.wait().then(function (tx) {
       console.log(
         `
-        Congrats - you've just upgraded DAI to DAIx!
+        Congrats - you've just upgraded to ${token}
       `
       );
 
@@ -160,7 +171,7 @@ async function daiUpgrade(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
 
       setTxLoading(false);
       setTxCompleted(true);
-      setTxHash(tx.hash);
+      setTxHash(txHash);
     });
   } catch (error) {
     console.error(error);
@@ -179,7 +190,7 @@ export const Wrap = () => {
 
   useEffect(() => {
     getAllowance();
-    if(amount > allowance){
+    if(amount > allowance && token == "fDAIx"){
       setExceedsAllowance(true);
     }
     else{
@@ -295,10 +306,10 @@ export const Wrap = () => {
                     }}
                   >
                     <MenuItem key={'ETHx'} value={'ETHx'}>
-                      ETHx
+                      ETH
                     </MenuItem>
                     <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                      fDAIx
+                      fDAI
                     </MenuItem>
                   </TextField>
                 </FormGroup>
@@ -312,12 +323,18 @@ export const Wrap = () => {
                   label="amount"
                   value={amount}
                   onChange={handleAmountChange}
-                  placeholder="fDAI"
+                  placeholder={token == "fDAIx" ? "fDAI" : "ETH"}
                   color="success"
                   sx={{width: "100%"}}
                 />
               </FormGroup>
             </Form>
+            
+            {
+              token == "fDAIx"
+              ? <p>fDAI <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAIx</p> 
+              : <p>ETH <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETHx</p>
+            }
 
             <div className="wrapButtonContainer">
             {
@@ -326,7 +343,7 @@ export const Wrap = () => {
               ? <div>
                 <ApproveButton
                   onClick={() => {
-                    daiApprove(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    daiApprove(amount, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setAmount("");
                   }}
                 >
@@ -336,11 +353,11 @@ export const Wrap = () => {
               </div>
               : <UpgradeButton
                   onClick={() => {
-                    daiUpgrade(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    daiUpgrade(amount, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setAmount("");
                   }}
                 >
-                  Wrap to fDAIx
+                  Wrap
                 </UpgradeButton>
             }
             </div>    

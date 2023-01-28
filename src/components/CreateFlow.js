@@ -50,7 +50,7 @@ async function checkTxStatus(resolve, reject){
   }
 }
 
-async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, setTxMsg) {
+async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxCompleted, setTxMsg) {
 
   console.log(recipient);
 
@@ -67,8 +67,18 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
       provider: provider
   });
 
-  const fDAIxContract = await sf.loadSuperToken("fDAIx");
-  const fDAIx = fDAIxContract.address;
+  var superToken = '';
+
+  if (token == 'fDAIx'){
+    console.log("creating a fDAIX stream...");
+    const fDAIxContract = await sf.loadSuperToken("fDAIx");
+    superToken = fDAIxContract.address;
+  }
+  else if (token == 'ETHx'){
+    console.log("creating a ETHx stream...");
+    const ETHxContract = await sf.loadSuperToken("ETHx");
+    superToken = ETHxContract.address;
+  }
 
   const accounts = await ethereum.request({ method: "eth_accounts" });
   const account = accounts[0];
@@ -78,7 +88,7 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
       sender: account, 
       receiver: recipient,
       flowRate: flowRate,
-      superToken: fDAIx
+      superToken: superToken
       // userData?: string
     });
 
@@ -92,7 +102,7 @@ async function createNewFlow(recipient, flowRate, setTxLoading, setTxCompleted, 
         `Congrats - you've just created a money stream!
         View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
         Network: Goerli
-        Super Token: fDAIx
+        Token: ${token},
         Receiver: ${recipient},
         FlowRate: ${flowRate},
         Transaction: ${tx.transactionHash}
@@ -307,7 +317,7 @@ export const CreateFlow = () => {
                 </Button>
               : <CreateButton
                   onClick={() => {
-                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), setTxLoading, setTxCompleted, setTxMsg);
+                    createNewFlow(recipient, calculateFlowRate(flowRate, interval), token, setTxLoading, setTxCompleted, setTxMsg);
                     setRecipient('');
                     setFlowRate('');
                   }}
