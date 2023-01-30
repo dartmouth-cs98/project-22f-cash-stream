@@ -13,9 +13,7 @@ export const NavBar = (props) => {
 
   return(
     <nav class='nav-bar'>
-      <a class='nav-logo-and-items'>
-        <ConnectWalletWagmi/>
-        
+      <a class='nav-logo-and-items'>                
         <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
           <NavLink to ="/dashboard">
