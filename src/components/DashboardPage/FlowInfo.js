@@ -52,21 +52,25 @@ class FlowInfo extends Component {
   }
 
   async getTokensInfo(){
-    const accounts = await ethereum.request({ method: "eth_accounts" });
-    const account = accounts[0];
+    // const accounts = await ethereum.request({ method: "eth_accounts" });
+    // const account = accounts[0];
+    const account = this.state.account;
 
     if (account !== undefined){
       if(this.state.account !== ""){
-        //GraphQL Query
+
+        //GraphQL Query (https://console.superfluid.finance/subgraph?_network=goerli)
         const TOKENS_QUERY =
         `
         query {
-          accounts(
-            where: {
-              #enter an address below (NEED TO BE ALL LOWERCASE)
-              id: "${this.state.account}"
-            }
-          ) {
+          accounts(where: {
+          #enter an address below
+          id: "${this.state.account}"
+          })
+          
+          {
+            
+           # Get Account's Tokens Info
             accountTokenSnapshots {
               token {
                 symbol
@@ -75,9 +79,30 @@ class FlowInfo extends Component {
               totalOutflowRate
               totalNetFlowRate
             }
+            
+            # Get Account's Stream History
+            inflows {
+              token{
+                symbol
+              }
+              createdAtTimestamp
+              sender {
+                id
+              }
+              currentFlowRate
+            }
+            outflows {
+              token {
+                symbol
+              }
+              createdAtTimestamp
+              receiver {
+                id
+              }
+              currentFlowRate
+            }
           }
-        }
-
+        }        
         `
 
         const queryResult = await axios({
@@ -88,6 +113,31 @@ class FlowInfo extends Component {
           }
 
         })
+        // Streams Infos:
+        const inflowsData = queryResult.data.data.accounts[0].inflows
+        const outflowsData = queryResult.data.data.accounts[0].outflows
+      
+        // ======== Inflows Data ========
+        inflowsData.map(inflow => {
+          console.log("===========================")
+          console.log("Token:",inflow.token.symbol);
+          console.log("Sender:",inflow.sender.id);
+          console.log("Time:",inflow.createdAtTimestamp);
+          console.log("FlowRate:", inflow.currentFlowRate);
+          console.log("===========================")
+        })
+
+        // ======== Inflows Data ========
+        outflowsData.map(outflow => {
+          console.log("===========================")
+          console.log("Token:",outflow.token.symbol);
+          console.log("Receiver:",outflow.receiver.id);
+          console.log("Time:",outflow.createdAtTimestamp);
+          console.log("FlowRate:", outflow.currentFlowRate);
+          console.log("===========================")
+        })
+
+
 
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
@@ -101,6 +151,7 @@ class FlowInfo extends Component {
           const totalInflowRate = tokensData[i].totalInflowRate
           const totalOutflowRate = tokensData[i].totalOutflowRate
           const totalNetflowRate = tokensData[i].totalNetFlowRate
+          
           // Add current Token To Array
           tokensInfo.push({
               name: tokenSymbol,
@@ -137,6 +188,7 @@ class FlowInfo extends Component {
       this.setState({account: "",});
     }
   }
+
 
   async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
