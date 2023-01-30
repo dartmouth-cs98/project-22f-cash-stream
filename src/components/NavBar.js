@@ -13,9 +13,9 @@ export const NavBar = (props) => {
         <a class="name" href="/">CashStream</a>
         <ConnectWallet class="connectButton" connected={props.connected} setConnected={props.setConnected}/>        
         <div class='nav-items'>    
-          <NavLink to ="/dashboard">
+          <NavLink to ="/">
             {
-              location.pathname == "/dashboard"
+              location.pathname == "/"
               ? <p className="nav-item-clicked"><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
               : <p className="nav-item"><FontAwesomeIcon icon={faTableColumns} className="icon"/>Dashboard</p>
             }

@@ -3,8 +3,7 @@ import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import "../../css/flowInfo.css"
 import { DashboardTable } from './Dashboard';
-import { ConnectWallet } from "../ConnectWallet";
-import { BeforeConnect } from "../BeforeConnect";
+import { Main } from "../Main";
 import axios from 'axios';
 
 class FlowInfo extends Component {
@@ -223,7 +222,7 @@ class FlowInfo extends Component {
         {
         this.props.connected
         ? <div className="flowInfoContainer"> {DashboardTable(this.state.tokensInfo)}</div>
-        : <BeforeConnect/>
+        : <Main/>
         }
 
           {/* <button onClick={this.getTokensInfo}>
