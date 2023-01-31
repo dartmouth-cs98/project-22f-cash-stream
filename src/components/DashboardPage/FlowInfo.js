@@ -52,8 +52,6 @@ class FlowInfo extends Component {
   }
 
   async getTokensInfo(){
-    // const accounts = await ethereum.request({ method: "eth_accounts" });
-    // const account = accounts[0];
     const account = this.state.account;
 
     if (account !== undefined){
@@ -114,36 +112,24 @@ class FlowInfo extends Component {
 
         })
         // Streams Infos:
-        const inflowsData = queryResult.data.data.accounts[0].inflows
-        const outflowsData = queryResult.data.data.accounts[0].outflows
+        // const inflowsData = queryResult.data.data.accounts[0].inflows
       
         // ======== Inflows Data ========
-        inflowsData.map(inflow => {
-          console.log("===========================")
-          console.log("Token:",inflow.token.symbol);
-          console.log("Sender:",inflow.sender.id);
-          console.log("Time:",inflow.createdAtTimestamp);
-          console.log("FlowRate:", inflow.currentFlowRate);
-          console.log("===========================")
-        })
-
-        // ======== Inflows Data ========
-        outflowsData.map(outflow => {
-          console.log("===========================")
-          console.log("Token:",outflow.token.symbol);
-          console.log("Receiver:",outflow.receiver.id);
-          console.log("Time:",outflow.createdAtTimestamp);
-          console.log("FlowRate:", outflow.currentFlowRate);
-          console.log("===========================")
-        })
-
+        // inflowsData.map(inflow => {
+        //   console.log("===========================")
+        //   console.log("Token:",inflow.token.symbol);
+        //   console.log("Sender:",inflow.sender.id);
+        //   console.log("Time:",inflow.createdAtTimestamp);
+        //   console.log("FlowRate:", inflow.currentFlowRate);
+        //   console.log("===========================")
+        // })
 
 
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
         const tokensInfo = []
-
+        console.log("Tokens DATA:",tokensData);
         // Add Tokens Info to Array 
         for (let i=0; i<tokensData.length; i++){
           const tokenSymbol = tokensData[i].token.symbol
@@ -159,23 +145,39 @@ class FlowInfo extends Component {
               inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
               outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
               netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
-              history:[ {
-                date: '2020-01-05',
-                customerId: '11091700',
-                amount: 3,
-              },
-              {
-                date: '2020-01-02',
-                customerId: 'Anonymous',
-                amount: 1,
-              },],
+              history:[],
           })
         }
 
-        // Batch Promise To Constantly Update Balance More Efficiently
-        await Promise.all(tokensInfo.map(async token => (
-          token.balance = await this.getTokenBalance(token.name)
-        )));
+        // // Batch Promise To Constantly Update Balance More Efficiently
+        // await Promise.all(tokensInfo.map(async token => (
+        //   token.balance = await this.getTokenBalance(token.name)
+        // )));
+
+
+        // ======== Outflows Data ========
+        const outflowsData = queryResult.data.data.accounts[0].outflows
+        const outflowsInfo = []
+        outflowsData.map(outflow => {
+          const outflowDetail = {
+            tokenName: outflow.token.symbol, 
+            history:[ {
+              date: outflow.createdAtTimestamp,
+              customerId: outflow.receiver.id,
+              amount: outflow.currentFlowRate,
+            }],
+          }
+          outflowsInfo.push(outflowDetail);
+        })
+
+        // Push Outflow Info into TokensInfo
+        outflowsInfo.map(outflowDetail => {
+          tokensInfo.map(tokenDetail => {
+            if (tokenDetail.name == outflowDetail.tokenName){
+              tokenDetail.history = outflowDetail.history;
+            }
+          })
+        })
 
         // UPDATE STATE
         this.setState({       
@@ -193,8 +195,7 @@ class FlowInfo extends Component {
   async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-      const account = accounts[0]
+      const account = this.state.account;
       const chainId = await window.ethereum.request({ method: "eth_chainId" });
 
       const sf = await Framework.create({
@@ -225,14 +226,6 @@ class FlowInfo extends Component {
         ? <div className="flowInfoContainer"> {DashboardTable(this.state.tokensInfo)}</div>
         : <BeforeConnect/>
         }
-
-          {/* <button onClick={this.getTokensInfo}>
-            Fetch Tokens Data
-          </button> */}
-          {/* <div className="flowInfoContainer">
-            <p>Your current fDAIx: {this.state.fDaixBalance}</p>
-            <p>Your current netFlow: {this.state.fDaixNetflow} wei/second</p>
-          </div> */}
       </div>
     );
   }
