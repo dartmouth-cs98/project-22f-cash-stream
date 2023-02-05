@@ -10,6 +10,8 @@ import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { InputAdornment } from '@mui/material';
 import axios from 'axios';
 import ether from '../img/ether.png';
@@ -106,7 +108,7 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
   }
 }
 
-export const DeleteFlow = () => {
+export const DeleteFlow = (props) => {
   const [recipient, setRecipient] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
@@ -146,6 +148,19 @@ export const DeleteFlow = () => {
   return (
     <>
       <div className="streamContainer">
+        <div className="streamToggle">
+          <ToggleButtonGroup
+            color="primary"
+            value={props.alignment}
+            exclusive
+            onChange={props.handleToggleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
+            <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+
         <Card className="flowCard"
           sx={{
             bgcolor: "secondary.dark",

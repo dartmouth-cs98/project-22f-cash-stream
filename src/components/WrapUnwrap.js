@@ -9,28 +9,16 @@ import "../css/wrapUnwrap.css";
 export const WrapUnwrap = () => {
   const [alignment, setAlignment] = useState('wrap'); //togglebutton options
 
-  const handleChange = (event, newAlignment) => {
+  const handleToggleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
 
   return (
     <div className="wrapUnwrapPage">
-        <div className="wrapToggle">
-          <ToggleButtonGroup
-            color="success"
-            value={alignment}
-            exclusive
-            onChange={handleChange}
-            aria-label="Platform"
-          >
-            <ToggleButton value="wrap" sx={{fontFamily: 'Lato', textTransform: "none"}}>Wrap</ToggleButton>
-            <ToggleButton value="unwrap" sx={{fontFamily: 'Lato', textTransform: "none"}}>Unwrap</ToggleButton>
-          </ToggleButtonGroup>
-        </div>
         {
           alignment === "wrap" 
-          ? <Wrap/> 
-          : <Unwrap/>
+          ? <Wrap alignment={alignment} handleToggleChange={handleToggleChange}/> 
+          : <Unwrap alignment={alignment} handleToggleChange={handleToggleChange}/>
         }
     </div>
   );
