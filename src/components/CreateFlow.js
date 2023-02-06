@@ -58,21 +58,26 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
 
   console.log(recipient);
 
+  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+
   if (typeof window.provider == 'undefined') {
     console.log('Retrieving provider & signer.')
     window.provider = new ethers.providers.Web3Provider(window.ethereum);
     console.log(window.provider);
-
-    window.signer = window.provider.getSigner();
-    console.log(window.signer);
-
-    window.sf = await Framework.create({
-      chainId: Number(chainId),
-      provider: window.provider
-    });
   }
 
-  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+  if (typeof window.signer == 'undefined') {
+    window.signer = provider.getSigner();
+    console.log(window.signer);
+  }
+
+  if (typeof window.sf == 'undefined') {
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: provider
+    });   
+    console.log(window.sf);
+  }
 
   var superToken = '';
 
