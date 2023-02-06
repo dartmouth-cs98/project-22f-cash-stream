@@ -38,26 +38,32 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
 
   console.log(recipient);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider & signer.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
 
-  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    window.signer = provider.getSigner();
+    console.log(window.signer);
 
-  const sf = await Framework.create({
+    window.sf = await Framework.create({
       chainId: Number(chainId),
       provider: provider
-  });
+    });
+  }
+
+  const chainId = await window.ethereum.request({ method: "eth_chainId" });
 
   var superToken = '';
 
   if (token == 'fDAIx'){
     console.log("creating a fDAIX stream...");
-    const fDAIxContract = await sf.loadSuperToken("fDAIx");
+    const fDAIxContract = await window.sf.loadSuperToken("fDAIx");
     superToken = fDAIxContract.address;
   }
   else if (token == 'ETHx'){
     console.log("creating a ETHx stream...");
-    const ETHxContract = await sf.loadSuperToken("ETHx");
+    const ETHxContract = await window.sf.loadSuperToken("ETHx");
     superToken = ETHxContract.address;
   }
 
@@ -65,7 +71,7 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
   const account = accounts[0];
 
   try {
-    const deleteFlowOperation = sf.cfaV1.deleteFlow({
+    const deleteFlowOperation = window.sf.cfaV1.deleteFlow({
       sender: account,
       receiver: recipient,
       superToken: superToken,
@@ -76,7 +82,7 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
     setTxLoading(true);
     setTxMsg("Transaction being broadcasted...");
 
-    const deleteTxn = await deleteFlowOperation.exec(signer);
+    const deleteTxn = await deleteFlowOperation.exec(window.signer);
     await deleteTxn.wait().then(function (tx) {
     console.log(
       `Congrats - you've just deleted your money stream!

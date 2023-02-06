@@ -2,13 +2,17 @@
 //https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 
 import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { Framework } from "@superfluid-finance/sdk-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import "../css/connectWallet.css";
+import store from "../app/store";
 
 export const ConnectWallet = (props) => {
   
   const [currentAccount, setCurrentAccount] = useState("");
+  let accounts = null;
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -17,7 +21,9 @@ export const ConnectWallet = (props) => {
         alert("Get MetaMask!");
         return;
       }
-      const accounts = await ethereum.request({
+      // const accounts = await ethereum.request({
+      accounts = await ethereum.request({
+
         method: "eth_requestAccounts"
       });
       console.log("Connected", accounts[0]);
@@ -27,9 +33,15 @@ export const ConnectWallet = (props) => {
       // Setup listener! This is for the case where a user comes to our site
       // and connected their wallet for the first time.
       // setupEventListener()
+      updateReduxState(accounts);
     } catch (error) {
       console.log(error);
-    }
+    } 
+    // finally {
+    //   if (accounts != null) {
+    //     updateReduxState(accounts);
+    //   }
+    // }
   };
   
   const checkIfWalletIsConnected = async () => {
@@ -73,6 +85,59 @@ export const ConnectWallet = (props) => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [props.connected]);
+
+
+  /*
+   * Function to update Redux state with our now-connected wallet info.
+   */ 
+  const updateReduxState = async(accounts) => {
+  // const updateReduxState = async() => {
+
+    /* 
+     * Assign provider and signer to globally-scoped variables. This is done since
+     * Redux does not support non-immutable type storage.
+     */
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    window.provider = provider;
+
+    console.log(typeof(provider))
+    console.log(window.provider);
+
+    const signer = provider.getSigner();
+    window.signer = signer;
+
+    console.log(typeof(signer))
+    console.log(window.signer);
+
+    /*
+     * chainId is stored as a string (immutable type). Thus, we store it in Redux.
+     */
+    const chainId = await window.ethereum.request({ method: "eth_chainId" });
+    console.log(typeof(chainId))
+
+    const sf = await Framework.create({
+        chainId: Number(chainId),
+        provider: provider
+    });
+
+    console.log(typeof(sf))
+    window.sf = sf;
+
+    const connectWalletAction = {
+      type: 'wallet/connect',
+      payload: {
+        // provider: provider, // TODO: make this global OR create a module 
+        // signer: signer,
+        chainId: chainId, // string
+        // sf: sf, // Framework
+        account: accounts[0]
+      }
+    }
+
+    store.dispatch(connectWalletAction);
+    console.log('dispatched action??')
+  }
 
   return(
     <div>

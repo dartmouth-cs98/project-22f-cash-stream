@@ -58,29 +58,32 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
 
   console.log(recipient);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  console.log(provider);
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider & signer.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
 
-  const signer = provider.getSigner();
-  console.log(signer);
+    window.signer = window.provider.getSigner();
+    console.log(window.signer);
+
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: window.provider
+    });
+  }
 
   const chainId = await window.ethereum.request({ method: "eth_chainId" });
-
-  const sf = await Framework.create({
-      chainId: Number(chainId),
-      provider: provider
-  });
 
   var superToken = '';
 
   if (token == 'fDAIx'){
     console.log("creating a fDAIX stream...");
-    const fDAIxContract = await sf.loadSuperToken("fDAIx");
+    const fDAIxContract = await window.sf.loadSuperToken("fDAIx");
     superToken = fDAIxContract.address;
   }
   else if (token == 'ETHx'){
     console.log("creating a ETHx stream...");
-    const ETHxContract = await sf.loadSuperToken("ETHx");
+    const ETHxContract = await window.sf.loadSuperToken("ETHx");
     superToken = ETHxContract.address;
   }
 
@@ -88,7 +91,7 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
   const account = accounts[0];
 
   try {
-    const createFlowOperation = sf.cfaV1.createFlow({
+    const createFlowOperation = window.sf.cfaV1.createFlow({
       sender: account, 
       receiver: recipient,
       flowRate: flowRate,
@@ -100,7 +103,7 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
     setTxLoading(true);
     setTxMsg("Transaction being broadcasted...");
 
-    const createTxn = await createFlowOperation.exec(signer);
+    const createTxn = await createFlowOperation.exec(window.signer);
     await createTxn.wait().then(function (tx) {
       console.log(
         `Congrats - you've just created a money stream!
