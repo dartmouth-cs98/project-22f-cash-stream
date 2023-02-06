@@ -59,8 +59,8 @@ a :hover{
   font-size: 16px;
   font-weight: bold;
   transition: 0.2s;
-  color: rgba(255, 255, 255);
-  background-color: rgba(255, 255, 255, 0.065);
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
   animation: float 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 } 

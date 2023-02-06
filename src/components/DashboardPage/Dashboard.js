@@ -44,14 +44,14 @@ function Row(props) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                History
+                Streams
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Date</TableCell>
                     <TableCell align="center">To/From </TableCell>
-                    <TableCell align="center"> All Time Flow</TableCell>
+                    {/* <TableCell align="center"> All Time Flow</TableCell> */}
                     <TableCell align="center">Flow Rate</TableCell>
                   </TableRow>
                 </TableHead>
@@ -63,9 +63,6 @@ function Row(props) {
                       </TableCell>
                       <TableCell align="center">{historyRow.customerId}</TableCell>
                       <TableCell align="center">{historyRow.amount}</TableCell>
-                      <TableCell align="center">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -104,7 +101,6 @@ export const DashboardTable = (rows) => {
     <div>
       <h4>
         Goerli Network 
-        {/*console.log(rows)*/}
       </h4>
       
       <TableContainer component={Paper} class='dashboard'>

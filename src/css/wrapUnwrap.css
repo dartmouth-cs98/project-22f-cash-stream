@@ -15,9 +15,6 @@
 }
 
 .wrapToggle{
-  position: absolute;
-  width: 100%;
-  top: 12%;
 }
 
 .wrapUnwrapContainer{
@@ -28,24 +25,42 @@
   transform: translateY(-50%);
 }
 
+.titleContainer{
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
 .wrapCard{
   margin-left: auto;
   margin-right: auto;
   margin-top: 3%;
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 4%;
+  padding-bottom: 4%;
   width: 55%;
-  border: 0.5px solid #a9a9a9;
+  /*border: 0.5px solid #a9a9a9;*/
 }
 
 .wrapTitle{
   position: relative;
+  display: inline-block;
   left: 20px;
+  top: 30px;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
-  margin-left: 15%;
-  margin-right: 15%;
   text-align: left;
+  width: 70%;
+}
+
+.token{
+  width: 30%;
+  text-align: right;
+  display: inline-block;
+}
+
+.token img{
+  margin-right: 3px;
+  height: 15px;
+  width: 15px;
 }
 
 .wrapForm{
@@ -73,4 +88,9 @@
 
 .displayNone{
   display: none;
+}
+
+.arrow{
+  margin-left: 5px;
+  margin-right: 5px;
 }
