@@ -148,10 +148,10 @@ class FlowInfo extends Component {
           })
         }
 
-        // // Batch Promise To Constantly Update Balance More Efficiently
-        // await Promise.all(tokensInfo.map(async token => (
-        //   token.balance = await this.getTokenBalance(token.name)
-        // )));
+        // Batch Promise To Constantly Update Balance More Efficiently
+        await Promise.all(tokensInfo.map(async token => (
+          token.balance = await this.getTokenBalance(token.name)
+        )));
 
 
         // ======== Outflows Data ========
@@ -201,6 +201,15 @@ class FlowInfo extends Component {
         chainId: Number(chainId),
         provider: provider
       });
+
+      // ERROR TRY/CATCH FOR UNOFFICIAL TOKENS THAT CANT GET BALANCE
+      try {
+        const superToken = await sf.loadSuperToken(tokenName);
+      }
+      catch (error) {
+        console.log(tokenName,": Not Found ", error);
+        return "N/A"
+      }
 
       const superToken = await sf.loadSuperToken(tokenName);
       // const fDAIxAddress= superToken.address;
