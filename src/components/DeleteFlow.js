@@ -32,24 +32,30 @@ async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxMsg) {
 
   console.log(recipient);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider & signer.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
+
+    window.signer = provider.getSigner();
+    console.log(window.signer);
+
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: provider
+    });
+  }
 
   const chainId = await window.ethereum.request({ method: "eth_chainId" });
 
-  const sf = await Framework.create({
-      chainId: Number(chainId),
-      provider: provider
-  });
-
-  const fDAIxContract = await sf.loadSuperToken("fDAIx");
+  const fDAIxContract = await window.sf.loadSuperToken("fDAIx");
   const fDAIx = fDAIxContract.address;
 
   const accounts = await ethereum.request({ method: "eth_accounts" });
   const account = accounts[0];
 
   try {
-    const deleteFlowOperation = sf.cfaV1.deleteFlow({
+    const deleteFlowOperation = window.sf.cfaV1.deleteFlow({
       sender: account,
       receiver: recipient,
       superToken: fDAIx
@@ -60,13 +66,13 @@ async function deleteFlow(recipient, setTxLoading, setTxCompleted, setTxMsg) {
     setTxLoading(true);
     setTxMsg("Transaction being broadcasted...");
 
-    const deleteTxn = await deleteFlowOperation.exec(signer);
+    const deleteTxn = await deleteFlowOperation.exec(window.signer);
     await deleteTxn.wait().then(function (tx) {
     console.log(
       `Congrats - you've just deleted your money stream!
        Network: Goerli
        Super Token: fDAIx
-       Sender: ${signer._address}
+       Sender: ${window.signer._address}
        Receiver: ${recipient}
        Transaction: ${tx.transactionHash}
     `
