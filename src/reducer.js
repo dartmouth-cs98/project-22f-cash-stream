@@ -9,6 +9,7 @@ export default function appReducer(state = [], action) {
       console.log(state)
       console.log(action.payload)
       state = action.payload
+      return state
     // Do something here based on the different types of actions
     default:
       // If this reducer doesn't recognize the action type, or doesn't

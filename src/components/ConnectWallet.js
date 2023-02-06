@@ -12,7 +12,7 @@ import store from "../app/store";
 export const ConnectWallet = (props) => {
   
   const [currentAccount, setCurrentAccount] = useState("");
-  let accounts;
+  let accounts = null;
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -33,11 +33,15 @@ export const ConnectWallet = (props) => {
       // Setup listener! This is for the case where a user comes to our site
       // and connected their wallet for the first time.
       // setupEventListener()
+      updateReduxState(accounts);
     } catch (error) {
       console.log(error);
-    } finally {
-      updateReduxState(accounts);
-    }
+    } 
+    // finally {
+    //   if (accounts != null) {
+    //     updateReduxState(accounts);
+    //   }
+    // }
   };
   
   const checkIfWalletIsConnected = async () => {
@@ -87,30 +91,46 @@ export const ConnectWallet = (props) => {
    * Function to update Redux state with our now-connected wallet info.
    */ 
   const updateReduxState = async(accounts) => {
+  // const updateReduxState = async() => {
+
+    /* 
+     * Assign provider and signer to globally-scoped variables. This is done since
+     * Redux does not support non-immutable type storage.
+     */
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    console.log(provider);
+    window.provider = provider;
+
     console.log(typeof(provider))
+    console.log(window.provider);
 
     const signer = provider.getSigner();
-    console.log(signer);
-    console.log(typeof(signer))
+    window.signer = signer;
 
+    console.log(typeof(signer))
+    console.log(window.signer);
+
+    /*
+     * chainId is stored as a string (immutable type). Thus, we store it in Redux.
+     */
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
     console.log(typeof(chainId))
+
     const sf = await Framework.create({
         chainId: Number(chainId),
         provider: provider
     });
+
     console.log(typeof(sf))
+    window.sf = sf;
 
     const connectWalletAction = {
       type: 'wallet/connect',
       payload: {
-        provider: provider,
-        signer: signer,
+        // provider: provider, // TODO: make this global OR create a module 
+        // signer: signer,
         chainId: chainId, // string
-        sf: sf, // Framework
+        // sf: sf, // Framework
         account: accounts[0]
       }
     }
