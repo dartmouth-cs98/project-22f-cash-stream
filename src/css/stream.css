@@ -120,11 +120,10 @@
   top: -60%;
   width: 220%;
   height: 220%;
-  background-color: #ccff33;
   background-repeat: no-repeat;
   background-size: 50% 50%, 50% 50%;
   background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-  background-image: linear-gradient(#70e000, #ccff33), linear-gradient(#70e000, #70e000), linear-gradient(#9ef01a, #9ef01a); 
+  background-image: linear-gradient(#70e000, #ccff33), linear-gradient(#70e000, #70e000); 
   animation: rotate 12s linear infinite;
 }
 
