@@ -1,6 +1,7 @@
 # Cash Stream
 
-Web application to facilitate real-time crypto payment.
+Web application to facilitate real-time crypto payment. 
+Landing Page: http://cashstreamcrypto.com
 
 ## Architecture
 
