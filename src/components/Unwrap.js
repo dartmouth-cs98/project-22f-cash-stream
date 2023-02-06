@@ -12,10 +12,13 @@ import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import { InputAdornment } from '@mui/material';
 import { MenuItem } from "@mui/material";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../css/wrapUnwrap.css";
+import "../css/stream.css";
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 
@@ -100,7 +103,7 @@ async function daiDowngrade(amt, token, setTxLoading, setTxCompleted, setTxHash,
   }
 }
 
-export const Unwrap = () => {
+export const Unwrap = (props) => {
   const [amount, setAmount] = useState("");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
@@ -156,6 +159,19 @@ export const Unwrap = () => {
   return (
     <>
       <div className="wrapUnwrapContainer">
+        <div className="wrapToggle">
+          <ToggleButtonGroup
+            color="success"
+            value={props.alignment}
+            exclusive
+            onChange={props.handleToggleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="wrap" sx={{textTransform: "none"}}>Wrap</ToggleButton>
+            <ToggleButton value="unwrap" sx={{textTransform: "none"}}>Unwrap</ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+
         <Card className="wrapCard" 
           sx={{
             bgcolor: "secondary.dark",
@@ -166,7 +182,8 @@ export const Unwrap = () => {
               <div className="wrapTitle">{txLoading?<h5 sx={{color: "#424242"}}>Unwrap</h5>:<h5>Unwrap</h5>}</div>
               <Form className="token">
                 <FormGroup>
-                  <TextField 
+                  <TextField
+                    className="rainbow"
                     select
                     defaultValue="ETHx"
                     value={token}
@@ -192,7 +209,7 @@ export const Unwrap = () => {
             </div>
             <Form className="wrapForm">
               <FormGroup>
-                <TextField 
+                <TextField
                   name="amount"
                   label="amount"
                   value={amount}

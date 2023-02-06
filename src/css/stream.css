@@ -15,9 +15,9 @@
 }
 
 .streamToggle{
-  position: absolute;
+ /* position: absolute;
   width: 100%;
-  top: 12%;
+  top: 12%;*/
 }
 
 .streamContainer { 
@@ -35,7 +35,7 @@
   padding-top: 4%;
   padding-bottom: 4%;
   width: 55%;
-  border: 0.5px solid #a9a9a9;
+  /*border: 0.5px solid #a9a9a9;*/
   background-color: black;
 }
 
@@ -102,4 +102,45 @@
 .txMsg{
   font-size: small;
   margin-top: 20px;
+}
+
+/*borderEffect: https://freefrontend.com/css-border-animations/*/
+.rainbow{
+	position: relative;
+	z-index: 0;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.rainbow::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  left: -60%;
+  top: -60%;
+  width: 220%;
+  height: 220%;
+  background-repeat: no-repeat;
+  background-size: 50% 50%, 50% 50%;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-image: linear-gradient(#70e000, #ccff33), linear-gradient(#70e000, #70e000); 
+  animation: rotate 12s linear infinite;
+}
+
+.rainbow::after {
+  background: black;
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 2px;
+  top: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-radius: 5px;
+}
+
+@keyframes rotate {
+	100% {
+		transform: rotate(1turn);
+	}
 }

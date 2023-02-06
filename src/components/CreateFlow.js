@@ -13,7 +13,11 @@ import axios from 'axios';
 import { TxModal } from "./Modal";
 import { SnackBar } from "./Snackbar";
 import { InputAdornment } from '@mui/material';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import "../css/stream.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 //import { width } from "@mui/system";
@@ -130,7 +134,7 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
   }
 }
 
-export const CreateFlow = () => {
+export const CreateFlow = (props) => {
   const [recipient, setRecipient] = useState("");
   const [flowRate, setFlowRate] = useState("");
   const [interval, setInterval] = useState("month");
@@ -224,7 +228,20 @@ export const CreateFlow = () => {
   return (
     <>
       <div className="streamContainer">
-        <Card className="flowCard" 
+        <div className="streamToggle">
+          <ToggleButtonGroup
+            color="primary"
+            value={props.alignment}
+            exclusive
+            onChange={props.handleToggleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
+            <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+
+        <Card className="flowCard"
           sx={{
             bgcolor: "secondary.dark",
             borderRadius: "20px",
@@ -234,7 +251,8 @@ export const CreateFlow = () => {
               <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Send Stream</h5> : <h5>Send Stream</h5>}</div>
               <Form className="token">
                 <FormGroup>
-                  <TextField 
+                  <TextField
+                    className="rainbow"
                     select
                     defaultValue="ETHx"
                     value={token}
@@ -329,6 +347,7 @@ export const CreateFlow = () => {
           </CardContent>
         </Card>
       </div>
+
       {
         txLoading
         ? <TxModal txMsg={txMsg}/>

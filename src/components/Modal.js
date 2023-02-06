@@ -23,10 +23,10 @@ export const TxModal = (props) => {
           borderRadius: '15px',
           boxShadow: 10,
           p: 4,
-          outline: 0
+          outline: 0,
         }}>
           <div>
-            <Typography sx={{fontFamily: 'Lato', textAlign: 'center'}}>{props.txMsg}</Typography>
+            <Typography sx={{textAlign: 'center'}}>{props.txMsg}</Typography>
             <LinearProgress color="success" sx={{marginTop: '20px'}}/>
           </div>
         </Box>

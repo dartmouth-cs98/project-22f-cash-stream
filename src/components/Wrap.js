@@ -13,10 +13,13 @@ import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import { InputAdornment } from '@mui/material';
 import { MenuItem } from "@mui/material";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../css/wrapUnwrap.css";
+import "../css/stream.css"
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 
@@ -179,7 +182,7 @@ async function daiUpgrade(amt, token, setTxLoading, setTxCompleted, setTxHash, s
   }
 }
 
-export const Wrap = () => {
+export const Wrap = (props) => {
   const [amount, setAmount] = useState("");
   const [exceedsAllowance, setExceedsAllowance] = useState(false); //checks if the number of tokens to wrap exceeds allowance
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
@@ -281,6 +284,19 @@ export const Wrap = () => {
   return (
     <>
       <div className="wrapUnwrapContainer">
+        <div className="wrapToggle">
+          <ToggleButtonGroup
+            color="success"
+            value={props.alignment}
+            exclusive
+            onChange={props.handleToggleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="wrap" sx={{textTransform: "none"}}>Wrap</ToggleButton>
+            <ToggleButton value="unwrap" sx={{textTransform: "none"}}>Unwrap</ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+
         <Card className="wrapCard" 
           sx={{
             bgcolor: "secondary.dark",
@@ -291,7 +307,8 @@ export const Wrap = () => {
               <div className="wrapTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Wrap</h5> : <h5>Wrap</h5>}</div>
               <Form className="token">
                 <FormGroup>
-                  <TextField 
+                  <TextField
+                    className="rainbow"
                     select
                     defaultValue="ETHx"
                     value={token}

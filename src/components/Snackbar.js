@@ -20,7 +20,7 @@ export const SnackBar = (props) => {
 
   return (
     <Stack spacing={2} sx={{width: '100%'}}>
-      <Snackbar open={props.openSnackBar} autoHideDuration={8000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+      <Snackbar open={props.openSnackBar} autoHideDuration={8000} onClose={handleClose} anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
         <Alert onClose={handleClose} severity="success" children={props.children}/>
       </Snackbar>
     </Stack>
