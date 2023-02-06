@@ -171,7 +171,8 @@ export const DeleteFlow = (props) => {
             <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
             <Form className="token">
               <FormGroup>
-                <TextField 
+                <TextField
+                  className="rainbow"
                   select
                   defaultValue="ETHx"
                   value={token}

@@ -35,15 +35,14 @@ export const Main = (props) => {
               <p className="header">3. &nbsp;&nbsp; Start streaming!</p>
               <p className="content">Open a stream to another crypto wallet</p>
             </div>
-          </div>     
+          </div>
         </div>
         
-        {/* 
         <a href="/userguide" className="link" target="_blank">
           <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
           Click here to learn more about how CashStream works!
         </a>
-        */}
+        
       </div>
 
       <div className="graphicContainer">
@@ -63,11 +62,6 @@ export const Main = (props) => {
         <img src={metamask}></img>
         <p>Connect your wallet to get started!</p>
       </div>
-
-      <a href="/userguide" className="link" target="_blank">
-        <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
-        Learn more about how CashStream works!
-      </a>
     </div>
   )
 }

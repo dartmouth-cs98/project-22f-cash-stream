@@ -265,7 +265,6 @@ export const CreateFlow = (props) => {
                         </InputAdornment>
                       ),
                     }}
-                    sx={{borderRadius: '10px'}}
                   >
                     <MenuItem key={'ETHx'} value={'ETHx'}>
                       ETHx

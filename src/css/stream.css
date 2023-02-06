@@ -108,7 +108,7 @@
 .rainbow{
 	position: relative;
 	z-index: 0;
-	border-radius: 10px;
+	border-radius: 5px;
 	overflow: hidden;
 }
 
@@ -120,11 +120,12 @@
   top: -60%;
   width: 220%;
   height: 220%;
+  background-color: #ccff33;
   background-repeat: no-repeat;
   background-size: 50% 50%, 50% 50%;
   background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-  background-image: linear-gradient(#38b000, #38b000), linear-gradient(#70e000, #70e000); 
-  animation: rotate 16s linear infinite;
+  background-image: linear-gradient(#70e000, #ccff33), linear-gradient(#70e000, #70e000), linear-gradient(#9ef01a, #9ef01a); 
+  animation: rotate 12s linear infinite;
 }
 
 .rainbow::after {
@@ -136,7 +137,7 @@
   top: 2px;
   width: calc(100% - 4px);
   height: calc(100% - 4px);
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 @keyframes rotate {

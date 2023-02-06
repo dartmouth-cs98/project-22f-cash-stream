@@ -19,6 +19,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import "../css/wrapUnwrap.css";
+import "../css/stream.css"
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 
@@ -306,7 +307,8 @@ export const Wrap = (props) => {
               <div className="wrapTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Wrap</h5> : <h5>Wrap</h5>}</div>
               <Form className="token">
                 <FormGroup>
-                  <TextField 
+                  <TextField
+                    className="rainbow"
                     select
                     defaultValue="ETHx"
                     value={token}

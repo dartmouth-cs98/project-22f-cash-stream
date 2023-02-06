@@ -28,13 +28,12 @@
 .infoSlogan{
   font-weight: 700;
   font-size: 19px;
-  margin-bottom: 8%;
+  margin-bottom: 5%;
 }
 
 .info{
   display: inline-block;
   text-align: left;
-  margin-bottom: 5px;
 }
 
 .infoItem{
@@ -67,14 +66,11 @@
 }
 
 .link{
-  position: absolute;
   font-size: 13px;
   font-weight: 300;
-  color: lightgray;
+  color: gray;
   text-decoration: underline;
   display: block;
-  bottom: 5%;
-  right: 3%;
 }
 
 .icon{
