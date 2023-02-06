@@ -110,18 +110,6 @@ class FlowInfo extends Component {
           }
 
         })
-        // Streams Infos:
-        // const inflowsData = queryResult.data.data.accounts[0].inflows
-      
-        // ======== Inflows Data ========
-        // inflowsData.map(inflow => {
-        //   console.log("===========================")
-        //   console.log("Token:",inflow.token.symbol);
-        //   console.log("Sender:",inflow.sender.id);
-        //   console.log("Time:",inflow.createdAtTimestamp);
-        //   console.log("FlowRate:", inflow.currentFlowRate);
-        //   console.log("===========================")
-        // })
 
 
         // Get Subgraph Schema by running the Query in this playground
@@ -160,11 +148,11 @@ class FlowInfo extends Component {
         outflowsData.map(outflow => {
           const outflowDetail = {
             tokenName: outflow.token.symbol, 
-            history:[ {
+            history: {
               date: outflow.createdAtTimestamp,
               customerId: outflow.receiver.id,
-              amount: outflow.currentFlowRate,
-            }],
+              amount: -outflow.currentFlowRate,
+            },
           }
           outflowsInfo.push(outflowDetail);
         })
@@ -173,10 +161,49 @@ class FlowInfo extends Component {
         outflowsInfo.map(outflowDetail => {
           tokensInfo.map(tokenDetail => {
             if (tokenDetail.name == outflowDetail.tokenName){
-              tokenDetail.history = outflowDetail.history;
+              tokenDetail.history.push(outflowDetail.history);
             }
           })
         })
+
+        // ======== Inflows Data ========
+        const inflowsData = queryResult.data.data.accounts[0].inflows
+        const inflowsInfo = []
+        inflowsData.map(inflow => {
+          const inflowDetail = {
+            tokenName: inflow.token.symbol, 
+            history: {
+              date: inflow.createdAtTimestamp,
+              customerId: inflow.sender.id,
+              amount: +inflow.currentFlowRate,
+            },
+          }
+          inflowsInfo.push(inflowDetail);
+        })
+
+        // Push inflow Info into TokensInfo
+        inflowsInfo.map(inflowDetail => {
+          tokensInfo.map(tokenDetail => {
+            if (tokenDetail.name == inflowDetail.tokenName){
+              tokenDetail.history.push(inflowDetail.history);
+            }
+          })
+        })
+
+
+
+        // // ======== Inflows Data ========
+        // const inflowsData = queryResult.data.data.accounts[0].inflows      
+        // const inflowsInfo = []
+        // inflowsData.map(inflow => {
+        //   console.log("===========================")
+        //   console.log("Token:",inflow.token.symbol);
+        //   console.log("Sender:",inflow.sender.id);
+        //   console.log("Time:",inflow.createdAtTimestamp);
+        //   console.log("FlowRate:", inflow.currentFlowRate);
+        //   console.log("===========================")
+        // })
+
 
         // UPDATE STATE
         this.setState({       
