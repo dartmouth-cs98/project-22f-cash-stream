@@ -123,6 +123,7 @@ export const ConnectWallet = (props) => {
 
     console.log(typeof(sf))
     window.sf = sf;
+    console.log(window.sf);
 
     const connectWalletAction = {
       type: 'wallet/connect',
