@@ -14,6 +14,9 @@ import Paper from '@mui/material/Paper';
 // Watch out for this react-icons path
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import "../../css/flowInfo.css";
 
 function Row(props) {
   const { row } = props;
@@ -25,10 +28,27 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.name}
         </TableCell>
+        
         <TableCell align="center">{row.balance}</TableCell>
-        <TableCell align="center">{row.inflow}</TableCell>
-        <TableCell align="center">{row.outflow}</TableCell>
-        <TableCell align="center">{row.netflow}</TableCell>
+        
+        <TableCell align="center">
+          <FontAwesomeIcon icon={faCaretUp} className="up"/>
+          <span className="up">{row.inflow}</span>
+        </TableCell>
+        
+        <TableCell align="center">
+          <FontAwesomeIcon icon={faCaretDown} className="down"/>
+          <span className="down">{row.outflow}</span>
+        </TableCell>
+        
+        <TableCell align="center">
+        {
+          row.netflow.slice(0,1) == '-' 
+          ? <span className="down"><FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.netflow.slice(1, row.netflow.length)}</span>
+          : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.netflow.slice(0, row.netflow.length)}</span>
+        }
+        </TableCell>
+        
         <TableCell align="center"> 
           <IconButton
             aria-label="expand row"
@@ -38,23 +58,28 @@ function Row(props) {
             {open ? <FiArrowUpCircle/> : <FiArrowDownCircle/>}
           </IconButton>
         </TableCell>
-      </TableRow>      
+      </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Streams
-              </Typography>
+              <Typography variant="h6" gutterBottom component="div">Active Streams</Typography>
+
               <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Date</TableCell>
-                    <TableCell align="center">To/From </TableCell>
-                    {/* <TableCell align="center"> All Time Flow</TableCell> */}
-                    <TableCell align="center">Flow Rate</TableCell>
-                  </TableRow>
-                </TableHead>
+                { 
+                  row.history.length == 0
+                  ? <div className="noStream"><p>You have no active streams.</p></div>
+                  : <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Start Date</TableCell>
+                      <TableCell align="center">To/From </TableCell>
+                      {/* <TableCell align="center"> All Time Flow</TableCell> */}
+                      <TableCell align="center">Flow Rate</TableCell>
+                    </TableRow>
+                  </TableHead>
+                }
+
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
@@ -62,7 +87,17 @@ function Row(props) {
                         {historyRow.date}
                       </TableCell>
                       <TableCell align="center">{historyRow.customerId}</TableCell>
-                      <TableCell align="center">{historyRow.amount}</TableCell>
+                      {
+                        historyRow.amount.slice(0,1) == '+'
+                        ? <TableCell align="center" className='up'>
+                          <FontAwesomeIcon icon={faCaretUp} className='up'/>
+                          <span className='up'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                        </TableCell>
+                        : <TableCell align="center" className='down'>
+                        <FontAwesomeIcon icon={faCaretDown} className='down'/>
+                        <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                      </TableCell>
+                      }
                     </TableRow>
                   ))}
                 </TableBody>
@@ -99,9 +134,7 @@ Row.propTypes = {
 export const DashboardTable = (rows) => {
   return (
     <div>
-      <h4>
-        Goerli Network 
-      </h4>
+      <h4>Goerli Network</h4>
       
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">

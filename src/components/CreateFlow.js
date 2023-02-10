@@ -16,8 +16,6 @@ import { InputAdornment } from '@mui/material';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import "../css/stream.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 //import { width } from "@mui/system";

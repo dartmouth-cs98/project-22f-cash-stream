@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
-import "../../css/flowInfo.css"
 import { DashboardTable } from './Dashboard';
 import { Main } from "../Main";
 import axios from 'axios';
+import "../../css/flowInfo.css"
 
 class FlowInfo extends Component {
   constructor(props) {
@@ -111,7 +111,6 @@ class FlowInfo extends Component {
 
         })
 
-
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
@@ -123,21 +122,14 @@ class FlowInfo extends Component {
 
           // const balance = await this.getTokenBalance(tokenSymbol)
           
-          const totalInflowRate = Math.floor(ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30)
-          const formattedInflow = totalInflowRate.toString() + " /mo"
+          var totalInflowRate = ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30;
+          var formattedInflow = " " + parseFloat(totalInflowRate.toFixed(5).toString()) + " /mo";
           
-          const totalOutflowRate = Math.floor(ethers.utils.formatEther(tokensData[i].totalOutflowRate)*3600*24*30)
-          const formattedOutflow = totalOutflowRate.toString() + " /mo"
+          var totalOutflowRate = ethers.utils.formatEther(tokensData[i].totalOutflowRate)*3600*24*30;
+          var formattedOutflow = " " + parseFloat(totalOutflowRate.toFixed(5).toString()) + " /mo";
 
-          const totalNetflowRate = Math.floor(ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30)
-          var formattedNetflow = ""
-
-          if(totalNetflowRate < 0){
-            formattedNetflow = totalNetflowRate.toString() + " /mo"
-          }
-          else{
-            formattedNetflow = totalNetflowRate.toString() + " /mo"
-          }
+          var totalNetflowRate = ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30;
+          const formattedNetflow = parseFloat(totalNetflowRate.toFixed(5).toString()) + " /mo";
           
           // Add current Token To Array
           tokensInfo.push({
@@ -155,18 +147,25 @@ class FlowInfo extends Component {
           token.balance = await this.getTokenBalance(token.name)
         )));
 
-
         // ======== Outflows Data ========
         const outflowsData = queryResult.data.data.accounts[0].outflows
         const outflowsInfo = []
         outflowsData.map(outflow => {
           if(outflow.currentFlowRate != 0){
+
+            const time = outflow.createdAtTimestamp * 1000;
+            const dateObject = new Date(time);
+            const date = dateObject.toDateString();
+
+            const outflowRate = ethers.utils.formatEther(outflow.currentFlowRate)*3600*24*30;
+            const formattedOutflow = "- " + parseFloat(outflowRate.toFixed(5).toString()) + " /mo";
+
             const outflowDetail = {
               tokenName: outflow.token.symbol, 
               history: {
-                date: outflow.createdAtTimestamp,
+                date: date,
                 customerId: outflow.receiver.id,
-                amount: -outflow.currentFlowRate,
+                amount: formattedOutflow,
               },
             }
             outflowsInfo.push(outflowDetail);
@@ -187,12 +186,20 @@ class FlowInfo extends Component {
         const inflowsInfo = []
         inflowsData.map(inflow => {
           if(inflow.currentFlowRate != 0){
+
+            const time = inflow.createdAtTimestamp * 1000;
+            const dateObject = new Date(time);
+            const date = dateObject.toDateString();
+
+            const inflowRate = ethers.utils.formatEther(inflow.currentFlowRate)*3600*24*30;
+            const formattedInflow = "+ " + parseFloat(inflowRate.toFixed(5).toString()) + " /mo";
+
             const inflowDetail = {
               tokenName: inflow.token.symbol, 
               history: {
-                date: inflow.createdAtTimestamp,
+                date: date,
                 customerId: inflow.sender.id,
-                amount: +inflow.currentFlowRate,
+                amount: formattedInflow,
               },
             }
             inflowsInfo.push(inflowDetail);
@@ -231,7 +238,6 @@ class FlowInfo extends Component {
       this.setState({account: "",});
     }
   }
-
 
   async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
