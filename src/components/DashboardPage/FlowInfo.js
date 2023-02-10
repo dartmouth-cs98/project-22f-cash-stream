@@ -116,22 +116,36 @@ class FlowInfo extends Component {
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
         const tokensInfo = []
-        console.log("Tokens DATA:",tokensData);
+        // console.log("Tokens DATA:",tokensData);
         // Add Tokens Info to Array 
         for (let i=0; i<tokensData.length; i++){
           const tokenSymbol = tokensData[i].token.symbol
+
           // const balance = await this.getTokenBalance(tokenSymbol)
-          const totalInflowRate = tokensData[i].totalInflowRate
-          const totalOutflowRate = tokensData[i].totalOutflowRate
-          const totalNetflowRate = tokensData[i].totalNetFlowRate
+          
+          const totalInflowRate = Math.floor(ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30)
+          const formattedInflow = totalInflowRate.toString() + " /mo"
+          
+          const totalOutflowRate = Math.floor(ethers.utils.formatEther(tokensData[i].totalOutflowRate)*3600*24*30)
+          const formattedOutflow = totalOutflowRate.toString() + " /mo"
+
+          const totalNetflowRate = Math.floor(ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30)
+          var formattedNetflow = ""
+
+          if(totalNetflowRate < 0){
+            formattedNetflow = totalNetflowRate.toString() + " /mo"
+          }
+          else{
+            formattedNetflow = totalNetflowRate.toString() + " /mo"
+          }
           
           // Add current Token To Array
           tokensInfo.push({
               name: tokenSymbol,
               // balance: 0,
-              inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
-              outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
-              netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
+              inflow : formattedInflow,
+              outflow: formattedOutflow,
+              netflow: formattedNetflow,
               history:[],
           })
         }
@@ -146,15 +160,17 @@ class FlowInfo extends Component {
         const outflowsData = queryResult.data.data.accounts[0].outflows
         const outflowsInfo = []
         outflowsData.map(outflow => {
-          const outflowDetail = {
-            tokenName: outflow.token.symbol, 
-            history: {
-              date: outflow.createdAtTimestamp,
-              customerId: outflow.receiver.id,
-              amount: -outflow.currentFlowRate,
-            },
+          if(outflow.currentFlowRate != 0){
+            const outflowDetail = {
+              tokenName: outflow.token.symbol, 
+              history: {
+                date: outflow.createdAtTimestamp,
+                customerId: outflow.receiver.id,
+                amount: -outflow.currentFlowRate,
+              },
+            }
+            outflowsInfo.push(outflowDetail);
           }
-          outflowsInfo.push(outflowDetail);
         })
 
         // Push Outflow Info into TokensInfo
@@ -170,15 +186,17 @@ class FlowInfo extends Component {
         const inflowsData = queryResult.data.data.accounts[0].inflows
         const inflowsInfo = []
         inflowsData.map(inflow => {
-          const inflowDetail = {
-            tokenName: inflow.token.symbol, 
-            history: {
-              date: inflow.createdAtTimestamp,
-              customerId: inflow.sender.id,
-              amount: +inflow.currentFlowRate,
-            },
+          if(inflow.currentFlowRate != 0){
+            const inflowDetail = {
+              tokenName: inflow.token.symbol, 
+              history: {
+                date: inflow.createdAtTimestamp,
+                customerId: inflow.sender.id,
+                amount: +inflow.currentFlowRate,
+              },
+            }
+            inflowsInfo.push(inflowDetail);
           }
-          inflowsInfo.push(inflowDetail);
         })
 
         // Push inflow Info into TokensInfo
@@ -189,8 +207,6 @@ class FlowInfo extends Component {
             }
           })
         })
-
-
 
         // // ======== Inflows Data ========
         // const inflowsData = queryResult.data.data.accounts[0].inflows      
@@ -203,7 +219,6 @@ class FlowInfo extends Component {
         //   console.log("FlowRate:", inflow.currentFlowRate);
         //   console.log("===========================")
         // })
-
 
         // UPDATE STATE
         this.setState({       
