@@ -14,6 +14,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { InputAdornment } from '@mui/material';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 
@@ -254,6 +256,11 @@ export const DeleteFlow = (props) => {
         ? <TxModal txMsg={txMsg}/>
         : <div className="displayNone"/>
       }
+      
+      <a href="/userguide" className="link help" target="_blank">
+        <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
+        Having trouble?
+      </a>
 
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
         {"Transaction successful! View on block explorer "}

@@ -144,3 +144,9 @@
 		transform: rotate(1turn);
 	}
 }
+
+.help{
+  position: absolute;
+  bottom: 4%;
+  right: 4%;
+}

@@ -16,6 +16,8 @@ import { InputAdornment } from '@mui/material';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import "../css/stream.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 //import { width } from "@mui/system";
@@ -306,7 +308,7 @@ export const CreateFlow = (props) => {
                     name="flowRate"
                     value={flowRate}
                     onChange={handleFlowRateChange}
-                    placeholder="fDAIx"
+                    placeholder={token === "ETHx"?"ETHx":"fDAIx"}
                     color="success"
                     sx={{width: "100%"}}
                   />
@@ -362,7 +364,12 @@ export const CreateFlow = (props) => {
         ? <TxModal txMsg={txMsg}/>
         : <div className="displayNone"/>
       }
-
+      
+      <a href="/userguide" className="link help" target="_blank">
+        <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
+        Having trouble?
+      </a>
+      
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
         {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.

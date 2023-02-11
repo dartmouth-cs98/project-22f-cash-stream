@@ -275,7 +275,7 @@ class FlowInfo extends Component {
 
   render() {
     return (
-      <div>
+      <div className="hello">
         {
         this.props.connected
         ? <div className="dashboardPage">

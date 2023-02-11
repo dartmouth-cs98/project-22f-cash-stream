@@ -1,7 +1,7 @@
 import "../css/main.css";
-import metamask from '../img/metamask.png';
-import tokens from '../img/tokens.png';
-import send from '../img/send.png';
+import metamask from '../img/metamask.png'; {/*https://icons8.com/icon/Oi106YG9IoLv/metamask-logo*/}
+import tokens from '../img/tokens.png'; {/*https://icons8.com/icon/D6Z4XXSIK1kE/token*/}
+import send from '../img/send.png'; {/*https://icons8.com/icon/HxucuUypRwuW/send*/}
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { ConnectWallet } from "./ConnectWallet";
@@ -16,21 +16,21 @@ export const Main = (props) => {
         </div>
         <div className="info">
           <div className="infoItem">
-            <img src={metamask}/> {/*https://icons8.com/icon/Oi106YG9IoLv/metamask-logo*/}
+            <img src={metamask}/>
             <div className="infoText">
               <p className="header">1. &nbsp;&nbsp; Connect to wallet</p>
               <p className="content">Connect to Web3Provider (Metamask)</p>
             </div>
           </div>
           <div className="infoItem">
-            <img src={tokens}/> {/*https://icons8.com/icon/D6Z4XXSIK1kE/token*/}
+            <img src={tokens}/>
             <div className="infoText">
               <p className="header">2. &nbsp;&nbsp; Wrap your tokens</p>
               <p className="content">Convert your tokens to wrapped tokens</p>
             </div>
           </div>
           <div className="infoItem">
-            <img src={send}/> {/*https://icons8.com/icon/HxucuUypRwuW/send*/}
+            <img src={send}/>
             <div className="infoText">
               <p className="header">3. &nbsp;&nbsp; Start streaming!</p>
               <p className="content">Open a stream to another crypto wallet</p>

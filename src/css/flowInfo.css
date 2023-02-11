@@ -1,26 +1,23 @@
-
-.MuiTableHead-root{
-  color: white;
-}
-
 .dashboardPage{
   position: relative;
   margin-left: 20%;
   height: 100vh;
+  overflow: hidden;
 }
 
 .dashboardContainer {
   position: absolute;
-  width: 100%;
   top: 50%;
   -ms-transform: translateY(-40%);
   transform: translateY(-40%);
   text-align: left;
+  width: 100%;
 }
 
 .dashboard {
-  margin: auto;
   display: flex;
+  margin-left: auto;
+  margin-right: auto;
   width: 70%;
   color: white;
   border-radius: 8px;
