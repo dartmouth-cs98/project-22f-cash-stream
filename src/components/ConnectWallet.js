@@ -80,12 +80,10 @@ export const ConnectWallet = (props) => {
     const identiconImageBuffer = identicon.generateSync({ id: 'put wallet address here', size: 50})  
     return identiconImageBuffer;
   };
-  
 
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [props.connected]);
-
 
   /*
    * Function to update Redux state with our now-connected wallet info.

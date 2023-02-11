@@ -261,10 +261,11 @@ class FlowInfo extends Component {
       // const fDAIxAddress= superToken.address;
       // ================================================================
       // Real Time Balance
+
       const realTimeBalance= await superToken.realtimeBalanceOf({
-          account: account,
-          // timestamp: string,
-          providerOrSigner: signer
+        account: account,
+        // timestamp: string,
+        providerOrSigner: signer
       });
 
       const superTokenBalance = realTimeBalance.availableBalance;

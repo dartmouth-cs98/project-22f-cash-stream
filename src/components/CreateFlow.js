@@ -159,8 +159,11 @@ export const CreateFlow = (props) => {
       if (Number(amount) === 0) {
         return 0;
       }
-      const amountBN = ethers.BigNumber.from(amount);
-      const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+      console.log("calculating flowrate...");
+      //const amountBN = ethers.BigNumber.from(amount);
+      console.log("Here?");
+      //const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+      const formattedAmount = amount * Math.pow(10, 18);
       var flowRate = 0;
 
       if(period == "hour"){

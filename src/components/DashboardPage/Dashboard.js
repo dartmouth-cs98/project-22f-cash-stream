@@ -141,6 +141,8 @@ Row.propTypes = {
 export const DashboardTable = (rows) => {
   return (
     <div>
+      <h4 className='mb-3 title dashboardTitle'>Tokens</h4>
+
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -155,7 +157,7 @@ export const DashboardTable = (rows) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.name} row={row} /> 
+              <Row key={row.name} row={row}/> 
             ))}
           </TableBody>
         </Table>
