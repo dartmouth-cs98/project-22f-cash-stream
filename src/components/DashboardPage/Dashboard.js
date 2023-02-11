@@ -14,6 +14,11 @@ import Paper from '@mui/material/Paper';
 // Watch out for this react-icons path
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import "../../css/flowInfo.css";
+import ether from '../../img/ether.png';
+import dai from '../../img/dai.png';
 
 function Row(props) {
   const { row } = props;
@@ -23,12 +28,34 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell component="th" scope="row">
+          {
+            row.name == "ETHx"
+            ? <img src={ether} className="img"/>
+            : <img src={dai} className="img"/>
+          }       
           {row.name}
         </TableCell>
+        
         <TableCell align="center">{row.balance}</TableCell>
-        <TableCell align="center">{row.inflow}</TableCell>
-        <TableCell align="center">{row.outflow}</TableCell>
-        <TableCell align="center">{row.netflow}</TableCell>
+        
+        <TableCell align="center">
+          <FontAwesomeIcon icon={faCaretUp} className="up"/>
+          <span className="up">{row.formattedInflow}</span>
+        </TableCell>
+        
+        <TableCell align="center">
+          <FontAwesomeIcon icon={faCaretDown} className="down"/>
+          <span className="down">{row.formattedOutflow}</span>
+        </TableCell>
+        
+        <TableCell align="center">
+        {
+          row.formattedNetflow.slice(0,1) == '-' 
+          ? <span className="down"><FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.formattedNetflow.slice(1, row.formattedNetflow.length)}</span>
+          : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
+        }
+        </TableCell>
+        
         <TableCell align="center"> 
           <IconButton
             aria-label="expand row"
@@ -38,31 +65,46 @@ function Row(props) {
             {open ? <FiArrowUpCircle/> : <FiArrowDownCircle/>}
           </IconButton>
         </TableCell>
-      </TableRow>      
+      </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Streams
-              </Typography>
+              <Typography variant="h6" gutterBottom component="div">Active Streams</Typography>
+
               <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Date</TableCell>
-                    <TableCell align="center">To/From </TableCell>
-                    {/* <TableCell align="center"> All Time Flow</TableCell> */}
-                    <TableCell align="center">Flow Rate</TableCell>
-                  </TableRow>
-                </TableHead>
+                { 
+                  row.history.length == 0
+                  ? <span className="noStream"><p>You have no active streams.</p></span>
+                  : <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Start Date</TableCell>
+                      <TableCell align="center">To/From </TableCell>
+                      {/* <TableCell align="center"> All Time Flow</TableCell> */}
+                      <TableCell align="center">Flow Rate</TableCell>
+                    </TableRow>
+                  </TableHead>
+                }
+
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
                       <TableCell component="th" scope="row" align="center"> 
                         {historyRow.date}
                       </TableCell>
-                      <TableCell align="center">{historyRow.customerId}</TableCell>
-                      <TableCell align="center">{historyRow.amount}</TableCell>
+                      <TableCell align="center">{historyRow.id}</TableCell>
+                      {
+                        historyRow.amount.slice(0,1) == '+'
+                        ? <TableCell align="center" className='up'>
+                          <FontAwesomeIcon icon={faCaretUp} className='up'/>
+                          <span className='up'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                        </TableCell>
+                        : <TableCell align="center" className='down'>
+                        <FontAwesomeIcon icon={faCaretDown} className='down'/>
+                        <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                      </TableCell>
+                      }
                     </TableRow>
                   ))}
                 </TableBody>
@@ -77,21 +119,21 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    balance: PropTypes.number.isRequired,
-    outflow: PropTypes.number.isRequired,
-    inflow: PropTypes.number.isRequired,
+    //balance: PropTypes.string.isRequired,
+    formattedOutflow: PropTypes.string.isRequired,
+    formattedInflow: PropTypes.string.isRequired,
 
     history: PropTypes.arrayOf(
       PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
+        amount: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
       }),
     ).isRequired,
-
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    netflow: PropTypes.number.isRequired,
+    
+    //name: PropTypes.string.isRequired,
+    //price: PropTypes.number.isRequired,
+    //netflow: PropTypes.number.isRequired,
   }).isRequired,
 };
 
@@ -99,10 +141,8 @@ Row.propTypes = {
 export const DashboardTable = (rows) => {
   return (
     <div>
-      <h4>
-        Goerli Network 
-      </h4>
-      
+      <h4 className='mb-3 title dashboardTitle'>Tokens</h4>
+
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -117,7 +157,7 @@ export const DashboardTable = (rows) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.name} row={row} /> 
+              <Row key={row.name} row={row}/> 
             ))}
           </TableBody>
         </Table>

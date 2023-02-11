@@ -161,8 +161,11 @@ export const CreateFlow = (props) => {
       if (Number(amount) === 0) {
         return 0;
       }
-      const amountBN = ethers.BigNumber.from(amount);
-      const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+      console.log("calculating flowrate...");
+      //const amountBN = ethers.BigNumber.from(amount);
+      console.log("Here?");
+      //const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+      const formattedAmount = amount * Math.pow(10, 18);
       var flowRate = 0;
 
       if(period == "hour"){
@@ -305,7 +308,7 @@ export const CreateFlow = (props) => {
                     name="flowRate"
                     value={flowRate}
                     onChange={handleFlowRateChange}
-                    placeholder="fDAIx"
+                    placeholder={token === "ETHx"?"ETHx":"fDAIx"}
                     color="success"
                     sx={{width: "100%"}}
                   />
@@ -361,7 +364,12 @@ export const CreateFlow = (props) => {
         ? <TxModal txMsg={txMsg}/>
         : <div className="displayNone"/>
       }
-
+      
+      <a href="/userguide" className="link help" target="_blank">
+        <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
+        Having trouble?
+      </a>
+      
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
         {"Transaction successful! View on block explorer "}
         <a href={`https://goerli.etherscan.io/tx/${txHash}`}>here</a>.

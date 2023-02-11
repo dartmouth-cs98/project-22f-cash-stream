@@ -1,9 +1,51 @@
-.flowInfoContainer {
+.dashboardPage{
+  position: relative;
   margin-left: 20%;
-  margin-top: 20%;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.flowInfoContainer p {
-  font-size:xx-large;
-  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+.dashboardContainer {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-40%);
+  transform: translateY(-40%);
+  text-align: left;
+  width: 100%;
+}
+
+.dashboard {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  color: white;
+  border-radius: 8px;
+  border: solid rgba(255, 255, 255, 0.636) 0.5px;
+  background-color: black;
+}
+
+.dashboardTitle{
+  position: relative;
+  left: 20%;
+}
+
+.noStream {
+  text-align: center;
+  font-size: 15px;
+  font-family: "Lato";
+}
+
+.up{
+  color: #a7c957;
+}
+
+.down{
+  color: #ff686b;
+}
+
+.img{
+  height: 15px;
+  width: 15px;
+  margin-right: 10px;
 }

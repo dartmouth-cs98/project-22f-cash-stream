@@ -20,7 +20,7 @@
   top: 12%;*/
 }
 
-.streamContainer { 
+.streamContainer {
   position: absolute;
   width: 100%;
   top: 50%;
@@ -37,6 +37,7 @@
   width: 55%;
   /*border: 0.5px solid #a9a9a9;*/
   background-color: black;
+  border: 1px solid #343434;
 }
 
 .titleContainer{
@@ -143,4 +144,10 @@
 	100% {
 		transform: rotate(1turn);
 	}
+}
+
+.help{
+  position: absolute;
+  bottom: 4%;
+  right: 4%;
 }

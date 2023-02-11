@@ -40,9 +40,10 @@ export const UserGuide = () => {
             Wrapped tokens provides these ERC-20 tokens with additional functionality, in this case providing the interoperability to be streamed. 
             A small gas fee will be charged when wrapping or unwrapping tokens.</p>
 
-            <p className="emphasize">When wrapping tokens, users must also set an allowance for the smart contract to access and manage their wrapped tokens.</p> 
+            <p className="emphasize">When wrapping fDAI, users must also set an allowance for the smart contract to access and manage their wrapped tokens.</p> 
             <p>This is an important security measure as it ensures that the smart contract does not have unlimited access to the user's assets. 
             The allowance can be easily modified or revoked by the user at any time.</p>
+            <p>There is no allowance for ETH, an etherium native token.</p>
           </div>
         </div>
 
@@ -51,7 +52,7 @@ export const UserGuide = () => {
           <div className="entryContent">
             <p>Through our platform, you can initiate a payment stream for recurring payments. 
               In this way, money is constantly being streamed (at regular intervals &lt;3 seconds), from you to the recepient. 
-              <span className="emphasize">You can send payments in Ethereum (ETH) or a stablecoin (DAI).</span></p>
+              <span className="emphasize"> You can send payments in Ethereum (ETH) or a stablecoin (DAI).</span></p>
             <p>Once you have wrapped your tokens, you can use our platform to create a new payment stream. 
               This functionality requires the following parameters: the recipient's Ethereum address, the amount of tokens to be sent, and the interval duration or the time to stop the stream.</p>
             
@@ -90,7 +91,7 @@ export const UserGuide = () => {
               </tbody>
             </table>
 
-            <p>The maximum amount ensures that the protocol does not recieve values greater than 2^53-1, the <code>MAX_SAFE_INTEGER</code> in <code>javascript</code>. 
+            <p>The maximum amount ensures that the protocol does not recieve values greater than 2<sup>53</sup>-1, the <code>MAX_SAFE_INTEGER</code> in <code>javascript</code>. 
             Amount smaller than the minimum amount will round down to zero when converted to wei, the smallest unit in cryptocurrency.</p>
           </div>
         </div>

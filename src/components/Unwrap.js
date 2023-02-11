@@ -17,6 +17,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import "../css/wrapUnwrap.css";
 import "../css/stream.css";
 import ether from '../img/ether.png';
@@ -246,6 +247,10 @@ export const Unwrap = (props) => {
         ? <TxModal txMsg={txMsg}/>
         : <div className="displayNone"/>
       }
+      <a href="/userguide" className="link help" target="_blank">
+        <FontAwesomeIcon icon={faCircleInfo} className="icon"/>
+        Having trouble?
+      </a>
 
       <SnackBar openSnackBar={txCompleted} setOpenSnackBar={setTxCompleted}>
         {"Your transaction has been boradcasted! View on block explorer "}

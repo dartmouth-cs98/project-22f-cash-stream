@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
-import "../../css/flowInfo.css"
 import { DashboardTable } from './Dashboard';
 import { Main } from "../Main";
 import axios from 'axios';
+import "../../css/flowInfo.css"
 
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      fDaixBalance:0,
+      //fDaixBalance: 0,
       account: '',
       tokensInfo: []
     }
-
-    //this.getTokensInfo = this.getTokensInfo.bind(this)
-    //this.getTokenBalance= this.getTokenBalance.bind(this)
   }
 
   async componentDidMount(){
+    await this.getWalletBalance();
+    await this.getTokensInfo();
 
-    await this.getWalletBalance()
-    
     this.timerID = setInterval(
       () => {
         if (this.props.connected) {
@@ -111,27 +108,34 @@ class FlowInfo extends Component {
 
         })
 
-
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
         const tokensInfo = []
-        console.log("Tokens DATA:",tokensData);
+        // console.log("Tokens DATA:",tokensData);
         // Add Tokens Info to Array 
         for (let i=0; i<tokensData.length; i++){
           const tokenSymbol = tokensData[i].token.symbol
+
           // const balance = await this.getTokenBalance(tokenSymbol)
-          const totalInflowRate = tokensData[i].totalInflowRate
-          const totalOutflowRate = tokensData[i].totalOutflowRate
-          const totalNetflowRate = tokensData[i].totalNetFlowRate
+          
+          var totalInflowRate = ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30;
+          var formattedInflow = " " + parseFloat(totalInflowRate.toFixed(5).toString()) + " /mo";
+          
+          var totalOutflowRate = ethers.utils.formatEther(tokensData[i].totalOutflowRate)*3600*24*30;
+          var formattedOutflow = " " + parseFloat(totalOutflowRate.toFixed(5).toString()) + " /mo";
+
+          var totalNetflowRate = ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30;
+          var formattedNetflow = parseFloat(totalNetflowRate.toFixed(5).toString()) + " /mo";
           
           // Add current Token To Array
           tokensInfo.push({
               name: tokenSymbol,
               // balance: 0,
-              inflow : ethers.utils.formatEther(totalInflowRate).substring(0,30),
-              outflow: ethers.utils.formatEther(totalOutflowRate).substring(0,30),
-              netflow: ethers.utils.formatEther(totalNetflowRate).substring(0,30),
+              formattedInflow : formattedInflow,
+              formattedOutflow: formattedOutflow,
+              netflow: tokensData[i].totalNetFlowRate,
+              formattedNetflow: formattedNetflow,
               history:[],
           })
         }
@@ -141,20 +145,29 @@ class FlowInfo extends Component {
           token.balance = await this.getTokenBalance(token.name)
         )));
 
-
         // ======== Outflows Data ========
         const outflowsData = queryResult.data.data.accounts[0].outflows
         const outflowsInfo = []
         outflowsData.map(outflow => {
-          const outflowDetail = {
-            tokenName: outflow.token.symbol, 
-            history: {
-              date: outflow.createdAtTimestamp,
-              customerId: outflow.receiver.id,
-              amount: -outflow.currentFlowRate,
-            },
+          if(outflow.currentFlowRate != 0){
+
+            const time = outflow.createdAtTimestamp * 1000;
+            const dateObject = new Date(time);
+            const date = dateObject.toDateString();
+
+            const outflowRate = ethers.utils.formatEther(outflow.currentFlowRate)*3600*24*30;
+            const formattedOutflow = "- " + parseFloat(outflowRate.toFixed(5).toString()) + " /mo";
+
+            const outflowDetail = {
+              tokenName: outflow.token.symbol, 
+              history: {
+                date: date,
+                id: outflow.receiver.id,
+                amount: formattedOutflow,
+              },
+            }
+            outflowsInfo.push(outflowDetail);
           }
-          outflowsInfo.push(outflowDetail);
         })
 
         // Push Outflow Info into TokensInfo
@@ -170,15 +183,25 @@ class FlowInfo extends Component {
         const inflowsData = queryResult.data.data.accounts[0].inflows
         const inflowsInfo = []
         inflowsData.map(inflow => {
-          const inflowDetail = {
-            tokenName: inflow.token.symbol, 
-            history: {
-              date: inflow.createdAtTimestamp,
-              customerId: inflow.sender.id,
-              amount: +inflow.currentFlowRate,
-            },
+          if(inflow.currentFlowRate != 0){
+
+            const time = inflow.createdAtTimestamp * 1000;
+            const dateObject = new Date(time);
+            const date = dateObject.toDateString();
+
+            const inflowRate = ethers.utils.formatEther(inflow.currentFlowRate)*3600*24*30;
+            const formattedInflow = "+ " + parseFloat(inflowRate.toFixed(5).toString()) + " /mo";
+
+            const inflowDetail = {
+              tokenName: inflow.token.symbol, 
+              history: {
+                date: date,
+                id: inflow.sender.id,
+                amount: formattedInflow,
+              },
+            }
+            inflowsInfo.push(inflowDetail);
           }
-          inflowsInfo.push(inflowDetail);
         })
 
         // Push inflow Info into TokensInfo
@@ -189,8 +212,6 @@ class FlowInfo extends Component {
             }
           })
         })
-
-
 
         // // ======== Inflows Data ========
         // const inflowsData = queryResult.data.data.accounts[0].inflows      
@@ -204,7 +225,6 @@ class FlowInfo extends Component {
         //   console.log("===========================")
         // })
 
-
         // UPDATE STATE
         this.setState({       
           tokensInfo:tokensInfo     
@@ -216,7 +236,6 @@ class FlowInfo extends Component {
       this.setState({account: "",});
     }
   }
-
 
   async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -242,23 +261,28 @@ class FlowInfo extends Component {
       // const fDAIxAddress= superToken.address;
       // ================================================================
       // Real Time Balance
+
       const realTimeBalance= await superToken.realtimeBalanceOf({
-          account: account,
-          // timestamp: string,
-          providerOrSigner: signer
+        account: account,
+        // timestamp: string,
+        providerOrSigner: signer
       });
 
       const superTokenBalance = realTimeBalance.availableBalance;
-      const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,30);
+      const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,13);
       return balanceInComa
   }
 
   render() {
     return (
-      <div>
+      <div className="hello">
         {
         this.props.connected
-        ? <div className="flowInfoContainer"> {DashboardTable(this.state.tokensInfo)}</div>
+        ? <div className="dashboardPage">
+          <div className="dashboardContainer">
+            {DashboardTable(this.state.tokensInfo)}
+          </div>
+        </div>
         : <Main/>
         }
       </div>
