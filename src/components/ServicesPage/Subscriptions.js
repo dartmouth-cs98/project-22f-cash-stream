@@ -17,10 +17,7 @@ export const ServiceCard = () => {
                 <div class= 'service-price'>
                     $9/month
                 </div>
-                </div>
-               
-
-      
+                </div>          
             </div>
 
             <a href="/" target='_blank' class ='service-right'>
@@ -35,16 +32,15 @@ export const ServiceCard = () => {
 
 
 export const Subscriptions = () => {
-    return (
-        <div class='subscriptions-container'>
-            <h2>Hi, I am The Subscripton Page</h2>
-            <ServiceCard/>
-            <ServiceCard/>
-            <ServiceCard/>
-            <ServiceCard/>
-
-        </div>
-    )
-    }
+  return (
+      <div class='subscriptions-container'>
+        <h2>Hi, I am The Subscripton Page</h2>
+        <ServiceCard/>
+        <ServiceCard/>
+        <ServiceCard/>
+        <ServiceCard/>
+      </div>
+  )
+}
   
 

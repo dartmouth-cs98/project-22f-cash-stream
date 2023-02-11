@@ -11,19 +11,16 @@ class FlowInfo extends Component {
     super(props)
 
     this.state = {
-      fDaixBalance:0,
+      //fDaixBalance: 0,
       account: '',
       tokensInfo: []
     }
-
-    //this.getTokensInfo = this.getTokensInfo.bind(this)
-    //this.getTokenBalance= this.getTokenBalance.bind(this)
   }
 
   async componentDidMount(){
+    await this.getWalletBalance();
+    await this.getTokensInfo();
 
-    await this.getWalletBalance()
-    
     this.timerID = setInterval(
       () => {
         if (this.props.connected) {
@@ -129,15 +126,16 @@ class FlowInfo extends Component {
           var formattedOutflow = " " + parseFloat(totalOutflowRate.toFixed(5).toString()) + " /mo";
 
           var totalNetflowRate = ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30;
-          const formattedNetflow = parseFloat(totalNetflowRate.toFixed(5).toString()) + " /mo";
+          var formattedNetflow = parseFloat(totalNetflowRate.toFixed(5).toString()) + " /mo";
           
           // Add current Token To Array
           tokensInfo.push({
               name: tokenSymbol,
               // balance: 0,
-              inflow : formattedInflow,
-              outflow: formattedOutflow,
-              netflow: formattedNetflow,
+              formattedInflow : formattedInflow,
+              formattedOutflow: formattedOutflow,
+              netflow: tokensData[i].totalNetFlowRate,
+              formattedNetflow: formattedNetflow,
               history:[],
           })
         }
@@ -164,7 +162,7 @@ class FlowInfo extends Component {
               tokenName: outflow.token.symbol, 
               history: {
                 date: date,
-                customerId: outflow.receiver.id,
+                id: outflow.receiver.id,
                 amount: formattedOutflow,
               },
             }
@@ -198,7 +196,7 @@ class FlowInfo extends Component {
               tokenName: inflow.token.symbol, 
               history: {
                 date: date,
-                customerId: inflow.sender.id,
+                id: inflow.sender.id,
                 amount: formattedInflow,
               },
             }
@@ -270,7 +268,7 @@ class FlowInfo extends Component {
       });
 
       const superTokenBalance = realTimeBalance.availableBalance;
-      const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,30);
+      const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,13);
       return balanceInComa
   }
 
@@ -279,7 +277,11 @@ class FlowInfo extends Component {
       <div>
         {
         this.props.connected
-        ? <div className="flowInfoContainer"> {DashboardTable(this.state.tokensInfo)}</div>
+        ? <div className="dashboardPage">
+          <div className="dashboardContainer">
+            {DashboardTable(this.state.tokensInfo)}
+          </div>
+        </div>
         : <Main/>
         }
       </div>

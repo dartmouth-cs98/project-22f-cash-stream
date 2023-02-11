@@ -17,6 +17,8 @@ import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import "../../css/flowInfo.css";
+import ether from '../../img/ether.png';
+import dai from '../../img/dai.png';
 
 function Row(props) {
   const { row } = props;
@@ -26,6 +28,11 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell component="th" scope="row">
+          {
+            row.name == "ETHx"
+            ? <img src={ether} className="img"/>
+            : <img src={dai} className="img"/>
+          }       
           {row.name}
         </TableCell>
         
@@ -33,19 +40,19 @@ function Row(props) {
         
         <TableCell align="center">
           <FontAwesomeIcon icon={faCaretUp} className="up"/>
-          <span className="up">{row.inflow}</span>
+          <span className="up">{row.formattedInflow}</span>
         </TableCell>
         
         <TableCell align="center">
           <FontAwesomeIcon icon={faCaretDown} className="down"/>
-          <span className="down">{row.outflow}</span>
+          <span className="down">{row.formattedOutflow}</span>
         </TableCell>
         
         <TableCell align="center">
         {
-          row.netflow.slice(0,1) == '-' 
-          ? <span className="down"><FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.netflow.slice(1, row.netflow.length)}</span>
-          : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.netflow.slice(0, row.netflow.length)}</span>
+          row.formattedNetflow.slice(0,1) == '-' 
+          ? <span className="down"><FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.formattedNetflow.slice(1, row.formattedNetflow.length)}</span>
+          : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
         }
         </TableCell>
         
@@ -69,7 +76,7 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 { 
                   row.history.length == 0
-                  ? <div className="noStream"><p>You have no active streams.</p></div>
+                  ? <span className="noStream"><p>You have no active streams.</p></span>
                   : <TableHead>
                     <TableRow>
                       <TableCell align="center">Start Date</TableCell>
@@ -86,7 +93,7 @@ function Row(props) {
                       <TableCell component="th" scope="row" align="center"> 
                         {historyRow.date}
                       </TableCell>
-                      <TableCell align="center">{historyRow.customerId}</TableCell>
+                      <TableCell align="center">{historyRow.id}</TableCell>
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="center" className='up'>
@@ -112,21 +119,21 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    balance: PropTypes.number.isRequired,
-    outflow: PropTypes.number.isRequired,
-    inflow: PropTypes.number.isRequired,
+    //balance: PropTypes.string.isRequired,
+    formattedOutflow: PropTypes.string.isRequired,
+    formattedInflow: PropTypes.string.isRequired,
 
     history: PropTypes.arrayOf(
       PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
+        amount: PropTypes.string.isRequired,
+        id: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
       }),
     ).isRequired,
-
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    netflow: PropTypes.number.isRequired,
+    
+    //name: PropTypes.string.isRequired,
+    //price: PropTypes.number.isRequired,
+    //netflow: PropTypes.number.isRequired,
   }).isRequired,
 };
 
@@ -134,8 +141,6 @@ Row.propTypes = {
 export const DashboardTable = (rows) => {
   return (
     <div>
-      <h4>Goerli Network</h4>
-      
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
