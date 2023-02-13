@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
+import store from '../app/store'
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
