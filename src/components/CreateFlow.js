@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
+import store from '../app/store'
 //import { width } from "@mui/system";
 
 const intervals = [
@@ -58,7 +59,35 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
 
   console.log(recipient);
 
-  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+  const currState = store.getState();
+  console.log(currState);
+
+  var chainId = currState.appReducer.chainId;
+  var account = currState.appReducer.account;
+  
+  if (typeof chainId == 'undefined') {
+    /*
+     * Redux store is not up to date. Retrieve chainId and account & save to 
+     * redux store via action dispatch.
+     */
+
+    chainId = await window.ethereum.request({ method: "eth_chainId" });
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    account = accounts[0];
+
+    const connectWalletAction = {
+      type: 'wallet/connect',
+      payload: {
+        chainId: chainId, // string
+        account: account
+      }
+    }
+    store.dispatch(connectWalletAction);
+    console.log('Wallet redux state updated.')
+  }
+
+  console.log(chainId);
+  console.log(account);
 
   if (typeof window.provider == 'undefined') {
     console.log('Retrieving provider & signer.')
@@ -91,9 +120,6 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
     const ETHxContract = await window.sf.loadSuperToken("ETHx");
     superToken = ETHxContract.address;
   }
-
-  const accounts = await ethereum.request({ method: "eth_accounts" });
-  const account = accounts[0];
 
   try {
     const createFlowOperation = window.sf.cfaV1.createFlow({
