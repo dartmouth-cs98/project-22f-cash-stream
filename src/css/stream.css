@@ -151,3 +151,16 @@
   bottom: 4%;
   right: 4%;
 }
+
+.back {
+  margin-left: 18%;
+  margin-bottom: 3%;
+  text-align: left;
+}
+
+.back p {
+  margin-left: 10px;
+  display: inline-block;
+  -ms-transform: translateY(30%);
+  transform: translateY(30%);
+}

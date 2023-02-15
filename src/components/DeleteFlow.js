@@ -15,10 +15,11 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 import store from '../app/store'
+import { borderRadius } from "@mui/system";
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -195,13 +196,18 @@ export const DeleteFlow = (props) => {
             exclusive
             onChange={props.handleToggleChange}
             aria-label="Platform"
-          >
+          
             <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
             <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
           </ToggleButtonGroup>
         </div>
         */}
-        <FontAwesomeIcon icon={faArrowLeft} onClick={()=>{props.openDashboard()}}/> <p>Back to dashboard</p>
+        <div className="back">
+          <Button variant="outlined" sx={{textTransform:"none", borderRadius:"10px"}} onClick={()=>{props.openDashboard()}}>
+            <FontAwesomeIcon icon={faCircleArrowLeft}/> 
+            <p>Dashboard</p>
+          </Button>
+        </div>
 
         <Card className="flowCard"
           sx={{
@@ -209,35 +215,35 @@ export const DeleteFlow = (props) => {
             borderRadius: "20px",
           }}>
           <CardContent>
-          <div className="titleContainer">          
-            <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
-            <Form className="token">
-              <FormGroup>
-                <TextField
-                  className="rainbow"
-                  select
-                  defaultValue="ETHx"
-                  value={token}
-                  onChange={handleTokenChange}
-                  color="success"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        {token === "ETHx"?<img src={ether}/>:<img src={dai}/>}
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  <MenuItem key={'ETHx'} value={'ETHx'}>
-                    ETHx
-                  </MenuItem>
-                  <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                    fDAIx
-                  </MenuItem>
-                </TextField>
-              </FormGroup>
-            </Form>
-          </div>
+            <div className="titleContainer">          
+              <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
+              <Form className="token">
+                <FormGroup>
+                  <TextField
+                    className="rainbow"
+                    select
+                    defaultValue="ETHx"
+                    value={token}
+                    onChange={handleTokenChange}
+                    color="success"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {token === "ETHx"?<img src={ether}/>:<img src={dai}/>}
+                        </InputAdornment>
+                      ),
+                    }}
+                  >
+                    <MenuItem key={'ETHx'} value={'ETHx'}>
+                      ETHx
+                    </MenuItem>
+                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
+                      fDAIx
+                    </MenuItem>
+                  </TextField>
+                </FormGroup>
+              </Form>
+            </div>
 
             <Form className="flowForm">
               <FormGroup>
