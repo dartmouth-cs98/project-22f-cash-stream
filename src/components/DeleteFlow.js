@@ -103,9 +103,6 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
     superToken = ETHxContract.address;
   }
 
-  const accounts = await ethereum.request({ method: "eth_accounts" });
-  const account = accounts[0];
-
   try {
     const deleteFlowOperation = window.sf.cfaV1.deleteFlow({
       sender: account,
