@@ -15,13 +15,13 @@ import Paper from '@mui/material/Paper';
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
 import "../../css/flowInfo.css";
 import ether from '../../img/ether.png';
 import dai from '../../img/dai.png';
 
 function Row(props) {
-  const { row } = props;
+  const {row} = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -83,6 +83,7 @@ function Row(props) {
                       <TableCell align="center">To/From </TableCell>
                       {/* <TableCell align="center"> All Time Flow</TableCell> */}
                       <TableCell align="center">Flow Rate</TableCell>
+                      <TableCell align="center">Close</TableCell>
                     </TableRow>
                   </TableHead>
                 }
@@ -105,6 +106,11 @@ function Row(props) {
                         <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
                       </TableCell>
                       }
+                      <TableCell align='center' className='cursor'>
+                        <FontAwesomeIcon icon={faCircleXmark} onClick={()=>{
+                          props.setClose(row.name, historyRow.id)
+                        }}/>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -138,11 +144,10 @@ Row.propTypes = {
 };
 
 
-export const DashboardTable = (rows) => {
+export const DashboardTable = (props) => {
   return (
     <div>
       <h4 className='mb-3 title dashboardTitle'>Tokens</h4>
-
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -156,8 +161,8 @@ export const DashboardTable = (rows) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row}/> 
+            {props.tokensInfo.map((row) => (
+              <Row key={row.name} row={row} setClose={props.setClose}/>
             ))}
           </TableBody>
         </Table>

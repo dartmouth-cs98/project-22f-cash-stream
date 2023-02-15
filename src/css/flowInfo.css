@@ -5,6 +5,16 @@
   overflow: hidden;
 }
 
+.dashboardPage a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.dashboardPage a:visited{
+  color: white;
+  text-decoration: underline;
+}
+
 .dashboardContainer {
   position: absolute;
   top: 50%;
@@ -48,4 +58,8 @@
   height: 15px;
   width: 15px;
   margin-right: 10px;
+}
+
+.cursor{
+  cursor: pointer;
 }

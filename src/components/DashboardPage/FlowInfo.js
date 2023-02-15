@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { useState } from 'react';
 import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import { DashboardTable } from './Dashboard';
 import { Main } from "../Main";
 import axios from 'axios';
 import "../../css/flowInfo.css"
+import { DeleteFlow } from '../DeleteFlow';
 
 class FlowInfo extends Component {
   constructor(props) {
@@ -13,8 +15,26 @@ class FlowInfo extends Component {
     this.state = {
       //fDaixBalance: 0,
       account: '',
-      tokensInfo: []
+      tokensInfo: [],
+      close: false,
+      closeToken: '',
+      closeAddress: '',
     }
+
+    this.setCloseInfo = (token, addr) => {
+      this.setState({
+        close: true,
+        closeToken: token,
+        closeAddress: addr,
+      });
+    }
+
+    this.openDashboard = () => {
+      this.setState({
+        close: false,
+      })
+    }
+
   }
 
   async componentDidMount(){
@@ -275,13 +295,17 @@ class FlowInfo extends Component {
 
   render() {
     return (
-      <div className="hello">
+      <div>
         {
         this.props.connected
         ? <div className="dashboardPage">
-          <div className="dashboardContainer">
-            {DashboardTable(this.state.tokensInfo)}
+          {
+          this.state.close
+          ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
+          : <div className="dashboardContainer">
+            <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
           </div>
+          }
         </div>
         : <Main/>
         }

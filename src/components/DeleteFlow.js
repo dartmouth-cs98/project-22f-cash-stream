@@ -15,7 +15,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 import store from '../app/store'
@@ -148,10 +148,10 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
 }
 
 export const DeleteFlow = (props) => {
-  const [recipient, setRecipient] = useState("");
+  const [recipient, setRecipient] = useState(props.recipient);
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  const [token, setToken] = useState("ETHx");
+  const [token, setToken] = useState(props.token);
   //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
 
@@ -187,6 +187,7 @@ export const DeleteFlow = (props) => {
   return (
     <>
       <div className="streamContainer">
+        {/*
         <div className="streamToggle">
           <ToggleButtonGroup
             color="primary"
@@ -199,6 +200,8 @@ export const DeleteFlow = (props) => {
             <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
           </ToggleButtonGroup>
         </div>
+        */}
+        <FontAwesomeIcon icon={faArrowLeft} onClick={()=>{props.openDashboard()}}/> <p>Back to dashboard</p>
 
         <Card className="flowCard"
           sx={{

@@ -265,6 +265,7 @@ export const CreateFlow = (props) => {
   return (
     <>
       <div className="streamContainer">
+        {/*
         <div className="streamToggle">
           <ToggleButtonGroup
             color="primary"
@@ -277,6 +278,7 @@ export const CreateFlow = (props) => {
             <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
           </ToggleButtonGroup>
         </div>
+        */}
 
         <Card className="flowCard"
           sx={{
