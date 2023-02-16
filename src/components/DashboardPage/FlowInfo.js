@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { useState } from 'react';
 import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import { DashboardTable } from './Dashboard';
@@ -7,13 +6,13 @@ import { Main } from "../Main";
 import axios from 'axios';
 import "../../css/flowInfo.css"
 import { DeleteFlow } from '../DeleteFlow';
+import { TokenCard } from './TokenCard';
 
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      //fDaixBalance: 0,
       account: '',
       tokensInfo: [],
       close: false,
@@ -306,6 +305,13 @@ class FlowInfo extends Component {
           this.state.close
           ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
           : <div className="dashboardContainer">
+            <div className='tokenCard'>
+              {
+              this.state.tokensInfo.map((token) => (
+                <TokenCard key={token.name} token={token}/>
+              ))
+              }
+            </div>
             <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
           </div>
           }

@@ -35,19 +35,17 @@ function Row(props) {
           }       
           {row.name}
         </TableCell>
-        
-        <TableCell align="center">{row.balance}</TableCell>
-        
+        <TableCell align="center">
+          {row.balance}
+        </TableCell>
         <TableCell align="center">
           <FontAwesomeIcon icon={faCaretUp} className="up"/>
           <span className="up">{row.formattedInflow}</span>
         </TableCell>
-        
         <TableCell align="center">
           <FontAwesomeIcon icon={faCaretDown} className="down"/>
           <span className="down">{row.formattedOutflow}</span>
         </TableCell>
-        
         <TableCell align="center">
         {
           row.formattedNetflow.slice(0,1) == '-' 
@@ -55,7 +53,6 @@ function Row(props) {
           : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
         }
         </TableCell>
-        
         <TableCell align="center"> 
           <IconButton
             aria-label="expand row"
@@ -66,13 +63,11 @@ function Row(props) {
           </IconButton>
         </TableCell>
       </TableRow>
-
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">Active Streams</Typography>
-
               <Table size="small" aria-label="purchases">
                 { 
                   row.history.length == 0
@@ -87,7 +82,6 @@ function Row(props) {
                     </TableRow>
                   </TableHead>
                 }
-
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
@@ -151,7 +145,6 @@ Row.propTypes = {
 export const DashboardTable = (props) => {
   return (
     <div>
-      <h4 className='mb-3 title dashboardTitle'>Tokens</h4>
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -165,9 +158,11 @@ export const DashboardTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.tokensInfo.map((row) => (
-              <Row key={row.name} row={row} setClose={props.setClose}/>
-            ))}
+            {
+              props.tokensInfo.map((row) => (
+                <Row key={row.name} row={row} setClose={props.setClose}/>
+              ))
+            }
           </TableBody>
         </Table>
       </TableContainer>

@@ -2,7 +2,6 @@
   position: relative;
   margin-left: 20%;
   height: 100vh;
-  overflow: hidden;
 }
 
 .dashboardPage a:link{
@@ -28,7 +27,7 @@
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 65%;
   color: white;
   border-radius: 8px;
   border: solid rgba(255, 255, 255, 0.636) 0.5px;
@@ -36,8 +35,6 @@
 }
 
 .dashboardTitle{
-  position: relative;
-  left: 20%;
 }
 
 .noStream {
@@ -62,4 +59,11 @@
 
 .cursor{
   cursor: pointer;
+}
+
+.tokenCard{
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2%;
+  width: 65%;
 }
