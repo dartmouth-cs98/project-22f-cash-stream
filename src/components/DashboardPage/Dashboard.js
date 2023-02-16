@@ -83,7 +83,7 @@ function Row(props) {
                       <TableCell align="center">To/From </TableCell>
                       {/* <TableCell align="center"> All Time Flow</TableCell> */}
                       <TableCell align="center">Flow Rate</TableCell>
-                      <TableCell align="center">Close</TableCell>
+                      <TableCell align="center"></TableCell>
                     </TableRow>
                   </TableHead>
                 }
@@ -107,9 +107,13 @@ function Row(props) {
                       </TableCell>
                       }
                       <TableCell align='center' className='cursor'>
-                        <FontAwesomeIcon icon={faCircleXmark} onClick={()=>{
-                          props.setClose(row.name, historyRow.id)
-                        }}/>
+                        {
+                          historyRow.amount.slice(0,1) == '-'
+                          ? <FontAwesomeIcon icon={faCircleXmark} onClick={()=>{
+                            props.setClose(row.name, historyRow.id)
+                          }}/>
+                          : <div>-</div>
+                        }
                       </TableCell>
                     </TableRow>
                   ))}
