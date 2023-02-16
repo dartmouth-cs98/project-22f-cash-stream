@@ -92,13 +92,13 @@ function Row(props) {
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="center" className='up'>
-                          <FontAwesomeIcon icon={faCaretUp} className='up'/>
-                          <span className='up'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
-                        </TableCell>
+                            <FontAwesomeIcon icon={faCaretUp} className='up'/>
+                            <span className='up'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                          </TableCell>
                         : <TableCell align="center" className='down'>
-                        <FontAwesomeIcon icon={faCaretDown} className='down'/>
-                        <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
-                      </TableCell>
+                            <FontAwesomeIcon icon={faCaretDown} className='down'/>
+                            <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                          </TableCell>
                       }
                       <TableCell align='center'>
                         {

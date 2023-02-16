@@ -180,7 +180,13 @@ export const Unwrap = (props) => {
           }}>
           <CardContent>
             <div className="titleContainer">
-              <div className="wrapTitle">{txLoading?<h5 sx={{color: "#424242"}}>Unwrap</h5>:<h5>Unwrap</h5>}</div>
+            <div className="wrapTitle">
+              {
+                token == "fDAIx" 
+                ? <h5>fDAIx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAI</h5> 
+                : <h5>ETHx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETH</h5>
+              }
+              </div>
               <Form className="token">
                 <FormGroup>
                   <TextField
@@ -221,12 +227,6 @@ export const Unwrap = (props) => {
                 />
               </FormGroup>
             </Form>
-
-            {
-              token == "fDAIx"
-              ? <p>fDAIx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAI</p> 
-              : <p>ETHx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETH</p>
-            }
 
             <div className="wrapButtonContainer">
               <DowngradeButton

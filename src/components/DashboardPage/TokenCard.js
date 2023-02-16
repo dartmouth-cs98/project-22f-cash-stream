@@ -37,7 +37,7 @@ export const TokenCard = (props) => {
             ? <FontAwesomeIcon icon={faCaretDown}/>
             : <>
             { 
-              props.token.formattedNetflow.slice(0,1) == '0'
+              props.token.formattedNetflow.slice(0, props.token.formattedNetflow.length-4) == '0'
               ? <FontAwesomeIcon icon={faMinus}/>
               : <FontAwesomeIcon icon={faCaretUp}/>
             }
@@ -47,8 +47,16 @@ export const TokenCard = (props) => {
         </Typography>
         {
           props.token.formattedNetflow.slice(0,1) == '-'
-          ? <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>Balance reaches zero in {time}</Typography>
-          : <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>Non-negative netflow</Typography>
+          ? <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>
+              Balance reaches 0 in {time}
+            </Typography>
+          : <>
+          { 
+            props.token.formattedNetflow.slice(0, props.token.formattedNetflow.length-4) == '0'
+            ? <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>Zero netflow</Typography>
+            : <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>Positive netflow</Typography>
+          }
+          </>
         }
       </CardContent>
     </Card>

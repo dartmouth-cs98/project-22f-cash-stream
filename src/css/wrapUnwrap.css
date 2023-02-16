@@ -84,6 +84,8 @@
 .wrapMessage{
   margin-top: 5%;
   font-size: smaller;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .displayNone{
