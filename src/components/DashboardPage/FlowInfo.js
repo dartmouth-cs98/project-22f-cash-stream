@@ -105,7 +105,8 @@ class FlowInfo extends Component {
               }
               currentFlowRate
             }
-            outflows {
+            
+            outflows(orderBy: createdAtTimestamp, orderDirection: desc){
               token {
                 symbol
               }
@@ -152,7 +153,7 @@ class FlowInfo extends Component {
           tokensInfo.push({
               name: tokenSymbol,
               // balance: 0,
-              formattedInflow : formattedInflow,
+              formattedInflow: formattedInflow,
               formattedOutflow: formattedOutflow,
               netflow: tokensData[i].totalNetFlowRate,
               formattedNetflow: formattedNetflow,
@@ -167,10 +168,11 @@ class FlowInfo extends Component {
 
         // ======== Outflows Data ========
         const outflowsData = queryResult.data.data.accounts[0].outflows
+        //console.log(outflowsData)
+
         const outflowsInfo = []
         outflowsData.map(outflow => {
-          if(outflow.currentFlowRate != 0){
-
+          if(outflow.currentFlowRate !== '0'){
             const time = outflow.createdAtTimestamp * 1000;
             const dateObject = new Date(time);
             const date = dateObject.toDateString();
@@ -202,8 +204,9 @@ class FlowInfo extends Component {
         // ======== Inflows Data ========
         const inflowsData = queryResult.data.data.accounts[0].inflows
         const inflowsInfo = []
+
         inflowsData.map(inflow => {
-          if(inflow.currentFlowRate != 0){
+          if(inflow.currentFlowRate !== '0'){
 
             const time = inflow.createdAtTimestamp * 1000;
             const dateObject = new Date(time);

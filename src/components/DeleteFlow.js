@@ -221,7 +221,7 @@ export const DeleteFlow = (props) => {
                 <FormGroup>
                   <TextField
                     className="rainbow"
-                    select
+                    
                     defaultValue="ETHx"
                     value={token}
                     onChange={handleTokenChange}
@@ -233,14 +233,8 @@ export const DeleteFlow = (props) => {
                         </InputAdornment>
                       ),
                     }}
-                  >
-                    <MenuItem key={'ETHx'} value={'ETHx'}>
-                      ETHx
-                    </MenuItem>
-                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                      fDAIx
-                    </MenuItem>
-                  </TextField>
+                    sx={{width: '110px'}}
+                  />
                 </FormGroup>
               </Form>
             </div>
