@@ -307,14 +307,9 @@ class FlowInfo extends Component {
           this.state.close
           ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
           : <div className="dashboardContainer">
-            <Button variant="outlined" sx={{textTransform:"none", borderRadius:"10px"}}>
-              Goerli Network
-            </Button>
-            <div className='tokenCard'>
-              {this.state.tokensInfo.map((token)=>(<TokenCard key={token.name} token={token}/>))}
+              <div className='tokenCard'>{this.state.tokensInfo.map((token)=>(<TokenCard key={token.name} token={token}/>))}</div>
+              <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
             </div>
-            <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
-          </div>
           }
         </div>
         : <Main/>

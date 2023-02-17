@@ -19,8 +19,8 @@
 
 .service-card{
   background-color: rgb(7, 5, 22);
-  margin: 10px;
-  width: 700px;
+  margin-top: 20px;
+  width: 50%;
   height: 140px;
   padding: 30px;
   border: solid black 1px;

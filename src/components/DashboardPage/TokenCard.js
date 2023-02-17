@@ -29,12 +29,8 @@ export const TokenCard = (props) => {
     }
   }
 
-  function decreaseTime(){
-
-  }
-
   return (
-    <Card sx={{minWidth: 275, height: '135px', display: "inline-block", marginRight: '15px'}}>
+    <Card sx={{minWidth: 275, height: '135px', display: "inline-block", marginRight: '15px'}} className="card">
       <CardContent>
         <Typography sx={{fontSize: 18, fontWeight: '700'}} color="text.secondary" gutterBottom>
           {

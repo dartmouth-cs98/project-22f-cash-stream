@@ -40,14 +40,14 @@ function Row(props) {
         </TableCell>
         <TableCell align="center">
           {
-            row.formattedNetflow.slice(0, row.formattedNetflow.length-4) == '0'
+            row.formattedInflow == " 0 /mo"
             ? <span><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
             : <span className="up"><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
           }
         </TableCell>
         <TableCell align="center">
           {
-            row.formattedNetflow.slice(0, row.formattedNetflow.length-4) == '0'
+            row.formattedOutflow == " 0 /mo"
             ? <span><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
             : <span className="down"><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
           }
@@ -107,11 +107,11 @@ function Row(props) {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="center" className='up'>
                             <FontAwesomeIcon icon={faCaretUp} className='up'/>
-                            <span className='up'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                            <span className='up'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
                         : <TableCell align="center" className='down'>
                             <FontAwesomeIcon icon={faCaretDown} className='down'/>
-                            <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
+                            <span className='down'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
                       }
                       <TableCell align='center'>
