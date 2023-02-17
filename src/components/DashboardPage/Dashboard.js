@@ -39,18 +39,32 @@ function Row(props) {
           {row.balance}
         </TableCell>
         <TableCell align="center">
-          <FontAwesomeIcon icon={faCaretUp} className="up"/>
-          <span className="up">{row.formattedInflow}</span>
+          {
+            row.formattedNetflow.slice(0, row.formattedNetflow.length-4) == '0'
+            ? <span><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
+            : <span className="up"><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
+          }
         </TableCell>
         <TableCell align="center">
-          <FontAwesomeIcon icon={faCaretDown} className="down"/>
-          <span className="down">{row.formattedOutflow}</span>
+          {
+            row.formattedNetflow.slice(0, row.formattedNetflow.length-4) == '0'
+            ? <span><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
+            : <span className="down"><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
+          }
         </TableCell>
         <TableCell align="center">
         {
           row.formattedNetflow.slice(0,1) == '-' 
-          ? <span className="down"><FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.formattedNetflow.slice(1, row.formattedNetflow.length)}</span>
-          : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
+          ? <span className="down">
+              <FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.formattedNetflow.slice(1, row.formattedNetflow.length)}
+            </span>
+          : <>
+            {
+              row.formattedNetflow.slice(0, row.formattedNetflow.length-4) == '0'
+              ? <>-&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</>
+              : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
+            }
+            </>
         }
         </TableCell>
         <TableCell align="center"> 

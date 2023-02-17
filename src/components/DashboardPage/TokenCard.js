@@ -15,7 +15,7 @@ export const TokenCard = (props) => {
       const date = new Date();
       date.setSeconds(seconds); // specify value of SECONDS
       const res = date.toDateString();
-      return res;
+      return res.substring(0,10) + ", " + res.substring(11,15);
     }
     else{
       return "-";
@@ -38,7 +38,7 @@ export const TokenCard = (props) => {
             : <>
             { 
               props.token.formattedNetflow.slice(0, props.token.formattedNetflow.length-4) == '0'
-              ? <FontAwesomeIcon icon={faMinus}/>
+              ? <span sx={{fontWeight: 700}}>-</span>
               : <FontAwesomeIcon icon={faCaretUp}/>
             }
             </>
@@ -46,17 +46,14 @@ export const TokenCard = (props) => {
           &nbsp; {props.token.balance} {props.token.name}
         </Typography>
         {
+          props.token.history.length == 0
+          ? <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>No active stream</Typography>
+          : <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>{props.token.history.length} active streams</Typography>
+        }
+        {
           props.token.formattedNetflow.slice(0,1) == '-'
-          ? <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>
-              Balance reaches 0 in {time}
-            </Typography>
-          : <>
-          { 
-            props.token.formattedNetflow.slice(0, props.token.formattedNetflow.length-4) == '0'
-            ? <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>Zero netflow</Typography>
-            : <Typography sx={{fontSize: 13}} color="text.secondary" gutterBottom>Positive netflow</Typography>
-          }
-          </>
+          ? <Typography sx={{fontSize: 13}} color="text.secondary">Liquidation Date: {time}</Typography>
+          : <Typography sx={{fontSize: 13}} color="text.secondary">Liquidation Date: N/A</Typography>
         }
       </CardContent>
     </Card>

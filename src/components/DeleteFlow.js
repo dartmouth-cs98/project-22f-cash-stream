@@ -221,8 +221,6 @@ export const DeleteFlow = (props) => {
                 <FormGroup>
                   <TextField
                     className="rainbow"
-                    
-                    defaultValue="ETHx"
                     value={token}
                     onChange={handleTokenChange}
                     color="success"
