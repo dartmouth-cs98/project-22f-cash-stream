@@ -17,8 +17,8 @@
 .dashboardContainer {
   position: absolute;
   top: 50%;
-  -ms-transform: translateY(-40%);
-  transform: translateY(-40%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
   text-align: left;
   width: 100%;
 }
@@ -35,6 +35,7 @@
 }
 
 .dashboardTitle{
+  margin-left: 20%;
 }
 
 .noStream {
@@ -64,11 +65,12 @@
 .tokenCard{
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
   width: 65%;
 }
 
 .card{
+  text-align: left;
   border-radius: 15px;
 }
 

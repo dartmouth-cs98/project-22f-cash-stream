@@ -159,6 +159,7 @@ Row.propTypes = {
 export const DashboardTable = (props) => {
   return (
     <div>
+      {/*<div className='dashboardTitle'><h4 className='mb-3 title'>Streams</h4></div>*/}
       <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
