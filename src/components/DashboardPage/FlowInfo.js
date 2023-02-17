@@ -3,8 +3,10 @@ import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import { DashboardTable } from './Dashboard';
 import { Main } from "../Main";
+import Button from '@mui/material/Button';
 import axios from 'axios';
 import "../../css/flowInfo.css"
+import { faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { DeleteFlow } from '../DeleteFlow';
 import { TokenCard } from './TokenCard';
 
@@ -305,12 +307,11 @@ class FlowInfo extends Component {
           this.state.close
           ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
           : <div className="dashboardContainer">
+            <Button variant="outlined" sx={{textTransform:"none", borderRadius:"10px"}}>
+              Goerli Network
+            </Button>
             <div className='tokenCard'>
-              {
-              this.state.tokensInfo.map((token) => (
-                <TokenCard key={token.name} token={token}/>
-              ))
-              }
+              {this.state.tokensInfo.map((token)=>(<TokenCard key={token.name} token={token}/>))}
             </div>
             <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
           </div>
