@@ -11,6 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
 // Watch out for this react-icons path
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
@@ -159,8 +160,10 @@ Row.propTypes = {
 export const DashboardTable = (props) => {
   return (
     <div>
-      {/*<div className='dashboardTitle'><h4 className='mb-3 title'>Streams</h4></div>*/}
-      <TableContainer component={Paper} class='dashboard'>
+      {
+      props.tokensInfo.length == 0
+      ? <div className='dashboardLoading'><CircularProgress color="inherit"/></div>
+      : <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
@@ -181,6 +184,7 @@ export const DashboardTable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
+    }
     </div>
   );
 }

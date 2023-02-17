@@ -164,3 +164,7 @@
   -ms-transform: translateY(30%);
   transform: translateY(30%);
 }
+
+.button:hover {
+  transition: all 1s;
+}

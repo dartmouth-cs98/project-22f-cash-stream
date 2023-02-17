@@ -15,11 +15,11 @@ export const WrapUnwrap = () => {
 
   return (
     <div className="wrapUnwrapPage">
-        {
-          alignment === "wrap" 
-          ? <Wrap alignment={alignment} handleToggleChange={handleToggleChange}/> 
-          : <Unwrap alignment={alignment} handleToggleChange={handleToggleChange}/>
-        }
+      {
+        alignment === "wrap" 
+        ? <Wrap alignment={alignment} handleToggleChange={handleToggleChange}/> 
+        : <Unwrap alignment={alignment} handleToggleChange={handleToggleChange}/>
+      }
     </div>
   );
 }

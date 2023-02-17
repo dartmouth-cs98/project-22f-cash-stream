@@ -16,6 +16,7 @@ import { faCircleInfo, faCircleArrowLeft } from '@fortawesome/free-solid-svg-ico
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 import store from '../app/store'
+import "../css/stream.css";
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -152,27 +153,6 @@ export const DeleteFlow = (props) => {
   //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
 
-  function DeleteButton({ children, ...props }) {
-    return ( 
-      <Button variant="contained"
-        color="primary" 
-        sx={{
-          height: "45px",
-          width: "100%",
-          color: "white",
-          textTransform: "none",
-          fontFamily: 'Lato',
-          fontWeight: "700",
-          ":hover": {borderColor: "primary.main"}
-        }}
-        {...props}
-        >
-        {children}
-      </Button>
-      
-    );
-  }
-
   const handleRecipientChange = (e) => {
     setRecipient(() => ([e.target.name] = e.target.value));
   };
@@ -260,14 +240,23 @@ export const DeleteFlow = (props) => {
                   }}>
                     Close Stream
                   </Button>
-                : <DeleteButton
+                : <Button variant="contained"
+                    color="primary"
+                    sx={{
+                      height: "45px",
+                      width: "100%",
+                      color: "white",
+                      textTransform: "none",
+                      fontFamily: 'Lato',
+                      fontWeight: "700",
+                    }}
                     onClick={() => {
                       deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxMsg);
                       setRecipient('');
                     }}
-                  >
+                    >
                     Close Stream
-                  </DeleteButton>
+                  </Button>
               }
             </div>
           </CardContent>
