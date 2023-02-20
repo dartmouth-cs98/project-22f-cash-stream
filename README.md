@@ -1,5 +1,7 @@
 # Cash Stream
 
+https://cash-stream.surge.sh/ 
+
 CashStream is a React web application to facilitate real-time crypto payment. It allows the user to open a "stream" from one wallet address to another, where crypto assets will be transferred in real-time each second.
 
 Our application is built for **Goerli Testnet**. It works for two Ethereum-based tokens, **ETH and fDAI**.
