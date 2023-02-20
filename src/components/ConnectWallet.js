@@ -56,9 +56,7 @@ export const ConnectWallet = (props) => {
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const chain = await window.ethereum.request({ method: "eth_chainId" });
-    let chainId = chain;
-    console.log("chain ID:", chain);
-    console.log("global Chain Id:", chainId);
+
     if (accounts.length !== 0) {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
@@ -99,29 +97,20 @@ export const ConnectWallet = (props) => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     window.provider = provider;
 
-    console.log(typeof(provider))
-    console.log(window.provider);
-
     const signer = provider.getSigner();
     window.signer = signer;
-
-    console.log(typeof(signer))
-    console.log(window.signer);
 
     /*
      * chainId is stored as a string (immutable type). Thus, we store it in Redux.
      */
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    console.log(typeof(chainId))
 
     const sf = await Framework.create({
         chainId: Number(chainId),
         provider: provider
     });
 
-    console.log(typeof(sf))
     window.sf = sf;
-    console.log(window.sf);
 
     const connectWalletAction = {
       type: 'wallet/connect',
@@ -135,7 +124,7 @@ export const ConnectWallet = (props) => {
     }
 
     store.dispatch(connectWalletAction);
-    console.log('dispatched action??')
+    console.log('Wallet state updated.')
   }
 
   return(
