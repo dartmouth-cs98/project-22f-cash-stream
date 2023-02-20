@@ -2,14 +2,23 @@
   position: relative;
   margin-left: 20%;
   height: 100vh;
-  overflow: hidden;
+}
+
+.dashboardPage a:link{
+  color: white;
+  text-decoration: underline;
+}
+
+.dashboardPage a:visited{
+  color: white;
+  text-decoration: underline;
 }
 
 .dashboardContainer {
   position: absolute;
   top: 50%;
-  -ms-transform: translateY(-40%);
-  transform: translateY(-40%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
   text-align: left;
   width: 100%;
 }
@@ -18,7 +27,7 @@
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 65%;
   color: white;
   border-radius: 8px;
   border: solid rgba(255, 255, 255, 0.636) 0.5px;
@@ -26,8 +35,7 @@
 }
 
 .dashboardTitle{
-  position: relative;
-  left: 20%;
+  margin-left: 20%;
 }
 
 .noStream {
@@ -48,4 +56,32 @@
   height: 15px;
   width: 15px;
   margin-right: 10px;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.tokenCard{
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2%;
+  width: 65%;
+}
+
+.card{
+  text-align: left;
+  border-radius: 15px;
+}
+
+.tokenCard :hover{
+  transition: 0.1s;
+  transition: 0.1s ease-in;
+  color:rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.065);;
+  z-index: 999;
+}
+
+.dashboardLoading{
+  text-align: center;
 }

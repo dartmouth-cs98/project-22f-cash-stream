@@ -172,6 +172,14 @@ export const Unwrap = (props) => {
             <ToggleButton value="unwrap" sx={{textTransform: "none"}}>Unwrap</ToggleButton>
           </ToggleButtonGroup>
         </div>
+        
+        <Card className="wrapInfo" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>
+          <CardContent>
+            <div className="wrapInfoText">
+              Wrapped tokens are extensions of regular tokens that enable real-time transfer. They can be converted back to regular tokens at any time with a small gas fee.
+            </div>
+          </CardContent>
+        </Card>
 
         <Card className="wrapCard" 
           sx={{
@@ -180,7 +188,13 @@ export const Unwrap = (props) => {
           }}>
           <CardContent>
             <div className="titleContainer">
-              <div className="wrapTitle">{txLoading?<h5 sx={{color: "#424242"}}>Unwrap</h5>:<h5>Unwrap</h5>}</div>
+            <div className="wrapTitle">
+              {
+                token == "fDAIx" 
+                ? <h5>fDAIx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAI</h5> 
+                : <h5>ETHx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETH</h5>
+              }
+              </div>
               <Form className="token">
                 <FormGroup>
                   <TextField
@@ -221,12 +235,6 @@ export const Unwrap = (props) => {
                 />
               </FormGroup>
             </Form>
-
-            {
-              token == "fDAIx"
-              ? <p>fDAIx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAI</p> 
-              : <p>ETHx <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETH</p>
-            }
 
             <div className="wrapButtonContainer">
               <DowngradeButton

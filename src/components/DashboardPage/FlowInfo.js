@@ -3,17 +3,40 @@ import { ethers } from 'ethers';
 import { Framework } from "@superfluid-finance/sdk-core";
 import { DashboardTable } from './Dashboard';
 import { Main } from "../Main";
+import Button from '@mui/material/Button';
 import axios from 'axios';
 import "../../css/flowInfo.css"
+import { DeleteFlow } from '../DeleteFlow';
+import { TokenCard } from './TokenCard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGift } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from "react-router-dom";
 
 class FlowInfo extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      //fDaixBalance: 0,
+      firstTimeUser: false,
       account: '',
-      tokensInfo: []
+      tokensInfo: [],
+      close: false,
+      closeToken: '',
+      closeAddress: '',
+    }
+
+    this.setCloseInfo = (token, addr) => {
+      this.setState({
+        close: true,
+        closeToken: token,
+        closeAddress: addr,
+      });
+    }
+
+    this.openDashboard = () => {
+      this.setState({
+        close: false,
+      })
     }
   }
 
@@ -85,7 +108,8 @@ class FlowInfo extends Component {
               }
               currentFlowRate
             }
-            outflows {
+            
+            outflows(orderBy: createdAtTimestamp, orderDirection: desc){
               token {
                 symbol
               }
@@ -110,125 +134,134 @@ class FlowInfo extends Component {
 
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
-        const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
-        const tokensInfo = []
-        // console.log("Tokens DATA:",tokensData);
-        // Add Tokens Info to Array 
-        for (let i=0; i<tokensData.length; i++){
-          const tokenSymbol = tokensData[i].token.symbol
+        
+        if(typeof queryResult.data.data.accounts[0].accountTokenSnapshots == 'undefined'){
+          this.setState({firstTimeUser: true,});
+        }
+        else {
+          this.setState({firstTimeUser: false,});
+          const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
+          const tokensInfo = []
+          // console.log("Tokens DATA:",tokensData);
+          // Add Tokens Info to Array 
+          for (let i=0; i<tokensData.length; i++){
+            const tokenSymbol = tokensData[i].token.symbol
 
-          // const balance = await this.getTokenBalance(tokenSymbol)
-          
-          var totalInflowRate = ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30;
-          var formattedInflow = " " + parseFloat(totalInflowRate.toFixed(5).toString()) + " /mo";
-          
-          var totalOutflowRate = ethers.utils.formatEther(tokensData[i].totalOutflowRate)*3600*24*30;
-          var formattedOutflow = " " + parseFloat(totalOutflowRate.toFixed(5).toString()) + " /mo";
+            // const balance = await this.getTokenBalance(tokenSymbol)
+            
+            var totalInflowRate = ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30;
+            var formattedInflow = " " + parseFloat(totalInflowRate.toFixed(5).toString()) + " /mo";
+            
+            var totalOutflowRate = ethers.utils.formatEther(tokensData[i].totalOutflowRate)*3600*24*30;
+            var formattedOutflow = " " + parseFloat(totalOutflowRate.toFixed(5).toString()) + " /mo";
 
-          var totalNetflowRate = ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30;
-          var formattedNetflow = parseFloat(totalNetflowRate.toFixed(5).toString()) + " /mo";
-          
-          // Add current Token To Array
-          tokensInfo.push({
-              name: tokenSymbol,
-              // balance: 0,
-              formattedInflow : formattedInflow,
-              formattedOutflow: formattedOutflow,
-              netflow: tokensData[i].totalNetFlowRate,
-              formattedNetflow: formattedNetflow,
-              history:[],
+            var totalNetflowRate = ethers.utils.formatEther(tokensData[i].totalNetFlowRate)*3600*24*30;
+            var formattedNetflow = parseFloat(totalNetflowRate.toFixed(5).toString()) + " /mo";
+            
+            // Add current Token To Array
+            tokensInfo.push({
+                name: tokenSymbol,
+                // balance: 0,
+                formattedInflow: formattedInflow,
+                formattedOutflow: formattedOutflow,
+                netflow: tokensData[i].totalNetFlowRate,
+                formattedNetflow: formattedNetflow,
+                history:[],
+            })
+          }
+
+          // Batch Promise To Constantly Update Balance More Efficiently
+          await Promise.all(tokensInfo.map(async token => (
+            token.balance = await this.getTokenBalance(token.name)
+          )));
+
+          // ======== Outflows Data ========
+          const outflowsData = queryResult.data.data.accounts[0].outflows
+          //console.log(outflowsData)
+
+          const outflowsInfo = []
+          outflowsData.map(outflow => {
+            if(outflow.currentFlowRate !== '0'){
+              const time = outflow.createdAtTimestamp * 1000;
+              const dateObject = new Date(time);
+              const date = dateObject.toDateString();
+
+              const outflowRate = ethers.utils.formatEther(outflow.currentFlowRate)*3600*24*30;
+              const formattedOutflow = "- " + parseFloat(outflowRate.toFixed(5).toString()) + " /mo";
+
+              const outflowDetail = {
+                tokenName: outflow.token.symbol, 
+                history: {
+                  date: date,
+                  id: outflow.receiver.id,
+                  amount: formattedOutflow,
+                },
+              }
+              outflowsInfo.push(outflowDetail);
+            }
+          })
+
+          // Push Outflow Info into TokensInfo
+          outflowsInfo.map(outflowDetail => {
+            tokensInfo.map(tokenDetail => {
+              if (tokenDetail.name == outflowDetail.tokenName){
+                tokenDetail.history.push(outflowDetail.history);
+              }
+            })
+          })
+
+          // ======== Inflows Data ========
+          const inflowsData = queryResult.data.data.accounts[0].inflows
+          const inflowsInfo = []
+
+          inflowsData.map(inflow => {
+            if(inflow.currentFlowRate !== '0'){
+
+              const time = inflow.createdAtTimestamp * 1000;
+              const dateObject = new Date(time);
+              const date = dateObject.toDateString();
+
+              const inflowRate = ethers.utils.formatEther(inflow.currentFlowRate)*3600*24*30;
+              const formattedInflow = "+ " + parseFloat(inflowRate.toFixed(5).toString()) + " /mo";
+
+              const inflowDetail = {
+                tokenName: inflow.token.symbol, 
+                history: {
+                  date: date,
+                  id: inflow.sender.id,
+                  amount: formattedInflow,
+                },
+              }
+              inflowsInfo.push(inflowDetail);
+            }
+          })
+
+          // Push inflow Info into TokensInfo
+          inflowsInfo.map(inflowDetail => {
+            tokensInfo.map(tokenDetail => {
+              if (tokenDetail.name == inflowDetail.tokenName){
+                tokenDetail.history.push(inflowDetail.history);
+              }
+            })
+          })
+
+          // // ======== Inflows Data ========
+          // const inflowsData = queryResult.data.data.accounts[0].inflows      
+          // const inflowsInfo = []
+          // inflowsData.map(inflow => {
+          //   console.log("===========================")
+          //   console.log("Token:",inflow.token.symbol);
+          //   console.log("Sender:",inflow.sender.id);
+          //   console.log("Time:",inflow.createdAtTimestamp);
+          //   console.log("FlowRate:", inflow.currentFlowRate);
+          //   console.log("===========================")
+          // })
+
+          // UPDATE STATE
+          this.setState({       
+            tokensInfo:tokensInfo     
           })
         }
-
-        // Batch Promise To Constantly Update Balance More Efficiently
-        await Promise.all(tokensInfo.map(async token => (
-          token.balance = await this.getTokenBalance(token.name)
-        )));
-
-        // ======== Outflows Data ========
-        const outflowsData = queryResult.data.data.accounts[0].outflows
-        const outflowsInfo = []
-        outflowsData.map(outflow => {
-          if(outflow.currentFlowRate != 0){
-
-            const time = outflow.createdAtTimestamp * 1000;
-            const dateObject = new Date(time);
-            const date = dateObject.toDateString();
-
-            const outflowRate = ethers.utils.formatEther(outflow.currentFlowRate)*3600*24*30;
-            const formattedOutflow = "- " + parseFloat(outflowRate.toFixed(5).toString()) + " /mo";
-
-            const outflowDetail = {
-              tokenName: outflow.token.symbol, 
-              history: {
-                date: date,
-                id: outflow.receiver.id,
-                amount: formattedOutflow,
-              },
-            }
-            outflowsInfo.push(outflowDetail);
-          }
-        })
-
-        // Push Outflow Info into TokensInfo
-        outflowsInfo.map(outflowDetail => {
-          tokensInfo.map(tokenDetail => {
-            if (tokenDetail.name == outflowDetail.tokenName){
-              tokenDetail.history.push(outflowDetail.history);
-            }
-          })
-        })
-
-        // ======== Inflows Data ========
-        const inflowsData = queryResult.data.data.accounts[0].inflows
-        const inflowsInfo = []
-        inflowsData.map(inflow => {
-          if(inflow.currentFlowRate != 0){
-
-            const time = inflow.createdAtTimestamp * 1000;
-            const dateObject = new Date(time);
-            const date = dateObject.toDateString();
-
-            const inflowRate = ethers.utils.formatEther(inflow.currentFlowRate)*3600*24*30;
-            const formattedInflow = "+ " + parseFloat(inflowRate.toFixed(5).toString()) + " /mo";
-
-            const inflowDetail = {
-              tokenName: inflow.token.symbol, 
-              history: {
-                date: date,
-                id: inflow.sender.id,
-                amount: formattedInflow,
-              },
-            }
-            inflowsInfo.push(inflowDetail);
-          }
-        })
-
-        // Push inflow Info into TokensInfo
-        inflowsInfo.map(inflowDetail => {
-          tokensInfo.map(tokenDetail => {
-            if (tokenDetail.name == inflowDetail.tokenName){
-              tokenDetail.history.push(inflowDetail.history);
-            }
-          })
-        })
-
-        // // ======== Inflows Data ========
-        // const inflowsData = queryResult.data.data.accounts[0].inflows      
-        // const inflowsInfo = []
-        // inflowsData.map(inflow => {
-        //   console.log("===========================")
-        //   console.log("Token:",inflow.token.symbol);
-        //   console.log("Sender:",inflow.sender.id);
-        //   console.log("Time:",inflow.createdAtTimestamp);
-        //   console.log("FlowRate:", inflow.currentFlowRate);
-        //   console.log("===========================")
-        // })
-
-        // UPDATE STATE
-        this.setState({       
-          tokensInfo:tokensInfo     
-        })
       }
     }
     else {
@@ -275,13 +308,32 @@ class FlowInfo extends Component {
 
   render() {
     return (
-      <div className="hello">
+      <div>
         {
         this.props.connected
         ? <div className="dashboardPage">
-          <div className="dashboardContainer">
-            {DashboardTable(this.state.tokensInfo)}
-          </div>
+          {
+          this.state.firstTimeUser
+          ? <div className="dashboardContainer dashboardLoading">
+              <h6>New to CashStream?</h6>
+              <h6>Start by wrapping your tokens!</h6>
+              <WrapButton/>
+            </div>
+          : <>
+            {
+            this.state.close
+            ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
+            : <div className="dashboardContainer">
+                <div className='tokenCard'>{this.state.tokensInfo.map((token)=>{
+                  return token.name === 'ETHx' || token.name === 'fDAIx'
+                  ? <TokenCard key={token.name} token={token}/>
+                  : <></>
+                })}</div>
+                <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
+              </div>
+            }
+          </>
+          }
         </div>
         : <Main/>
         }
@@ -289,5 +341,23 @@ class FlowInfo extends Component {
     );
   }
 }
-  
+
+function WrapButton(){
+  const navigate = useNavigate();
+
+  return(
+    <Button variant="contained" onClick={()=>{navigate("/wrap")}}
+      sx={{textTransform:"none", 
+           width:"20%", 
+           height:"45px", 
+           color:"white", 
+           marginTop:"15px", 
+           fontWeight:"700", 
+           borderRadius: "15px"}}
+    >
+      <FontAwesomeIcon icon={faGift} className="icon"/>Wrap
+    </Button>
+  );
+}
+
 export default FlowInfo;

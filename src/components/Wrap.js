@@ -298,14 +298,24 @@ export const Wrap = (props) => {
           </ToggleButtonGroup>
         </div>
 
-        <Card className="wrapCard" 
-          sx={{
-            bgcolor: "secondary.dark",
-            borderRadius: "20px",
-          }}>
+        <Card className="wrapInfo" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>
+          <CardContent>
+            <div className="wrapInfoText">
+              Wrapped tokens are extensions of regular tokens that enable real-time transfer. They can be converted back to regular tokens at any time with a small gas fee.
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="wrapCard" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>
           <CardContent>
             <div className="titleContainer">
-              <div className="wrapTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Wrap</h5> : <h5>Wrap</h5>}</div>
+              <div className="wrapTitle">
+              {
+                token == "fDAIx" 
+                ? <h5>fDAI <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAIx</h5> 
+                : <h5>ETH <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETHx</h5>
+              }
+              </div>
               <Form className="token">
                 <FormGroup>
                   <TextField
@@ -323,12 +333,8 @@ export const Wrap = (props) => {
                       ),
                     }}
                   >
-                    <MenuItem key={'ETHx'} value={'ETHx'}>
-                      ETH
-                    </MenuItem>
-                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                      fDAI
-                    </MenuItem>
+                    <MenuItem key={'ETHx'} value={'ETHx'}>ETH</MenuItem>
+                    <MenuItem key={'fDAIx'} value={'fDAIx'}>fDAI</MenuItem>
                   </TextField>
                 </FormGroup>
               </Form>
@@ -347,12 +353,6 @@ export const Wrap = (props) => {
                 />
               </FormGroup>
             </Form>
-            
-            {
-              token == "fDAIx"
-              ? <p>fDAI <FontAwesomeIcon icon={faArrowRight} className="arrow"/> fDAIx</p> 
-              : <p>ETH <FontAwesomeIcon icon={faArrowRight} className="arrow"/> ETHx</p>
-            }
 
             <div className="wrapButtonContainer">
             {

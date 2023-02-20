@@ -34,7 +34,7 @@
   margin-top: 3%;
   padding-top: 4%;
   padding-bottom: 4%;
-  width: 55%;
+  width: 50%;
   /*border: 0.5px solid #a9a9a9;*/
   background-color: black;
   border: 1px solid #343434;
@@ -86,13 +86,13 @@
 
 .flowAmount{
   display: inline-block;
-  width: 75%;
+  width: 70%;
   padding-right: 1%;
 }
 
 .flowInterval{
   display: inline-block;
-  width: 25%;
+  width: 30%;
   padding-left: 1%;
 }
 
@@ -150,4 +150,21 @@
   position: absolute;
   bottom: 4%;
   right: 4%;
+}
+
+.back {
+  margin-left: 18%;
+  margin-bottom: 3%;
+  text-align: left;
+}
+
+.back p {
+  margin-left: 10px;
+  display: inline-block;
+  -ms-transform: translateY(30%);
+  transform: translateY(30%);
+}
+
+.button:hover {
+  transition: all 1s;
 }

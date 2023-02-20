@@ -5,20 +5,18 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { MenuItem } from "@mui/material";
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 import store from '../app/store'
+import "../css/stream.css";
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -148,33 +146,12 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
 }
 
 export const DeleteFlow = (props) => {
-  const [recipient, setRecipient] = useState("");
+  const [recipient, setRecipient] = useState(props.recipient);
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  const [token, setToken] = useState("ETHx");
+  const [token, setToken] = useState(props.token);
   //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
-
-  function DeleteButton({ children, ...props }) {
-    return ( 
-      <Button variant="contained"
-        color="primary" 
-        sx={{
-          height: "45px",
-          width: "100%",
-          color: "white",
-          textTransform: "none",
-          fontFamily: 'Lato',
-          fontWeight: "700",
-          ":hover": {borderColor: "primary.main"}
-        }}
-        {...props}
-        >
-        {children}
-      </Button>
-      
-    );
-  }
 
   const handleRecipientChange = (e) => {
     setRecipient(() => ([e.target.name] = e.target.value));
@@ -187,6 +164,7 @@ export const DeleteFlow = (props) => {
   return (
     <>
       <div className="streamContainer">
+        {/*
         <div className="streamToggle">
           <ToggleButtonGroup
             color="primary"
@@ -194,10 +172,17 @@ export const DeleteFlow = (props) => {
             exclusive
             onChange={props.handleToggleChange}
             aria-label="Platform"
-          >
+          
             <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
             <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
           </ToggleButtonGroup>
+        </div>
+        */}
+        <div className="back">
+          <Button variant="outlined" sx={{textTransform:"none", borderRadius:"10px"}} onClick={()=>{props.openDashboard()}}>
+            <FontAwesomeIcon icon={faCircleArrowLeft}/> 
+            <p>Dashboard</p>
+          </Button>
         </div>
 
         <Card className="flowCard"
@@ -206,35 +191,27 @@ export const DeleteFlow = (props) => {
             borderRadius: "20px",
           }}>
           <CardContent>
-          <div className="titleContainer">          
-            <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
-            <Form className="token">
-              <FormGroup>
-                <TextField
-                  className="rainbow"
-                  select
-                  defaultValue="ETHx"
-                  value={token}
-                  onChange={handleTokenChange}
-                  color="success"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        {token === "ETHx"?<img src={ether}/>:<img src={dai}/>}
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  <MenuItem key={'ETHx'} value={'ETHx'}>
-                    ETHx
-                  </MenuItem>
-                  <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                    fDAIx
-                  </MenuItem>
-                </TextField>
-              </FormGroup>
-            </Form>
-          </div>
+            <div className="titleContainer">          
+              <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
+              <Form className="token">
+                <FormGroup>
+                  <TextField
+                    className="rainbow"
+                    value={token}
+                    onChange={handleTokenChange}
+                    color="success"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {token === "ETHx"?<img src={ether}/>:<img src={dai}/>}
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{width: '110px'}}
+                  />
+                </FormGroup>
+              </Form>
+            </div>
 
             <Form className="flowForm">
               <FormGroup>
@@ -263,14 +240,23 @@ export const DeleteFlow = (props) => {
                   }}>
                     Close Stream
                   </Button>
-                : <DeleteButton
+                : <Button variant="contained"
+                    color="primary"
+                    sx={{
+                      height: "45px",
+                      width: "100%",
+                      color: "white",
+                      textTransform: "none",
+                      fontFamily: 'Lato',
+                      fontWeight: "700",
+                    }}
                     onClick={() => {
                       deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxMsg);
                       setRecipient('');
                     }}
-                  >
+                    >
                     Close Stream
-                  </DeleteButton>
+                  </Button>
               }
             </div>
           </CardContent>

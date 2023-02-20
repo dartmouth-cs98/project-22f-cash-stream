@@ -11,17 +11,18 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
 // Watch out for this react-icons path
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
 import "../../css/flowInfo.css";
 import ether from '../../img/ether.png';
 import dai from '../../img/dai.png';
 
 function Row(props) {
-  const { row } = props;
+  const {row} = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -35,27 +36,38 @@ function Row(props) {
           }       
           {row.name}
         </TableCell>
-        
-        <TableCell align="center">{row.balance}</TableCell>
-        
         <TableCell align="center">
-          <FontAwesomeIcon icon={faCaretUp} className="up"/>
-          <span className="up">{row.formattedInflow}</span>
+          {row.balance}
         </TableCell>
-        
         <TableCell align="center">
-          <FontAwesomeIcon icon={faCaretDown} className="down"/>
-          <span className="down">{row.formattedOutflow}</span>
+          {
+            row.formattedInflow == " 0 /mo"
+            ? <span><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
+            : <span className="up"><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
+          }
         </TableCell>
-        
+        <TableCell align="center">
+          {
+            row.formattedOutflow == " 0 /mo"
+            ? <span><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
+            : <span className="down"><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
+          }
+        </TableCell>
         <TableCell align="center">
         {
           row.formattedNetflow.slice(0,1) == '-' 
-          ? <span className="down"><FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.formattedNetflow.slice(1, row.formattedNetflow.length)}</span>
-          : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
+          ? <span className="down">
+              <FontAwesomeIcon icon={faCaretDown} className='down'/>&nbsp;{row.formattedNetflow.slice(1, row.formattedNetflow.length)}
+            </span>
+          : <>
+            {
+              row.formattedNetflow.slice(0, row.formattedNetflow.length-4) == '0'
+              ? <>-&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</>
+              : <span className="up"><FontAwesomeIcon icon={faCaretUp} className='up'/>&nbsp;{row.formattedNetflow.slice(0, row.formattedNetflow.length)}</span>
+            }
+            </>
         }
         </TableCell>
-        
         <TableCell align="center"> 
           <IconButton
             aria-label="expand row"
@@ -66,13 +78,11 @@ function Row(props) {
           </IconButton>
         </TableCell>
       </TableRow>
-
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">Active Streams</Typography>
-
               <Table size="small" aria-label="purchases">
                 { 
                   row.history.length == 0
@@ -80,13 +90,13 @@ function Row(props) {
                   : <TableHead>
                     <TableRow>
                       <TableCell align="center">Start Date</TableCell>
-                      <TableCell align="center">To/From </TableCell>
+                      <TableCell align="center">To/From</TableCell>
                       {/* <TableCell align="center"> All Time Flow</TableCell> */}
                       <TableCell align="center">Flow Rate</TableCell>
+                      <TableCell align="center"></TableCell>
                     </TableRow>
                   </TableHead>
                 }
-
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
@@ -97,14 +107,23 @@ function Row(props) {
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="center" className='up'>
-                          <FontAwesomeIcon icon={faCaretUp} className='up'/>
-                          <span className='up'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
-                        </TableCell>
+                            <FontAwesomeIcon icon={faCaretUp} className='up'/>
+                            <span className='up'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
+                          </TableCell>
                         : <TableCell align="center" className='down'>
-                        <FontAwesomeIcon icon={faCaretDown} className='down'/>
-                        <span className='down'>{historyRow.amount.slice(1,historyRow.amount.length)}</span>
-                      </TableCell>
+                            <FontAwesomeIcon icon={faCaretDown} className='down'/>
+                            <span className='down'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
+                          </TableCell>
                       }
+                      <TableCell align='center'>
+                        {
+                          historyRow.amount.slice(0,1) == '-'
+                          ? <FontAwesomeIcon className='cursor' icon={faCircleXmark} onClick={()=>{
+                            props.setClose(row.name, historyRow.id)
+                          }}/>
+                          : <div>-</div>
+                        }
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -138,12 +157,13 @@ Row.propTypes = {
 };
 
 
-export const DashboardTable = (rows) => {
+export const DashboardTable = (props) => {
   return (
     <div>
-      <h4 className='mb-3 title dashboardTitle'>Tokens</h4>
-
-      <TableContainer component={Paper} class='dashboard'>
+      {
+      props.tokensInfo.length == 0
+      ? <div className='dashboardLoading'><CircularProgress color="inherit"/></div>
+      : <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
@@ -156,12 +176,15 @@ export const DashboardTable = (rows) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row}/> 
-            ))}
+            {
+              props.tokensInfo.map((row) => (
+                <Row key={row.name} row={row} setClose={props.setClose}/>
+              ))
+            }
           </TableBody>
         </Table>
       </TableContainer>
+    }
     </div>
   );
 }

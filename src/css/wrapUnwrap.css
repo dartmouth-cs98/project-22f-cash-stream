@@ -14,7 +14,21 @@
   text-decoration: underline;
 }
 
-.wrapToggle{
+.wrapInfo{
+  width: 50%;
+  justify-content: center;
+  text-align: justify;
+  font-size: 14px;
+  border: 1px solid #343434;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  height: 75px;
+}
+
+.wrapInfoText{
+  width: 90%;
+  margin: auto;
 }
 
 .wrapUnwrapContainer{
@@ -33,10 +47,10 @@
 .wrapCard{
   margin-left: auto;
   margin-right: auto;
-  margin-top: 3%;
-  padding-top: 4%;
-  padding-bottom: 4%;
-  width: 55%;
+  margin-top: 1%;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  width: 50%;
   border: 1px solid #343434;
 }
 
@@ -84,6 +98,8 @@
 .wrapMessage{
   margin-top: 5%;
   font-size: smaller;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .displayNone{
