@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faMinus } from '@fortawesome/free-solid-svg-icons';
 import LinearProgress from '@mui/material/LinearProgress';
 
-bar: { transition: 'none'}
-
 export const TokenCard = (props) => {
   const[time, updateTime] = useState();
 
