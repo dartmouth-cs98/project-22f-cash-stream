@@ -135,7 +135,8 @@ class FlowInfo extends Component {
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         
-        if(typeof queryResult.data.data.accounts[0].accountTokenSnapshots == 'undefined'){
+        if ((typeof queryResult.data.data.accounts[0] == 'undefined') ||
+            (typeof queryResult.data.data.accounts[0].accountTokenSnapshots == 'undefined')) {
           this.setState({firstTimeUser: true,});
         }
         else {
