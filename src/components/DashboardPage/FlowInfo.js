@@ -11,6 +11,7 @@ import { TokenCard } from './TokenCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGift } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
+import store from '../../app/store'
 
 class FlowInfo extends Component {
   constructor(props) {
@@ -56,9 +57,14 @@ class FlowInfo extends Component {
 
   async getWalletBalance(){
     // Load account
-    const accounts = await ethereum.request({ method: "eth_accounts" });
+    const accounts = await ethereum.request({ method: "eth_accounts" }); // TODO - fix to store
     const account = accounts[0];
 
+    // const currState = store.getState();
+  
+    // var chainId = currState.appReducer.chainId;
+    // var account = currState.appReducer.account;
+    
     if (account !== undefined) {
       this.setState({ 
         account: account,
@@ -272,15 +278,51 @@ class FlowInfo extends Component {
   }
 
   async getTokenBalance(tokenName) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const account = this.state.account;
-      const chainId = await window.ethereum.request({ method: "eth_chainId" });
 
-      const sf = await Framework.create({
-        chainId: Number(chainId),
-        provider: provider
-      });
+      const currState = store.getState();
+    
+      var chainId = currState.appReducer.chainId;
+      var account = currState.appReducer.account;
+      
+      if (typeof chainId == 'undefined') {
+        /*
+        * Redux store is not up to date. Retrieve chainId and account & save to 
+        * redux store via action dispatch.
+        */
+    
+        chainId = await window.ethereum.request({ method: "eth_chainId" });
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+        account = accounts[0];
+    
+        const connectWalletAction = {
+          type: 'wallet/connect',
+          payload: {
+            chainId: chainId, // string
+            account: account
+          }
+        }
+        store.dispatch(connectWalletAction);
+        console.log('Wallet redux state updated.')
+      }
+      
+      if (typeof window.provider == 'undefined') {
+        console.log('Retrieving provider & signer.')
+        window.provider = new ethers.providers.Web3Provider(window.ethereum);
+        console.log(window.provider);
+      }
+    
+      if (typeof window.signer == 'undefined') {
+        window.signer = window.provider.getSigner();
+        console.log(window.signer);
+      }
+    
+      if (typeof window.sf == 'undefined') {
+        window.sf = await Framework.create({
+          chainId: Number(chainId),
+          provider: window.provider
+        });   
+        console.log(window.sf);
+      }
 
       // ERROR TRY/CATCH FOR UNOFFICIAL TOKENS THAT CANT GET BALANCE
       try {

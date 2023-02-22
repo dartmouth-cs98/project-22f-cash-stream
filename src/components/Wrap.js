@@ -21,6 +21,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import "../css/wrapUnwrap.css";
 import "../css/stream.css";
+import store from '../app/store'
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 
@@ -53,8 +54,55 @@ function convertWeitofDAIx(wei){
 }
 
 async function getAllowance(){
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+
+  const currState = store.getState();
+  console.log(currState);
+
+  var chainId = currState.appReducer.chainId;
+  var account = currState.appReducer.account;
+  
+  if (typeof chainId == 'undefined') {
+    /*
+     * Redux store is not up to date. Retrieve chainId and account & save to 
+     * redux store via action dispatch.
+     */
+
+    chainId = await window.ethereum.request({ method: "eth_chainId" });
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    account = accounts[0];
+
+    const connectWalletAction = {
+      type: 'wallet/connect',
+      payload: {
+        chainId: chainId, // string
+        account: account
+      }
+    }
+    store.dispatch(connectWalletAction);
+    console.log('Wallet redux state updated.')
+  }
+
+  console.log(chainId);
+  console.log(account);
+
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider & signer.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
+  }
+
+  if (typeof window.signer == 'undefined') {
+    window.signer = window.provider.getSigner();
+    console.log(window.signer);
+  }
+
+  if (typeof window.sf == 'undefined') {
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: window.provider
+    });   
+    console.log(window.sf);
+  }
   
 //note that this abi is the one found here: https://goerli.etherscan.io/address/0x88271d333C72e51516B67f5567c728E702b3eeE8
   const fDAI = new ethers.Contract(
@@ -62,9 +110,6 @@ async function getAllowance(){
     daiABI,
     signer
   );
-
-  const accounts = await ethereum.request({ method: "eth_accounts" });
-  const account = accounts[0];
   
   try{
     await fDAI.allowance(
@@ -80,13 +125,56 @@ async function getAllowance(){
 
 //this function increases the allowance if the number of tokens being wrapped is greater than allowance
 async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
-  const sf = await Framework.create({
-    chainId: 5,
-    provider: customHttpProvider
-  });
+  console.log(recipient);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const currState = store.getState();
+  console.log(currState);
+
+  var chainId = currState.appReducer.chainId;
+  var account = currState.appReducer.account;
+  
+  if (typeof chainId == 'undefined') {
+    /*
+     * Redux store is not up to date. Retrieve chainId and account & save to 
+     * redux store via action dispatch.
+     */
+
+    chainId = await window.ethereum.request({ method: "eth_chainId" });
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    account = accounts[0];
+
+    const connectWalletAction = {
+      type: 'wallet/connect',
+      payload: {
+        chainId: chainId, // string
+        account: account
+      }
+    }
+    store.dispatch(connectWalletAction);
+    console.log('Wallet redux state updated.')
+  }
+
+  console.log(chainId);
+  console.log(account);
+
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider & signer.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
+  }
+
+  if (typeof window.signer == 'undefined') {
+    window.signer = window.provider.getSigner();
+    console.log(window.signer);
+  }
+
+  if (typeof window.sf == 'undefined') {
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: window.provider
+    });   
+    console.log(window.sf);
+  }
 
   //note that this abi is the one found here: https://goerli.etherscan.io/address/0x88271d333C72e51516B67f5567c728E702b3eeE8
   const fDAI = new ethers.Contract(
@@ -130,14 +218,55 @@ async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
 //wrap tokens to supertokens
 async function daiUpgrade(amt, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
 
-  const sf = await Framework.create({
-    chainId: 5,
-    provider: customHttpProvider
-  });
+  const currState = store.getState();
+  console.log(currState);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  var chainId = currState.appReducer.chainId;
+  var account = currState.appReducer.account;
+  
+  if (typeof chainId == 'undefined') {
+    /*
+     * Redux store is not up to date. Retrieve chainId and account & save to 
+     * redux store via action dispatch.
+     */
 
-  const signer = provider.getSigner();
+    chainId = await window.ethereum.request({ method: "eth_chainId" });
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    account = accounts[0];
+
+    const connectWalletAction = {
+      type: 'wallet/connect',
+      payload: {
+        chainId: chainId, // string
+        account: account
+      }
+    }
+    store.dispatch(connectWalletAction);
+    console.log('Wallet redux state updated.')
+  }
+
+  console.log(chainId);
+  console.log(account);
+
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider & signer.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
+  }
+
+  if (typeof window.signer == 'undefined') {
+    window.signer = window.provider.getSigner();
+    console.log(window.signer);
+  }
+
+  if (typeof window.sf == 'undefined') {
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: window.provider
+    });   
+    console.log(window.sf);
+  }
+
   var superToken = '';
   if (token == "fDAIx"){
     superToken = await sf.loadSuperToken("fDAIx");

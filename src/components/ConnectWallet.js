@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Framework } from "@superfluid-finance/sdk-core";
+import { Framework, isEthersProvider } from "@superfluid-finance/sdk-core";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import "../css/connectWallet.css";
@@ -54,11 +54,37 @@ export const ConnectWallet = (props) => {
       console.log("We have the ethereum object", ethereum);
     }
 
-    const accounts = await ethereum.request({ method: "eth_accounts" });
-    // const chain = await window.ethereum.request({ method: "eth_chainId" });
+    // const currState = store.getState();
+    // console.log(currState);
+  
+    // var account = currState.appReducer.account;
+    
+    // console.log('account');
+    // console.log(account);
+    // if (typeof account != 'undefined') {
 
+    // const accounts = await ethereum.request({ method: "eth_accounts" });
+    // // const chain = await window.ethereum.request({ method: "eth_chainId" });
+    // const network = "goerli";
+
+    // const provider = new ethers.providers.Web3Provider(
+    //   // `wss://eth-${network}.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API_KEY}`
+    //   // web3.currentProvider
+    //   'https://goerli.infura.io/v3/2FTMzOge17hhTwy3mfVXN4T7L3j'
+    // );
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    provider = window.provider;
+    console.log('provider')
+    
+    console.log(provider);
+    const accounts = await provider.listAccounts();
+
+    console.log(accounts[0])
+    console.log('length')
+    console.log(accounts.length);
     if (accounts.length !== 0) {
       const account = accounts[0];
+
       console.log("Found an authorized account:", account);
       setCurrentAccount(account);
       props.setConnected(true);
@@ -96,15 +122,13 @@ export const ConnectWallet = (props) => {
 
     // const provider = new ethers.providers.Web3Provider(window.ethereum);     // This only work on Local Dev Server, NOT on Hosting Server [HAROLD]
 
-    // USE DEFAULT PROVIDERS WITH API KEYS INSTEAD [HAROLD]
-    // (https://docs.ethers.org/v5/api-keys/)
-    const provider = ethers.getDefaultProvider(network, {
-      // etherscan: YOUR_ETHERSCAN_API_KEY,
-      infura: "2FTMzOge17hhTwy3mfVXN4T7L3j", // YOUR_INFURA_PROJECT_ID,
-      alchemy: "Eje_Y-pqB-HZwxVWpOYEUQoB44DhjZGO",//YOUR_ALCHEMY_API_KEY,
-  });
+    const network = "goerli";
 
-    window.provider = provider;
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    // window.provider = provider;
+    console.log(typeof(provider));
+    console.log(provider);
     const signer = provider.getSigner();
     window.signer = signer;
     console.log('signer: ', signer);
@@ -116,7 +140,7 @@ export const ConnectWallet = (props) => {
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
     const sf = await Framework.create({
         chainId: Number(chainId),
-        provider: provider
+        provider: window.provider
     });
 
     window.sf = sf;

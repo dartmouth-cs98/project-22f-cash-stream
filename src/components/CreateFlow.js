@@ -96,14 +96,14 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
   }
 
   if (typeof window.signer == 'undefined') {
-    window.signer = provider.getSigner();
+    window.signer = window.provider.getSigner();
     console.log(window.signer);
   }
 
   if (typeof window.sf == 'undefined') {
     window.sf = await Framework.create({
       chainId: Number(chainId),
-      provider: provider
+      provider: window.provider
     });   
     console.log(window.sf);
   }
