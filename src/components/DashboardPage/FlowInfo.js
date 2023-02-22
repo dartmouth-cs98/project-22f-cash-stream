@@ -287,7 +287,6 @@ class FlowInfo extends Component {
         const superToken = await sf.loadSuperToken(tokenName);
       }
       catch (error) {
-        console.log(tokenName,": Not Found ", error);
         return "N/A"
       }
 
