@@ -80,13 +80,14 @@ async function getAllowance(){
 
 //this function increases the allowance if the number of tokens being wrapped is greater than allowance
 async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
-  const sf = await Framework.create({
-    chainId: 5,
-    provider: customHttpProvider
-  });
-
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
+  
+  const sf = await Framework.create({
+    chainId: 5,
+    //provider: customHttpProvider,
+    provider: provider
+  });
 
   //note that this abi is the one found here: https://goerli.etherscan.io/address/0x88271d333C72e51516B67f5567c728E702b3eeE8
   const fDAI = new ethers.Contract(
@@ -130,12 +131,13 @@ async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
 //wrap tokens to supertokens
 async function daiUpgrade(amt, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+
   const sf = await Framework.create({
     chainId: 5,
-    provider: customHttpProvider
+    //provider: customHttpProvider
+    provider: provider
   });
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const signer = provider.getSigner();
   var superToken = '';

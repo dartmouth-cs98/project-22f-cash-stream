@@ -46,13 +46,14 @@ const ETHx_contract_address = "0x5943F705aBb6834Cad767e6E4bB258Bc48D9C947";
 
 //where the Superfluid logic takes place
 async function daiDowngrade(amt, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
-  const sf = await Framework.create({
-    chainId: 5,
-    provider: customHttpProvider
-  });
-
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
+
+  const sf = await Framework.create({
+    chainId: 5,
+    //provider: customHttpProvider
+    provider: provider
+  });
 
   var superToken = '';
   if (token == "fDAIx"){
