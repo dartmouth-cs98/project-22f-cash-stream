@@ -94,15 +94,17 @@ export const ConnectWallet = (props) => {
      * Redux does not support non-immutable type storage.
      */
 
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);     // This only work on Local Dev Server, NOT on Hosting Server [HAROLD]
+    const provider = new ethers.providers.Web3Provider(window.ethereum);     // This only work on Local Dev Server, NOT on Hosting Server [HAROLD]
 
+    /*
     // USE DEFAULT PROVIDERS WITH API KEYS INSTEAD [HAROLD]
     // (https://docs.ethers.org/v5/api-keys/)
     const provider = ethers.getDefaultProvider(network, {
       // etherscan: YOUR_ETHERSCAN_API_KEY,
       infura: "2FTMzOge17hhTwy3mfVXN4T7L3j", // YOUR_INFURA_PROJECT_ID,
       alchemy: "Eje_Y-pqB-HZwxVWpOYEUQoB44DhjZGO",//YOUR_ALCHEMY_API_KEY,
-  });
+    });
+    */
 
     window.provider = provider;
     const signer = provider.getSigner();
