@@ -34,9 +34,9 @@ export const WrapUnwrap = (props) => {
         </Card>
       </div>
       {
-        alignment === "wrap" 
-        ? <Wrap alignment={alignment} handleToggleChange={handleToggleChange}/> 
-        : <Unwrap alignment={alignment} handleToggleChange={handleToggleChange}/>
+        alignment === "wrap"
+        ? <Wrap alignment={alignment} handleToggleChange={handleToggleChange} ETHxBalance={props.ETHxBalance} fDAIxBalance={props.fDAIxBalance}/>
+        : <Unwrap alignment={alignment} handleToggleChange={handleToggleChange} ETHxBalance={props.ETHxBalance} fDAIxBalance={props.fDAIxBalance}/>
       }
     </div>
   );

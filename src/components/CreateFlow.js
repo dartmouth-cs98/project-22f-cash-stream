@@ -189,12 +189,16 @@ export const CreateFlow = (props) => {
       buffer = buffer/30/24;
     }
 
-    if(buffer > props.ETHxBalance){
+    if(token == 'ETHx' && buffer > props.ETHxBalance){
       console.log("balance is low!")
-      setLowBalance(true)
+      setLowBalance(true);
+    }
+    else if(token == 'fDAIx' && buffer > props.fDAIxBalance){
+      console.log("balance is low!")
+      setLowBalance(true);
     }
     else{
-      setLowBalance(false)
+      setLowBalance(false);
     }
   }
 
@@ -266,8 +270,9 @@ export const CreateFlow = (props) => {
   const handleFlowRateChange = (e) => {
     try {
       setFlowRate(() => ([e.target.name] = e.target.value));
-      checkLowBalance(token, flowRate, interval);
+      checkLowBalance(token, e.target.value, interval);
     } catch {
+      alert("Enter a valid flowrate.");
       console.error("Flowrate invalid.");
     }
   };
@@ -362,7 +367,10 @@ export const CreateFlow = (props) => {
             
             {
               lowBalance
-              ? <Typography sx={{fontSize: 15, marginBottom: '20px'}} gutterBottom>You don't have enough balance to initate this stream.</Typography>
+              ? <div>
+                <Typography sx={{fontSize: 15}} gutterBottom>You don't have enough balance to initate this stream.</Typography>
+                <Typography sx={{fontSize: 12, marginBottom: '25px'}} gutterBottom>Your balance should be greater than the upfront buffer (1 hour flowrate)</Typography>
+              </div>
               : <></>
             }
 

@@ -11,6 +11,7 @@ import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
 import { InputAdornment } from '@mui/material';
+import { Typography } from '@mui/material';
 import { MenuItem } from "@mui/material";
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -112,12 +113,25 @@ export const Unwrap = (props) => {
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
   const [token, setToken] = useState("ETHx");
+  const [lowBalance, setLowBalance] = useState(false)
+
+  function checkLowBalance(token, amount){
+    if(token == 'ETHx' && amount > parseFloat(props.ETHxBalance)){
+      setLowBalance(true);
+    }
+    else if(token == 'fDAIx' && amount > parseFloat(props.fDAIxBalance)){
+      setLowBalance(true);
+    }
+    else {
+      setLowBalance(false);
+    }
+  }
 
   function DowngradeButton({ isLoading, children, ...props }) {
     return (
       <div>
         {
-          txLoading || amount == ""
+          txLoading || amount == "" || lowBalance
           ? <Button 
               variant="contained" 
               disabled
@@ -151,7 +165,13 @@ export const Unwrap = (props) => {
   }
 
   const handleAmountChange = (e) => {
-    setAmount(() => ([e.target.name] = e.target.value));
+    try{
+      setAmount(() => ([e.target.name] = e.target.value));
+      checkLowBalance(token, e.target.value);
+    } catch {
+      alert("Enter a valid flowrate.");
+      console.error("Flowrate invalid.");
+    }
   };
 
   const handleTokenChange = (e) => {
@@ -213,12 +233,8 @@ export const Unwrap = (props) => {
                       ),
                     }}
                   >
-                    <MenuItem key={'ETHx'} value={'ETHx'}>
-                      ETHx
-                    </MenuItem>
-                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                      fDAIx
-                    </MenuItem>
+                    <MenuItem key={'ETHx'} value={'ETHx'}>ETHx</MenuItem>
+                    <MenuItem key={'fDAIx'} value={'fDAIx'}>fDAIx</MenuItem>
                   </TextField>
                 </FormGroup>
               </Form>
@@ -236,6 +252,12 @@ export const Unwrap = (props) => {
                 />
               </FormGroup>
             </Form>
+            
+            {
+              lowBalance
+              ? <Typography sx={{fontSize: 15, marginBottom: '20px'}} gutterBottom>You don't have enough balance.</Typography>
+              : <></>
+            }
 
             <div className="wrapButtonContainer">
               <DowngradeButton
