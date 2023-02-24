@@ -17,6 +17,7 @@ class FlowInfo extends Component {
     super(props)
 
     this.state = {
+      network: "goerli",
       firstTimeUser: false,
       account: '',
       tokensInfo: [],
@@ -273,6 +274,9 @@ class FlowInfo extends Component {
 
   async getTokenBalance(tokenName) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const network = await provider.getNetwork()
+      this.setState({network: network.name,})
+
       const signer = provider.getSigner();
       const account = this.state.account;
       const chainId = await window.ethereum.request({ method: "eth_chainId" });
@@ -313,24 +317,30 @@ class FlowInfo extends Component {
         this.props.connected
         ? <div className="dashboardPage">
           {
-          this.state.firstTimeUser
-          ? <div className="dashboardContainer dashboardLoading">
-              <h6>New to CashStream?</h6>
-              <h6>Start by wrapping your tokens!</h6>
-              <WrapButton/>
-            </div>
+          this.state.network !== "goerli"
+          ? <div className='dashboardContainer dashboardLoading'>Switch to Goerli testnet!</div>
           : <>
             {
-            this.state.close
-            ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
-            : <div className="dashboardContainer">
-                <div className='tokenCard'>{this.state.tokensInfo.map((token)=>{
-                  return token.name === 'ETHx' || token.name === 'fDAIx'
-                  ? <TokenCard key={token.name} token={token}/>
-                  : <></>
-                })}</div>
-                <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
+            this.state.firstTimeUser
+            ? <div className="dashboardContainer dashboardLoading">
+                <h6>New to CashStream?</h6>
+                <h6>Start by wrapping your tokens!</h6>
+                <WrapButton/>
               </div>
+            : <>
+              {
+              this.state.close
+              ? <DeleteFlow openDashboard = {this.openDashboard} token={this.state.closeToken} recipient={this.state.closeAddress}/>
+              : <div className="dashboardContainer">
+                  <div className='tokenCard'>{this.state.tokensInfo.map((token)=>{
+                    return token.name === 'ETHx' || token.name === 'fDAIx'
+                    ? <TokenCard key={token.name} token={token}/>
+                    : <></>
+                  })}</div>
+                  <DashboardTable tokensInfo={this.state.tokensInfo} setClose={this.setCloseInfo}/>
+                </div>
+              }
+            </>
             }
           </>
           }
@@ -344,7 +354,6 @@ class FlowInfo extends Component {
 
 function WrapButton(){
   const navigate = useNavigate();
-
   return(
     <Button variant="contained" onClick={()=>{navigate("/wrap")}}
       sx={{textTransform:"none", 
