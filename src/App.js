@@ -32,6 +32,8 @@ const theme = createTheme({
 
 export default function App() {
   let [connected, setConnected] = useState(false);
+  let [ETHxBalance, setETHxBalance] = useState('');
+  let [fDAIxBalance, setfDAIxBalance] = useState('');
   
   useEffect(() => {
     document.title = 'CashStream';
@@ -51,13 +53,13 @@ export default function App() {
           <Routes>
             <Route exact path="/" element={
                 connected
-                ? <FlowInfo connected={connected} setConnected={setConnected}/>
+                ? <FlowInfo connected={connected} setConnected={setConnected} setfDAIxBalance={setfDAIxBalance} setETHxBalance={setETHxBalance}/>
                 : <Main connected={connected} setConnected={setConnected}/>
               }>  
             </Route>
             <Route exact path="/stream" element={
                 connected
-                ? <Stream/>
+                ? <Stream ETHxBalance={ETHxBalance} fDAIxBalance={fDAIxBalance}/>
                 : <Main connected={connected} setConnected={setConnected}/>
               }>
             </Route>

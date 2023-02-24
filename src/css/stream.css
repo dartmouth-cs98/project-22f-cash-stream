@@ -168,3 +168,7 @@
 .button:hover {
   transition: all 1s;
 }
+
+.tokenBalance {
+  margin-top: 5%;
+}

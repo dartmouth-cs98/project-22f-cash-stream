@@ -307,6 +307,14 @@ class FlowInfo extends Component {
 
       const superTokenBalance = realTimeBalance.availableBalance;
       const balanceInComa = ethers.utils.formatEther(superTokenBalance).substring(0,13);
+
+      if (tokenName == 'ETHx'){
+        this.props.setETHxBalance(balanceInComa)
+      }
+      else if (tokenName == 'fDAIx'){
+        this.props.setfDAIxBalance(balanceInComa)
+      }
+
       return balanceInComa
   }
 

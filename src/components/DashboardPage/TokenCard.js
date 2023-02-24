@@ -1,8 +1,7 @@
-import Card from '@mui/material/Card';
 import { useEffect, useState } from 'react';
-import { CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import LinearProgress from '@mui/material/LinearProgress';
 
 export const TokenCard = (props) => {
