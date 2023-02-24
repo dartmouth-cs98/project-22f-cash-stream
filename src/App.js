@@ -65,7 +65,7 @@ export default function App() {
             </Route>
             <Route exact path="/wrap" element={
               connected
-              ? <WrapUnwrap/>
+              ? <WrapUnwrap ETHxBalance={ETHxBalance} fDAIxBalance={fDAIxBalance}/>
               : <Main connected={connected} setConnected={setConnected}/>
               }>
             </Route>

@@ -15,11 +15,22 @@ export const Stream = (props) => {
   return (
     <div className="streamPage">
       <div className="tokenBalance">
-        <Card sx={{minWidth: 275, marginRight: '15px', paddingTop: '10px', paddingBottom: '8px', borderRadius: '15px'}}>
-            <Typography sx={{fontSize: 15, fontWeight: '700'}} color="text.secondary" gutterBottom>{props.ETHxBalance} ETHx</Typography>
+        <Card sx={{
+                  minWidth: 200, 
+                  marginRight: '10px', 
+                  paddingTop: '12px', 
+                  paddingBottom: '12px', 
+                  borderRadius: '10px',
+                  display: 'inline-block'}}>
+            <Typography sx={{fontSize: 15, fontWeight: '700'}}>{props.ETHxBalance} ETHx</Typography>
         </Card>
-        <Card sx={{minWidth: 275, marginRight: '15px', paddingTop: '10px', paddingBottom: '8px', borderRadius: '15px'}}>
-          <Typography sx={{fontSize: 15, fontWeight: '700'}} color="text.secondary" gutterBottom>{props.fDAIxBalance} fDAIx</Typography>
+        <Card sx={{
+                  minWidth: 200, 
+                  paddingTop: '12px', 
+                  paddingBottom: '12px', 
+                  borderRadius: '10px',
+                  display: 'inline-block'}}>
+          <Typography sx={{fontSize: 15, fontWeight: '700'}}>{props.fDAIxBalance} fDAIx</Typography>
         </Card>
       </div>
       <CreateFlow/>

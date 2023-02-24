@@ -170,5 +170,7 @@
 }
 
 .tokenBalance {
-  margin-top: 5%;
+  position: absolute;
+  margin-top: 2%;
+  right: 2%;
 }
