@@ -136,9 +136,10 @@ class FlowInfo extends Component {
         // Get Subgraph Schema by running the Query in this playground
         // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         
-        if ((typeof queryResult.data.data.accounts[0] == 'undefined') ||
-            (typeof queryResult.data.data.accounts[0].accountTokenSnapshots == 'undefined')) {
-          this.setState({firstTimeUser: true,});
+        if ((typeof queryResult.data.data.accounts[0] == 'undefined') || (typeof queryResult.data.data.accounts[0].accountTokenSnapshots == 'undefined')) {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const network = await provider.getNetwork()        
+          this.setState({network: network.name, firstTimeUser: true,});
         }
         else {
           this.setState({firstTimeUser: false,});
@@ -325,7 +326,7 @@ class FlowInfo extends Component {
         this.props.connected
         ? <div className="dashboardPage">
           {
-          this.state.network !== "goerli"
+          this.state.network != "goerli"
           ? <div className='dashboardContainer dashboardLoading'>Switch to Goerli testnet!</div>
           : <>
             {
