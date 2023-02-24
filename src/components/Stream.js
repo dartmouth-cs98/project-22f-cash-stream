@@ -2,16 +2,8 @@ import { CreateFlow } from "./CreateFlow";
 import { Card, Typography } from '@mui/material';
 import "../css/stream.css";
 
-//Stream page (wrapper component for create/delete flow)
+//Stream page (wrapper component for create flow)
 export const Stream = (props) => {
-  {/*
-  const [alignment, setAlignment] = useState('create'); //togglebutton options
-
-  const handleToggleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
-  */}
-
   return (
     <div className="streamPage">
       <div className="tokenBalance">
@@ -33,12 +25,7 @@ export const Stream = (props) => {
           <Typography sx={{fontSize: 15, fontWeight: '700'}}>{props.fDAIxBalance} fDAIx</Typography>
         </Card>
       </div>
-      <CreateFlow/>
-      {/*
-        alignment === "create" 
-        ? <CreateFlow alignment={alignment} handleToggleChange={handleToggleChange}/>
-        : <DeleteFlow alignment={alignment} handleToggleChange={handleToggleChange}/>
-    */}
+      <CreateFlow ETHxBalance={props.ETHxBalance} fDAIxBalance={props.fDAIxBalance}/>
     </div>
   );
 }
