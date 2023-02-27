@@ -23,12 +23,13 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 2%;
-  height: 75px;
 }
 
 .wrapInfoText{
   width: 90%;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
 }
 
 .wrapUnwrapContainer{

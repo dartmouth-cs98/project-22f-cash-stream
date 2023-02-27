@@ -363,7 +363,7 @@ export const Wrap = (props) => {
               ? <div>
                 <ApproveButton
                   onClick={() => {
-                    daiApprove(amount, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
+                    daiApprove(amount, setTxLoading, setTxCompleted, setTxHash, setTxMsg);
                     setAmount("");
                   }}
                 >

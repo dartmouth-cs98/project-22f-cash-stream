@@ -4,24 +4,21 @@ import { Framework } from "@superfluid-finance/sdk-core";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
-//import Typography from '@mui/material/Typography';
 import { MenuItem } from "@mui/material";
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import axios from 'axios';
 import { TxModal } from "./Modal";
 import { SnackBar } from "./Snackbar";
 import { InputAdornment } from '@mui/material';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
 import store from '../app/store'
 import "../css/stream.css";
-//import { width } from "@mui/system";
 
 const intervals = [
   {
@@ -175,9 +172,36 @@ export const CreateFlow = (props) => {
   const [token, setToken] = useState("ETHx");
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
-  //const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
+  const [lowBalance, setLowBalance] = useState(false);
   
+  function checkLowBalance(token, amount, period){
+    if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
+      return;
+    }
+
+    let buffer = amount
+    
+    if(period == "month"){
+      buffer = buffer/30;
+    }
+    else if(period == "day"){
+      buffer = buffer/30/24;
+    }
+
+    if(token == 'ETHx' && buffer > props.ETHxBalance){
+      console.log("balance is low!")
+      setLowBalance(true);
+    }
+    else if(token == 'fDAIx' && buffer > props.fDAIxBalance){
+      console.log("balance is low!")
+      setLowBalance(true);
+    }
+    else{
+      setLowBalance(false);
+    }
+  }
+
   function calculateFlowRate(amount, period){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       alert("You can only calculate a flowRate based on a number");
@@ -187,10 +211,7 @@ export const CreateFlow = (props) => {
       if (Number(amount) === 0) {
         return 0;
       }
-      console.log("calculating flowrate...");
-      //const amountBN = ethers.BigNumber.from(amount);
-      console.log("Here?");
-      //const formattedAmount = ethers.utils.parseEther(amountBN.toString());
+
       const formattedAmount = amount * Math.pow(10, 18);
       var flowRate = 0;
 
@@ -213,7 +234,7 @@ export const CreateFlow = (props) => {
       if (flowRate > Number.MAX_SAFE_INTEGER){
         //max safe integer is 2^53-1, 9007199254740000.
         //Amount greater than 32.425917/hour, 778.22202/day, and 2334666.66/month will throw an overflow error.
-        alert("The flowrate cannot exceed the maximum safe integer value (32/hr, 778/day, 23346/month). Enter a smaller amount. ");
+        alert("The flowrate cannot exceed the maximum safe integer value (32/hr, 778/day, 23346/month). Enter a smaller amount.");
         return;
       }
 
@@ -249,7 +270,9 @@ export const CreateFlow = (props) => {
   const handleFlowRateChange = (e) => {
     try {
       setFlowRate(() => ([e.target.name] = e.target.value));
+      checkLowBalance(token, e.target.value, interval);
     } catch {
+      alert("Enter a valid flowrate.");
       console.error("Flowrate invalid.");
     }
   };
@@ -265,21 +288,6 @@ export const CreateFlow = (props) => {
   return (
     <>
       <div className="streamContainer">
-        {/*
-        <div className="streamToggle">
-          <ToggleButtonGroup
-            color="primary"
-            value={props.alignment}
-            exclusive
-            onChange={props.handleToggleChange}
-            aria-label="Platform"
-          >
-            <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
-            <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
-          </ToggleButtonGroup>
-        </div>
-        */}
-
         <Card className="flowCard"
           sx={{
             bgcolor: "secondary.dark",
@@ -305,12 +313,8 @@ export const CreateFlow = (props) => {
                       ),
                     }}
                   >
-                    <MenuItem key={'ETHx'} value={'ETHx'}>
-                      ETHx
-                    </MenuItem>
-                    <MenuItem key={'fDAIx'} value={'fDAIx'}>
-                      fDAIx
-                    </MenuItem>
+                    <MenuItem key={'ETHx'} value={'ETHx'}>ETHx</MenuItem>
+                    <MenuItem key={'fDAIx'} value={'fDAIx'}>fDAIx</MenuItem>
                   </TextField>
                 </FormGroup>
               </Form>
@@ -360,10 +364,19 @@ export const CreateFlow = (props) => {
                 </FormGroup>
               </div>
             </Form>
+            
+            {
+              lowBalance
+              ? <div>
+                <Typography sx={{fontSize: 15}} gutterBottom>You don't have enough balance to initate this stream.</Typography>
+                <Typography sx={{fontSize: 12, marginBottom: '25px'}} gutterBottom>Your balance should be greater than the upfront buffer (1 hour flowrate)</Typography>
+              </div>
+              : <></>
+            }
 
             <div className="flowButtonContainer">
             {
-              recipient == "" || flowRate == "" || txLoading
+              recipient == "" || flowRate == "" || txLoading || lowBalance
               ? <Button variant="contained" disabled 
                 sx={{textTransform:"none", 
                   width:"100%", 
