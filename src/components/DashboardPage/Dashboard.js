@@ -16,14 +16,21 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faCircleXmark, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
 import "../../css/flowInfo.css";
 import ether from '../../img/ether.png';
 import dai from '../../img/dai.png';
+import { EditForm } from './EditForm';
 
 function Row(props) {
   const {row} = props;
   const [open, setOpen] = React.useState(false);
+
+  const [editOpen, setEditOpen] = React.useState(false);
+
+  const handleEditOpen = () => setEditOpen(true);
+  const handleEditClose = () => setEditOpen(false);
+  const [editAddress, setEditAddress] = React.useState("");
 
   return (
     <React.Fragment>
@@ -103,7 +110,13 @@ function Row(props) {
                       <TableCell component="th" scope="row" align="center"> 
                         {historyRow.date}
                       </TableCell>
-                      <TableCell align="center">{historyRow.id}</TableCell>
+                      <TableCell align="center">
+                        {`${historyRow.id.substring(0, 4)}...${historyRow.id.substring(38)}`}
+                        <FontAwesomeIcon icon={faPenToSquare} className='marginLeft15px cursor' onClick={()=>{
+                          setEditAddress(historyRow.id);
+                          handleEditOpen();
+                        }}/>
+                      </TableCell>
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="center" className='up'>
@@ -132,6 +145,7 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
+      <EditForm address={editAddress} editOpen={editOpen} handleEditClose={handleEditClose}/>
     </React.Fragment>
   );
 }
@@ -155,7 +169,6 @@ Row.propTypes = {
     //netflow: PropTypes.number.isRequired,
   }).isRequired,
 };
-
 
 export const DashboardTable = (props) => {
   return (
