@@ -23,6 +23,7 @@ import "../css/wrapUnwrap.css";
 import "../css/stream.css";
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
+import store from '../app/store'
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
@@ -131,15 +132,56 @@ async function daiApprove(amt, setTxLoading, setTxCompleted, setTxHash, setTxMsg
 //wrap tokens to supertokens
 async function daiUpgrade(amt, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
+  }
 
-  const sf = await Framework.create({
-    chainId: 5,
-    //provider: customHttpProvider
-    provider: provider
-  });
+  const provider = window.provider;
 
-  const signer = provider.getSigner();
+  if (typeof window.signer == 'undefined') {
+    window.signer = provider.getSigner();
+    console.log(window.signer);
+  }
+
+  const signer = window.signer;
+
+  if (typeof window.sf == 'undefined') {
+  
+    const currState = store.getState();
+    console.log(currState);
+  
+    var chainId = currState.appReducer.chainId;
+
+    if (typeof chainId == 'undefined') {
+      /*
+       * Redux store is not up to date. Retrieve chainId and account & save to 
+       * redux store via action dispatch.
+       */
+  
+      chainId = await window.ethereum.request({ method: "eth_chainId" });
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      const account = accounts[0];
+  
+      const connectWalletAction = {
+        type: 'wallet/connect',
+        payload: {
+          chainId: chainId, // string
+          account: account
+        }
+      }
+      store.dispatch(connectWalletAction);
+      console.log('Wallet redux state updated.')
+    }
+
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: provider
+    });   
+  }
+  const sf = window.sf;
+
   var superToken = '';
   if (token == "fDAIx"){
     superToken = await sf.loadSuperToken("fDAIx");

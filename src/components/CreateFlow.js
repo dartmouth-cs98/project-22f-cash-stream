@@ -92,10 +92,14 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
     console.log(window.provider);
   }
 
+  const provider = window.provider;
+
   if (typeof window.signer == 'undefined') {
     window.signer = provider.getSigner();
     console.log(window.signer);
   }
+
+  const signer = window.signer;
 
   if (typeof window.sf == 'undefined') {
     window.sf = await Framework.create({
@@ -105,21 +109,23 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
     console.log(window.sf);
   }
 
+  const sf = window.sf;
+
   var superToken = '';
 
   if (token == 'fDAIx'){
     console.log("creating a fDAIX stream...");
-    const fDAIxContract = await window.sf.loadSuperToken("fDAIx");
+    const fDAIxContract = await sf.loadSuperToken("fDAIx");
     superToken = fDAIxContract.address;
   }
   else if (token == 'ETHx'){
     console.log("creating a ETHx stream...");
-    const ETHxContract = await window.sf.loadSuperToken("ETHx");
+    const ETHxContract = await sf.loadSuperToken("ETHx");
     superToken = ETHxContract.address;
   }
 
   try {
-    const createFlowOperation = window.sf.cfaV1.createFlow({
+    const createFlowOperation = sf.cfaV1.createFlow({
       sender: account, 
       receiver: recipient,
       flowRate: flowRate,
@@ -131,7 +137,7 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
     setTxLoading(true);
     setTxMsg("Transaction being broadcasted...");
 
-    const createTxn = await createFlowOperation.exec(window.signer);
+    const createTxn = await createFlowOperation.exec(signer);
     await createTxn.wait().then(function (tx) {
       console.log(
         `Congrats - you've just created a money stream!

@@ -75,10 +75,14 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
     console.log(window.provider);
   }
 
+  const provider = window.provider;
+
   if (typeof window.signer == 'undefined') {
     window.signer = provider.getSigner();
     console.log(window.signer);
   }
+
+  const signer = window.signer;
 
   if (typeof window.sf == 'undefined') {
     window.sf = await Framework.create({
@@ -88,21 +92,23 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
     console.log(window.sf);
   }
 
+  const sf = window.sf;
+
   var superToken = '';
 
   if (token == 'fDAIx'){
     console.log("creating a fDAIX stream...");
-    const fDAIxContract = await window.sf.loadSuperToken("fDAIx");
+    const fDAIxContract = await sf.loadSuperToken("fDAIx");
     superToken = fDAIxContract.address;
   }
   else if (token == 'ETHx'){
     console.log("creating a ETHx stream...");
-    const ETHxContract = await window.sf.loadSuperToken("ETHx");
+    const ETHxContract = await sf.loadSuperToken("ETHx");
     superToken = ETHxContract.address;
   }
 
   try {
-    const deleteFlowOperation = window.sf.cfaV1.deleteFlow({
+    const deleteFlowOperation = sf.cfaV1.deleteFlow({
       sender: account,
       receiver: recipient,
       superToken: superToken,
@@ -113,7 +119,7 @@ async function deleteFlow(recipient, token, setTxLoading, setTxCompleted, setTxM
     setTxLoading(true);
     setTxMsg("Transaction being broadcasted...");
 
-    const deleteTxn = await deleteFlowOperation.exec(window.signer);
+    const deleteTxn = await deleteFlowOperation.exec(signer);
     await deleteTxn.wait().then(function (tx) {
     console.log(
       `Congrats - you've just deleted your money stream!

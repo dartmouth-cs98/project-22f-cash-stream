@@ -23,6 +23,7 @@ import "../css/wrapUnwrap.css";
 import "../css/stream.css";
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
+import store from '../app/store'
 
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
 
@@ -47,14 +48,57 @@ const ETHx_contract_address = "0x5943F705aBb6834Cad767e6E4bB258Bc48D9C947";
 
 //where the Superfluid logic takes place
 async function daiDowngrade(amt, token, setTxLoading, setTxCompleted, setTxHash, setTxMsg) {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
 
-  const sf = await Framework.create({
-    chainId: 5,
-    //provider: customHttpProvider
-    provider: provider
-  });
+  if (typeof window.provider == 'undefined') {
+    console.log('Retrieving provider.')
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+    console.log(window.provider);
+  }
+
+  const provider = window.provider;
+
+  if (typeof window.signer == 'undefined') {
+    window.signer = provider.getSigner();
+    console.log(window.signer);
+  }
+
+  const signer = window.signer;
+
+  if (typeof window.sf == 'undefined') {
+  
+    const currState = store.getState();
+    console.log(currState);
+  
+    var chainId = currState.appReducer.chainId;
+
+    if (typeof chainId == 'undefined') {
+      /*
+       * Redux store is not up to date. Retrieve chainId and account & save to 
+       * redux store via action dispatch.
+       */
+  
+      chainId = await window.ethereum.request({ method: "eth_chainId" });
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      const account = accounts[0];
+  
+      const connectWalletAction = {
+        type: 'wallet/connect',
+        payload: {
+          chainId: chainId, // string
+          account: account
+        }
+      }
+      store.dispatch(connectWalletAction);
+      console.log('Wallet redux state updated.')
+    }
+
+    window.sf = await Framework.create({
+      chainId: Number(chainId),
+      provider: provider
+    });   
+  }
+
+  const sf = window.sf;
 
   var superToken = '';
   if (token == "fDAIx"){
