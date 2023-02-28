@@ -29,13 +29,8 @@ export const EditForm = (props) => {
   };
 
   async function saveName(){
-    var contact = localStorage.getItem('contact');
-    if (contact == null){
-      let contact = []
-      contact.push({[props.address]: name})
-      localStorage.setItem('contact', JSON.stringify(contact));
-    }
-    else {
+    if (props.token == 'ETHx'){
+      var contact = localStorage.getItem('ETHx_contact');
       var parsed_contact = JSON.parse(contact);
       var exists = false;
 
@@ -46,11 +41,29 @@ export const EditForm = (props) => {
         }
       }
       if(!exists){
-        parsed_contact.push({[props.address]: name})
+        parsed_contact.push({[props.address]:name})
       }
 
-      localStorage.setItem('contact', JSON.stringify(parsed_contact));
+      localStorage.setItem('ETHx_contact', JSON.stringify(parsed_contact));
     }
+    else if (props.token == 'fDAIx'){
+      var contact = localStorage.getItem('fDAIx_contact');
+      var parsed_contact = JSON.parse(contact);
+      var exists = false;
+
+      for(const item of parsed_contact){
+        if(typeof item[props.address] !== "undefined"){
+          item[props.address] = name
+          exists = true;
+        }
+      }
+      if(!exists){
+        parsed_contact.push({[props.address]:name})
+      }
+
+      localStorage.setItem('fDAIx_contact', JSON.stringify(parsed_contact));
+    }
+    
     setName("")
     props.handleEditClose()
   }
@@ -84,7 +97,15 @@ export const EditForm = (props) => {
                 />
               </FormGroup>
             </Form>
-            <Button variant='contained' onClick={saveName} sx={{textTransform:"none", height:"45px", color: "white", fontFamily:'Lato', fontWeight: "700"}}>save</Button>
+            {
+            name == ""
+            ? <Button disabled variant='contained' onClick={saveName} sx={{textTransform:"none", height:"45px", color: "white", fontFamily:'Lato', fontWeight: "700"}}>
+              save
+            </Button>
+            : <Button variant='contained' onClick={saveName} sx={{textTransform:"none", height:"45px", color: "white", fontFamily:'Lato', fontWeight: "700"}}>
+              save
+            </Button>
+            }
           </div>
         </Box>
       </Modal>

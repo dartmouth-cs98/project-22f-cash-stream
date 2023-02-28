@@ -25,12 +25,45 @@ import { EditForm } from './EditForm';
 function Row(props) {
   const {row} = props;
   const [open, setOpen] = React.useState(false);
-
   const [editOpen, setEditOpen] = React.useState(false);
-
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
   const [editAddress, setEditAddress] = React.useState("");
+
+  if (localStorage.getItem('ETHx_contact') == null){
+    localStorage.setItem('ETHx_contact', JSON.stringify([]));
+  }
+
+  if (localStorage.getItem('fDAIx_contact') == null){
+    localStorage.setItem('fDAIx_contact', JSON.stringify([]));
+  }
+
+  function search_contact(address){
+    if (row.name == "ETHx"){
+      var contact = localStorage.getItem('ETHx_contact');
+      var parsed_contact = JSON.parse(contact);
+  
+      for(const item of parsed_contact){
+        if(typeof item[address] !== "undefined"){
+          return item[address];
+        }
+      }
+    }
+
+    else if (row.name == "fDAIx"){
+      if (row.name == "fDAIx"){
+        var contact = localStorage.getItem('fDAIx_contact');
+        var parsed_contact = JSON.parse(contact);
+    
+        for(const item of parsed_contact){
+          if(typeof item[address] !== "undefined"){
+            return item[address];
+          }
+        }
+      }
+    }
+    return undefined
+  }
 
   return (
     <React.Fragment>
@@ -96,39 +129,45 @@ function Row(props) {
                   ? <span className="noStream"><p>You have no active streams.</p></span>
                   : <TableHead>
                     <TableRow>
-                      <TableCell align="center">Start Date</TableCell>
-                      <TableCell align="center">To/From</TableCell>
-                      {/* <TableCell align="center"> All Time Flow</TableCell> */}
-                      <TableCell align="center">Flow Rate</TableCell>
-                      <TableCell align="center"></TableCell>
+                      <TableCell align="left">Start Date</TableCell>
+                      <TableCell align="left">Stream</TableCell>
+                      <TableCell align="left">To/From</TableCell>
+                      <TableCell align="left">Flow Rate</TableCell>
+                      <TableCell align="left"></TableCell>
                     </TableRow>
                   </TableHead>
                 }
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row" align="center"> 
+                      <TableCell component="th" scope="row" align="left"> 
                         {historyRow.date}
                       </TableCell>
-                      <TableCell align="center">
-                        {`${historyRow.id.substring(0, 4)}...${historyRow.id.substring(38)}`}
-                        <FontAwesomeIcon icon={faPenToSquare} className='marginLeft15px cursor' onClick={()=>{
-                          setEditAddress(historyRow.id);
-                          handleEditOpen();
+                      <TableCell align="left">
+                        {
+                          typeof search_contact(historyRow.id) !== "undefined"
+                          ? search_contact(historyRow.id)
+                          : "untitled stream"
+                        }
+                        <FontAwesomeIcon icon={faPenToSquare} className='marginLeft15px cursor' 
+                          onClick={()=>{
+                            setEditAddress(historyRow.id);
+                            handleEditOpen();
                         }}/>
                       </TableCell>
+                      <TableCell align="left">{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(38)}`}</TableCell>
                       {
                         historyRow.amount.slice(0,1) == '+'
-                        ? <TableCell align="center" className='up'>
+                        ? <TableCell align="left" className='up'>
                             <FontAwesomeIcon icon={faCaretUp} className='up'/>
                             <span className='up'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
-                        : <TableCell align="center" className='down'>
+                        : <TableCell align="left" className='down'>
                             <FontAwesomeIcon icon={faCaretDown} className='down'/>
                             <span className='down'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
                       }
-                      <TableCell align='center'>
+                      <TableCell align='left'>
                         {
                           historyRow.amount.slice(0,1) == '-'
                           ? <FontAwesomeIcon className='cursor' icon={faCircleXmark} onClick={()=>{
@@ -145,7 +184,7 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
-      <EditForm address={editAddress} editOpen={editOpen} handleEditClose={handleEditClose}/>
+      <EditForm token={row.name} address={editAddress} editOpen={editOpen} handleEditClose={handleEditClose}/>
     </React.Fragment>
   );
 }
