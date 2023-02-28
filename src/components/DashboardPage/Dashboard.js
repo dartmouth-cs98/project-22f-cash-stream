@@ -145,7 +145,7 @@ function Row(props) {
                       </TableCell>
                       <TableCell align="left">
                         {
-                          typeof search_contact(historyRow.id) !== "undefined"
+                          typeof search_contact(historyRow.id) !== "undefined" && search_contact(historyRow.id) !== ""
                           ? search_contact(historyRow.id)
                           : "untitled stream"
                         }
@@ -155,7 +155,7 @@ function Row(props) {
                             handleEditOpen();
                         }}/>
                       </TableCell>
-                      <TableCell align="left">{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(38)}`}</TableCell>
+                      <TableCell align="left">{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(36)}`}</TableCell>
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="left" className='up'>
