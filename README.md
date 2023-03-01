@@ -45,12 +45,14 @@ yarn start
 ## Other
 
 [Landing Page](http://cashstreamcrypto.com)
+
 [EtherStream Demo](https://spotify-3-0.onrender.com/)
+
 [EtherStream GitHub](https://github.com/thanvinhbaohoang/Spotify-3.0)
 
 ## Authors
 
-Sunint Bindra, Tai Wan Kim, Harold Than, Jason Wang
+Tai Wan Kim, Harold Than, Jason Wang, Sunint Bindra
 
 ## Acknowledgements
 
