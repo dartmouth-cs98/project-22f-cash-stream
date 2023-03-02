@@ -102,3 +102,7 @@
 .editFormField{
   text-align: center;
 }
+
+.address{
+  cursor: pointer;
+}

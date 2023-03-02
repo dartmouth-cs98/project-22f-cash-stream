@@ -1,19 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import CircularProgress from '@mui/material/CircularProgress';
-// Watch out for this react-icons path
-import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Tooltip } from '@mui/material';
+import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi"; // Watch out for this react-icons path
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown, faCircleXmark, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
@@ -23,13 +11,17 @@ import dai from '../../img/dai.png';
 import { EditForm } from './EditForm';
 
 function Row(props) {
-  const {row} = props;
-  const [open, setOpen] = React.useState(false);
-  const [editOpen, setEditOpen] = React.useState(false);
+  const {row} = props; //row containing information for each stream (date, id, )
+  const [open, setOpen] = React.useState(false); //drop down for dashboard
+
+  const [editOpen, setEditOpen] = React.useState(false); //open modal when we edit a stream's name
   const handleEditOpen = () => setEditOpen(true);
   const handleEditClose = () => setEditOpen(false);
-  const [editAddress, setEditAddress] = React.useState("");
+  const [editAddress, setEditAddress] = React.useState(""); //address of the stream being renamed
 
+  const [tooltip, setTooltip] = React.useState("Click to copy") //tooltip message for copy address (set to "Copied!" after copying)
+
+  //fetch stream names from local storage (Or set up storage if it is not already there)
   if (localStorage.getItem('ETHx_contact') == null){
     localStorage.setItem('ETHx_contact', JSON.stringify([]));
   }
@@ -38,6 +30,7 @@ function Row(props) {
     localStorage.setItem('fDAIx_contact', JSON.stringify([]));
   }
 
+  //Fetch stream name associated with the stream's wallet address
   function search_contact(address){
     if (row.name == "ETHx"){
       var contact = localStorage.getItem('ETHx_contact');
@@ -49,7 +42,6 @@ function Row(props) {
         }
       }
     }
-
     else if (row.name == "fDAIx"){
       if (row.name == "fDAIx"){
         var contact = localStorage.getItem('fDAIx_contact');
@@ -63,6 +55,12 @@ function Row(props) {
       }
     }
     return undefined
+  }
+
+  //copy wallet address to clipboard
+  function copyAddress(address){
+    navigator.clipboard.writeText(address);
+    setTooltip("Copied!");
   }
 
   return (
@@ -139,7 +137,7 @@ function Row(props) {
                 }
                 <TableBody>
                   {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
+                    <TableRow key={historyRow.id}>
                       <TableCell component="th" scope="row" align="left"> 
                         {historyRow.date}
                       </TableCell>
@@ -155,7 +153,14 @@ function Row(props) {
                             handleEditOpen();
                         }}/>
                       </TableCell>
-                      <TableCell align="left">{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(36)}`}</TableCell>
+                      <TableCell align="left">
+                        <Tooltip title={tooltip} arrow placement='top' 
+                          onClick={()=>{copyAddress(historyRow.id)}}
+                          onMouseOut={()=>{setTooltip("Click to copy")}}
+                        >
+                          <div className='address'>{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(36)}`}</div>
+                        </Tooltip>
+                      </TableCell>
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="left" className='up'>
