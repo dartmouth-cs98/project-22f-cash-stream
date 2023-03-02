@@ -365,7 +365,7 @@ export const CreateFlow = (props) => {
             <Form className="flowForm">
               <FormGroup>
                 <TextField
-                  label="stream name"
+                  label="tream name"
                   name="recipient"
                   value={name}
                   onChange={handleNameChange}

@@ -174,3 +174,7 @@
   margin-top: 2%;
   right: 2%;
 }
+
+.dummy div:hover{
+  color: white;
+}

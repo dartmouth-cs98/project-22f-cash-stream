@@ -1,15 +1,15 @@
 import { React } from "react"
 import '../../css/ServicePage.css'
-import spotify from '../../img/spotify.png'; {/*https://icons8.com/icons/set/spotify*/}
+import etherstream from '../../img/etherstream.png'; {/*https://icons8.com/icons/set/ethereum*/}
 
 export const ServiceCard = () => {
     return (
       <div class="service-card">
         <div class = 'service-left'>
-          <div class='service-thumbnail'><img src={spotify}/></div>
+          <div class='service-thumbnail'><img src={etherstream}/></div>
           <div class = 'service-name-and-price'>
             <div class= 'service-name'>
-              Spotify
+              Ether Stream
             </div>
 
             <div class= 'service-price'>
