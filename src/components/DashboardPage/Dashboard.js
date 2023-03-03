@@ -11,7 +11,7 @@ import dai from '../../img/dai.png';
 import { EditForm } from './EditForm';
 
 function Row(props) {
-  const {row} = props; //row containing information for each stream (date, id, )
+  const {row} = props; //row containing information for each token
   const [open, setOpen] = React.useState(false); //drop down for dashboard
 
   const [editOpen, setEditOpen] = React.useState(false); //open modal when we edit a stream's name
@@ -66,6 +66,7 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        {/*TOKEN ICON AND NAME=========================================================*/}
         <TableCell component="th" scope="row">
           {
             row.name == "ETHx"
@@ -74,9 +75,13 @@ function Row(props) {
           }       
           {row.name}
         </TableCell>
+
+        {/*TOKEN BALANCE=========================================================*/}
         <TableCell align="center">
           {row.balance}
         </TableCell>
+
+        {/*TOKEN INFLOW=========================================================*/}
         <TableCell align="center">
           {
             row.formattedInflow == " 0 /mo"
@@ -84,6 +89,8 @@ function Row(props) {
             : <span className="up"><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
           }
         </TableCell>
+
+        {/*TOKEN OUTFLOW=========================================================*/}
         <TableCell align="center">
           {
             row.formattedOutflow == " 0 /mo"
@@ -91,6 +98,8 @@ function Row(props) {
             : <span className="down"><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
           }
         </TableCell>
+
+        {/*TOKEN NETFLOW=========================================================*/}
         <TableCell align="center">
         {
           row.formattedNetflow.slice(0,1) == '-' 
@@ -106,6 +115,8 @@ function Row(props) {
             </>
         }
         </TableCell>
+
+        {/*DROP DOWN BUTTON=========================================================*/}
         <TableCell align="center"> 
           <IconButton
             aria-label="expand row"
@@ -116,6 +127,7 @@ function Row(props) {
           </IconButton>
         </TableCell>
       </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -138,9 +150,13 @@ function Row(props) {
                 <TableBody>
                   {row.history.map((historyRow) => (
                     <TableRow key={historyRow.id}>
+
+                       {/*STREAM START DATE=========================================================*/}
                       <TableCell component="th" scope="row" align="left"> 
                         {historyRow.date}
                       </TableCell>
+
+                       {/*STREAM NAME=========================================================*/}
                       <TableCell align="left">
                         {
                           typeof search_contact(historyRow.id) !== "undefined" && search_contact(historyRow.id) !== ""
@@ -153,6 +169,8 @@ function Row(props) {
                             handleEditOpen();
                         }}/>
                       </TableCell>
+
+                       {/*WALLET ADDRESS=========================================================*/}
                       <TableCell align="left">
                         <Tooltip title={tooltip} arrow placement='top' 
                           onClick={()=>{copyAddress(historyRow.id)}}
@@ -161,6 +179,8 @@ function Row(props) {
                           <div className='address'>{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(36)}`}</div>
                         </Tooltip>
                       </TableCell>
+
+                       {/*FLOWRATE=========================================================*/}
                       {
                         historyRow.amount.slice(0,1) == '+'
                         ? <TableCell align="left" className='up'>
@@ -172,6 +192,8 @@ function Row(props) {
                             <span className='down'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
                       }
+
+                       {/*DELETE STREAM ICON=========================================================*/}
                       <TableCell align='left'>
                         {
                           historyRow.amount.slice(0,1) == '-'
