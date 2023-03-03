@@ -85,3 +85,24 @@
 .dashboardLoading{
   text-align: center;
 }
+
+.marginLeft15px{
+  margin-left: 15px;
+}
+
+.marginRight15px{
+  margin-right: 10px;
+}
+
+.editFormTitle{
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.editFormField{
+  text-align: center;
+}
+
+.address{
+  cursor: pointer;
+}

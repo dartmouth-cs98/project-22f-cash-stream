@@ -51,11 +51,11 @@ export const TokenCard = (props) => {
           ? <Typography sx={{fontSize: 13}} color="text.secondary">Liquidation Date: {time}</Typography>
           : <Typography sx={{fontSize: 13}} color="text.secondary">Liquidation Date: N/A</Typography>
         }
-        {
+        {/*
           props.token.history.length == 0
           ? <></>
           : <LinearProgress color="success" sx={{marginTop: '20px'}} className="progress"/>
-        }
+        */}
       </CardContent>
     </Card>
   );

@@ -1,33 +1,72 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import CircularProgress from '@mui/material/CircularProgress';
-// Watch out for this react-icons path
-import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi";
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, CircularProgress, Tooltip } from '@mui/material';
+import { FiArrowDownCircle, FiArrowUpCircle } from "../../../node_modules/react-icons/fi"; // Watch out for this react-icons path
 import { BsArrowDownUp } from "../../../node_modules/react-icons/bs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faCircleXmark, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
 import "../../css/flowInfo.css";
 import ether from '../../img/ether.png';
 import dai from '../../img/dai.png';
+import { EditForm } from './EditForm';
 
 function Row(props) {
-  const {row} = props;
-  const [open, setOpen] = React.useState(false);
+  const {row} = props; //row containing information for each token
+  const [open, setOpen] = React.useState(false); //drop down for dashboard
+
+  const [editOpen, setEditOpen] = React.useState(false); //open modal when we edit a stream's name
+  const handleEditOpen = () => setEditOpen(true);
+  const handleEditClose = () => setEditOpen(false);
+  const [editAddress, setEditAddress] = React.useState(""); //address of the stream being renamed
+
+  const [tooltip, setTooltip] = React.useState("Click to copy") //tooltip message for copy address (set to "Copied!" after copying)
+
+  //fetch stream names from local storage (Or set up storage if it is not already there)
+  if (localStorage.getItem('ETHx_contact') == null){
+    localStorage.setItem('ETHx_contact', JSON.stringify([]));
+  }
+
+  if (localStorage.getItem('fDAIx_contact') == null){
+    localStorage.setItem('fDAIx_contact', JSON.stringify([]));
+  }
+
+  //Fetch stream name associated with the stream's wallet address
+  function search_contact(address){
+    if (row.name == "ETHx"){
+      var contact = localStorage.getItem('ETHx_contact');
+      var parsed_contact = JSON.parse(contact);
+  
+      for(const item of parsed_contact){
+        if(typeof item[address] !== "undefined"){
+          return item[address];
+        }
+      }
+    }
+    else if (row.name == "fDAIx"){
+      if (row.name == "fDAIx"){
+        var contact = localStorage.getItem('fDAIx_contact');
+        var parsed_contact = JSON.parse(contact);
+    
+        for(const item of parsed_contact){
+          if(typeof item[address] !== "undefined"){
+            return item[address];
+          }
+        }
+      }
+    }
+    return undefined
+  }
+
+  //copy wallet address to clipboard
+  function copyAddress(address){
+    navigator.clipboard.writeText(address);
+    setTooltip("Copied!");
+  }
 
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        {/*TOKEN ICON AND NAME=========================================================*/}
         <TableCell component="th" scope="row">
           {
             row.name == "ETHx"
@@ -36,9 +75,13 @@ function Row(props) {
           }       
           {row.name}
         </TableCell>
+
+        {/*TOKEN BALANCE=========================================================*/}
         <TableCell align="center">
           {row.balance}
         </TableCell>
+
+        {/*TOKEN INFLOW=========================================================*/}
         <TableCell align="center">
           {
             row.formattedInflow == " 0 /mo"
@@ -46,6 +89,8 @@ function Row(props) {
             : <span className="up"><FontAwesomeIcon icon={faCaretUp}/>{row.formattedInflow}</span>
           }
         </TableCell>
+
+        {/*TOKEN OUTFLOW=========================================================*/}
         <TableCell align="center">
           {
             row.formattedOutflow == " 0 /mo"
@@ -53,6 +98,8 @@ function Row(props) {
             : <span className="down"><FontAwesomeIcon icon={faCaretDown}/>{row.formattedOutflow}</span>
           }
         </TableCell>
+
+        {/*TOKEN NETFLOW=========================================================*/}
         <TableCell align="center">
         {
           row.formattedNetflow.slice(0,1) == '-' 
@@ -68,6 +115,8 @@ function Row(props) {
             </>
         }
         </TableCell>
+
+        {/*DROP DOWN BUTTON=========================================================*/}
         <TableCell align="center"> 
           <IconButton
             aria-label="expand row"
@@ -78,6 +127,7 @@ function Row(props) {
           </IconButton>
         </TableCell>
       </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -89,33 +139,62 @@ function Row(props) {
                   ? <span className="noStream"><p>You have no active streams.</p></span>
                   : <TableHead>
                     <TableRow>
-                      <TableCell align="center">Start Date</TableCell>
-                      <TableCell align="center">To/From</TableCell>
-                      {/* <TableCell align="center"> All Time Flow</TableCell> */}
-                      <TableCell align="center">Flow Rate</TableCell>
-                      <TableCell align="center"></TableCell>
+                      <TableCell align="left">Start Date</TableCell>
+                      <TableCell align="left">Stream</TableCell>
+                      <TableCell align="left">To/From</TableCell>
+                      <TableCell align="left">Flow Rate</TableCell>
+                      <TableCell align="left"></TableCell>
                     </TableRow>
                   </TableHead>
                 }
                 <TableBody>
                   {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row" align="center"> 
+                    <TableRow key={historyRow.id}>
+
+                       {/*STREAM START DATE=========================================================*/}
+                      <TableCell component="th" scope="row" align="left"> 
                         {historyRow.date}
                       </TableCell>
-                      <TableCell align="center">{historyRow.id}</TableCell>
+
+                       {/*STREAM NAME=========================================================*/}
+                      <TableCell align="left">
+                        {
+                          typeof search_contact(historyRow.id) !== "undefined" && search_contact(historyRow.id) !== ""
+                          ? search_contact(historyRow.id)
+                          : "untitled stream"
+                        }
+                        <FontAwesomeIcon icon={faPenToSquare} className='marginLeft15px cursor' 
+                          onClick={()=>{
+                            setEditAddress(historyRow.id);
+                            handleEditOpen();
+                        }}/>
+                      </TableCell>
+
+                       {/*WALLET ADDRESS=========================================================*/}
+                      <TableCell align="left">
+                        <Tooltip title={tooltip} arrow placement='top' 
+                          onClick={()=>{copyAddress(historyRow.id)}}
+                          onMouseOut={()=>{setTooltip("Click to copy")}}
+                        >
+                          <div className='address'>{`${historyRow.id.substring(0, 8)}...${historyRow.id.substring(36)}`}</div>
+                        </Tooltip>
+                      </TableCell>
+
+                       {/*FLOWRATE=========================================================*/}
                       {
                         historyRow.amount.slice(0,1) == '+'
-                        ? <TableCell align="center" className='up'>
+                        ? <TableCell align="left" className='up'>
                             <FontAwesomeIcon icon={faCaretUp} className='up'/>
                             <span className='up'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
-                        : <TableCell align="center" className='down'>
+                        : <TableCell align="left" className='down'>
                             <FontAwesomeIcon icon={faCaretDown} className='down'/>
                             <span className='down'>{historyRow.amount.slice(1, historyRow.amount.length)}</span>
                           </TableCell>
                       }
-                      <TableCell align='center'>
+
+                       {/*DELETE STREAM ICON=========================================================*/}
+                      <TableCell align='left'>
                         {
                           historyRow.amount.slice(0,1) == '-'
                           ? <FontAwesomeIcon className='cursor' icon={faCircleXmark} onClick={()=>{
@@ -132,6 +211,7 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
+      <EditForm token={row.name} address={editAddress} editOpen={editOpen} handleEditClose={handleEditClose}/>
     </React.Fragment>
   );
 }
@@ -155,7 +235,6 @@ Row.propTypes = {
     //netflow: PropTypes.number.isRequired,
   }).isRequired,
 };
-
 
 export const DashboardTable = (props) => {
   return (

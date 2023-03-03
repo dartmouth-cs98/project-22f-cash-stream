@@ -165,6 +165,43 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
   }
 }
 
+async function saveName(token, address, name){
+  if (token == 'ETHx'){
+    var contact = localStorage.getItem('ETHx_contact');
+    var parsed_contact = JSON.parse(contact);
+    var exists = false;
+
+    for(const item of parsed_contact){
+      if(typeof item[address] !== "undefined"){
+        item[address] = name
+        exists = true;
+      }
+    }
+    if(!exists){
+      parsed_contact.push({[address]: name})
+    }
+
+    localStorage.setItem('ETHx_contact', JSON.stringify(parsed_contact));
+  }
+
+  else if (token == 'fDAIx'){
+    var contact = localStorage.getItem('fDAIx_contact');
+    var parsed_contact = JSON.parse(contact);
+    var exists = false;
+
+    for(const item of parsed_contact){
+      if(typeof item[address] !== "undefined"){
+        item[address] = name
+        exists = true;
+      }
+    }
+    if(!exists){
+      parsed_contact.push({[address]:name})
+    }
+    localStorage.setItem('fDAIx_contact', JSON.stringify(parsed_contact));
+  }
+}
+
 export const CreateFlow = (props) => {
   const [recipient, setRecipient] = useState("");
   const [flowRate, setFlowRate] = useState("");
@@ -174,6 +211,7 @@ export const CreateFlow = (props) => {
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txMsg, setTxMsg] = useState("");
   const [lowBalance, setLowBalance] = useState(false);
+  const [name, setName] = useState("");
   
   function checkLowBalance(token, amount, period){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
@@ -285,6 +323,10 @@ export const CreateFlow = (props) => {
     setInterval(() => ([e.target.name] = e.target.value));
   };
 
+  const handleNameChange = (e) => {
+    setName(() => ([e.target.name] = e.target.value));
+  };
+
   return (
     <>
       <div className="streamContainer">
@@ -321,6 +363,18 @@ export const CreateFlow = (props) => {
             </div>
 
             <Form className="flowForm">
+              <FormGroup>
+                <TextField
+                  label="stream name"
+                  name="recipient"
+                  value={name}
+                  onChange={handleNameChange}
+                  placeholder="untitled stream"
+                  color="success"
+                  sx={{width: "100%", marginBottom: '3%'}}
+                /> 
+              </FormGroup>
+
               <FormGroup>
                 <TextField
                   label="recipient wallet address"
@@ -388,12 +442,14 @@ export const CreateFlow = (props) => {
               : <CreateButton
                   onClick={() => {
                     createNewFlow(recipient, calculateFlowRate(flowRate, interval), token, setTxLoading, setTxCompleted, setTxMsg);
+                    saveName(token, recipient.toLowerCase(), name)
+                    setName('');
                     setRecipient('');
                     setFlowRate('');
                   }}
                 >
                   Send Stream
-                </CreateButton>        
+                </CreateButton>       
             }
             </div>
           </CardContent>
