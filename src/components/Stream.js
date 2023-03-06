@@ -4,7 +4,7 @@ import { useState } from "react";
 import "../css/stream.css";
 import "../css/styles.css"
 
-const dummy = "0x516B3F54be2e31A0290f032A6ee1213948968FC8"
+const dummy = "0x45c01ceb87dbe6807ebecb9161408fc5c6acb5d1"
 
 //Stream page (wrapper component for create flow)
 export const Stream = (props) => {
