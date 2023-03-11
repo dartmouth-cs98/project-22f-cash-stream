@@ -4,7 +4,7 @@ CashStream is a React web application to facilitate real-time crypto payment. It
 
 Our application is built for **Goerli Testnet**. It works for two Ethereum-based tokens, **ETH and fDAI (stablecoin)**.
 
-It includes a demo with a mock Youtube page to suggest how money streaming could be used for subscriptions and recurrent payments.
+It includes a [mock subscription service](https://spotify-3-0.onrender.com/) to demo "pay as you go" proof of concept. The service will be available only if the user opens a stream to the designated recipient address.
 
 CashStream uses the Superfluid Protocol. [Superfluid](https://www.superfluid.finance/) is a De-Fi company working to enable money streaming in subscriptions, investment, etc.
 
@@ -40,7 +40,7 @@ yarn start
 
 ## Deployment
 
-[Working URL](cash-stream.surge.sh/) 
+[Working URL](https://cash-stream.surge.sh/) 
 
 ## Other
 
