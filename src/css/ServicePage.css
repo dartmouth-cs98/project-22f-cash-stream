@@ -71,6 +71,7 @@
 .service-price {
   color: rgb(16, 198, 0);
 }
+
 .service-subscribe-button {
   color: white;
   text-decoration: none;
@@ -80,6 +81,7 @@
   padding: 15px 20px;
   transition: 0.1s;
   font-weight: 700;
+  display: inline-block;
 }
 
 .service-subscribe-button:hover {
@@ -98,3 +100,9 @@
 /* a:hover, a:focus {
     text-decoration:none;
 } */
+
+.service-link{
+  display: inline-block;
+  margin-left: 20px;
+  color: white;
+}

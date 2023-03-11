@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import LinearProgress from '@mui/material/LinearProgress';
 
+/* This is the summary card that shows information for each token on dashboard
+ * Shows balance, number of active streams, and liquidation date
+ */
 export const TokenCard = (props) => {
   const[time, updateTime] = useState();
 
@@ -11,13 +13,14 @@ export const TokenCard = (props) => {
     setTime();
   },);
 
+  //compute liquidation date
   function setTime (){
     if(props.token.formattedNetflow.slice(0,1) == '-'){
       const monthlyNetflow = parseFloat(props.token.formattedNetflow.slice(1, props.token.formattedNetflow.length-4));
       const seconds = Math.round(props.token.balance / monthlyNetflow) * 30 * 24 * 3600;
       
       const date = new Date();
-      date.setSeconds(seconds); // specify value of SECONDS
+      date.setSeconds(seconds);
       const res = date.toDateString();
       updateTime(res.substring(0,10) + ", " + res.substring(11,15));
     }

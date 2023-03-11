@@ -7,7 +7,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled">{props.children}</MuiAlert>;
 });
 
-//This is a snackbar to display message that the transaction has been broadcasted 
+//This is a snackbar to display message that the transaction has been broadcasted (and a link to etherscan)
 //(for creating/deleting streams and wrapping/unwrapping tokens)
 export const SnackBar = (props) => {
 

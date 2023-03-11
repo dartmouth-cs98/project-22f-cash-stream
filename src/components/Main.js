@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { ConnectWallet } from "./ConnectWallet";
 
+//This is the main page the user will see if he/she is not connected to Metamask
 export const Main = (props) => {
 
   return(

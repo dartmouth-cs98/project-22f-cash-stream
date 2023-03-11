@@ -1,35 +1,27 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useEffect, useState } from "react";
-import { customHttpProvider } from "../config";
+//import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
 import { daiABI } from "../config";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Card, CardContent, TextField, Button, ToggleButton, ToggleButtonGroup, InputAdornment, MenuItem } from '@mui/material';
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
-import { InputAdornment } from '@mui/material';
-import { MenuItem } from "@mui/material";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import "../css/wrapUnwrap.css";
 import "../css/stream.css";
 import ether from '../img/ether.png';
 import dai from '../img/dai.png';
-import store from '../app/store'
+import store from '../app/store';
 
 //Token Contract Addresses (can be found here: https://docs.superfluid.finance/superfluid/developers/networks)
 const fDAI_contract_address = "0x88271d333C72e51516B67f5567c728E702b3eeE8";
 const fDAIx_contract_address = "0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00";
-const ETH_contract_address = "0x0000000000000000000000000000000000000000";
-const ETHx_contract_address = "0x5943F705aBb6834Cad767e6E4bB258Bc48D9C947";
+//const ETH_contract_address = "0x0000000000000000000000000000000000000000";
+//const ETHx_contract_address = "0x5943F705aBb6834Cad767e6E4bB258Bc48D9C947";
 
 let allowance = "0"; //number of tokens the protocol is allowed to wrap
 var txHash = ''; //transaction hash for createFlow transaction (Used to access etherscan transaction info)
@@ -72,7 +64,7 @@ async function getAllowance(){
       account,
       fDAIx_contract_address,
     ).then((value) => {
-       allowance = convertWeitofDAIx(parseInt(value.toString()));
+       allowance = parseInt(convertWeitofDAIx(parseInt(value.toString())));
     });
   } catch (error){
     console.log(error);
@@ -235,6 +227,7 @@ export const Wrap = (props) => {
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
   const [token, setToken] = useState("ETHx");
+  const [read, setRead] = useState(false); //read more
 
   useEffect(() => {
     getAllowance();
@@ -324,6 +317,7 @@ export const Wrap = (props) => {
 
   const handleTokenChange = (e) => {
     setToken(() => ([e.target.name] = e.target.value));
+    setAmount("")
   };
 
   return (
@@ -343,11 +337,25 @@ export const Wrap = (props) => {
         </div>
 
         <Card className="wrapInfo" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>
-          <CardContent>
-            <div className="wrapInfoText">
-              Wrapped tokens are extensions of regular tokens that enable real-time transfer. They can be converted back to regular tokens at any time with a small gas fee.
-            </div>
-          </CardContent>
+          {
+            read
+            ? <div className="wrapInfoText">
+                Wrapped tokens are extensions of regular tokens that enable real-time transfer. 
+                They can be converted back to regular tokens at any time with a small gas fee. 
+                <br/><br/>
+                Users need wrapped tokens to initiate a stream. You can check your wrapped token balance on CashStream website and other Web3 services like Metamask.
+                <br/><br/>
+                When wrapping fDAI, users must set an allowance for the smart contract to access and manage wrapped tokens.
+                <br/><br/>
+                You can learn more about CashStream from our <a href="/userguide" className="readMoreLink" target="_blank">user guide page</a>!
+                <span className="readMore" onClick={()=>{setRead(false)}}>hide</span>
+              </div>
+            : <div className="wrapInfoText">
+                Wrapped tokens are extensions of regular tokens that enable real-time transfer. 
+                They can be converted back to regular tokens at any time with a small gas fee. 
+                <span className="readMore" onClick={()=>{setRead(true)}}>read more</span>
+              </div>
+          }
         </Card>
 
         <Card className="wrapCard" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>

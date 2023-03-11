@@ -17,15 +17,16 @@ class FlowInfo extends Component {
     super(props)
 
     this.state = {
-      network: "goerli",
-      firstTimeUser: false,
+      network: "goerli", //network ("homestead" if main)
+      firstTimeUser: false, //true if the user has not interacted with SF protocol before (will ask the user to wrap tokens to get started)
       account: '',
       tokensInfo: [],
-      close: false,
-      closeToken: '',
-      closeAddress: '',
+      close: false, //true if the user is trying to close an active stream
+      closeToken: '', //the token of the stream being closed
+      closeAddress: '', //the address of the stream being closed
     }
 
+    //update information about the stream being closed
     this.setCloseInfo = (token, addr) => {
       this.setState({
         close: true,
@@ -34,6 +35,7 @@ class FlowInfo extends Component {
       });
     }
 
+    //navigate back to dashboard after the user has closed the stream
     this.openDashboard = () => {
       this.setState({
         close: false,
@@ -41,6 +43,7 @@ class FlowInfo extends Component {
     }
   }
 
+  //Fetch wallet balance and stream info every second
   async componentDidMount(){
     await this.getWalletBalance();
     await this.getTokensInfo();
@@ -56,7 +59,7 @@ class FlowInfo extends Component {
   };
 
   async getWalletBalance(){
-    // Load account
+    //Load account
     const accounts = await ethereum.request({ method: "eth_accounts" });
     const account = accounts[0];
 
@@ -133,8 +136,8 @@ class FlowInfo extends Component {
 
         })
 
-        // Get Subgraph Schema by running the Query in this playground
-        // https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
+        //Get Subgraph Schema by running the Query in this playground
+        //https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli
         
         if ((typeof queryResult.data.data.accounts[0] == 'undefined') || (typeof queryResult.data.data.accounts[0].accountTokenSnapshots == 'undefined')) {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -145,12 +148,12 @@ class FlowInfo extends Component {
           this.setState({firstTimeUser: false,});
           const tokensData = queryResult.data.data.accounts[0].accountTokenSnapshots      
           const tokensInfo = []
-          // console.log("Tokens DATA:",tokensData);
-          // Add Tokens Info to Array 
+          //console.log("Tokens DATA:",tokensData);
+          //Add Tokens Info to Array 
           for (let i=0; i<tokensData.length; i++){
             const tokenSymbol = tokensData[i].token.symbol
 
-            // const balance = await this.getTokenBalance(tokenSymbol)
+            //const balance = await this.getTokenBalance(tokenSymbol)
             
             var totalInflowRate = ethers.utils.formatEther(tokensData[i].totalInflowRate)*3600*24*30;
             var formattedInflow = " " + parseFloat(totalInflowRate.toFixed(5).toString()) + " /mo";
@@ -163,13 +166,13 @@ class FlowInfo extends Component {
             
             // Add current Token To Array
             tokensInfo.push({
-                name: tokenSymbol,
-                // balance: 0,
-                formattedInflow: formattedInflow,
-                formattedOutflow: formattedOutflow,
-                netflow: tokensData[i].totalNetFlowRate,
-                formattedNetflow: formattedNetflow,
-                history:[],
+              name: tokenSymbol,
+              // balance: 0,
+              formattedInflow: formattedInflow,
+              formattedOutflow: formattedOutflow,
+              netflow: tokensData[i].totalNetFlowRate,
+              formattedNetflow: formattedNetflow,
+              history:[],
             })
           }
 
@@ -178,7 +181,7 @@ class FlowInfo extends Component {
             token.balance = await this.getTokenBalance(token.name)
           )));
 
-          // ======== Outflows Data ========
+          //======== Outflows Data ========
           const outflowsData = queryResult.data.data.accounts[0].outflows
           //console.log(outflowsData)
 
@@ -239,7 +242,7 @@ class FlowInfo extends Component {
             }
           })
 
-          // Push inflow Info into TokensInfo
+          //Push Inflow Info into TokensInfo
           inflowsInfo.map(inflowDetail => {
             tokensInfo.map(tokenDetail => {
               if (tokenDetail.name == inflowDetail.tokenName){
@@ -361,8 +364,13 @@ class FlowInfo extends Component {
   }
 }
 
+/*
+ * This is when the user has not interacted with the SF protocol before.
+ * Navigates to wrap page so that the user can wrap tokens and get started.
+ */
 function WrapButton(){
   const navigate = useNavigate();
+
   return(
     <Button variant="contained" onClick={()=>{navigate("/wrap")}}
       sx={{textTransform:"none", 
