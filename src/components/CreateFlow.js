@@ -349,7 +349,7 @@ export const CreateFlow = (props) => {
                 If you don't have enough wrapped tokens, first wrap your tokens.
                 <br/><br/>
                 In order to open a stream, you need enough wrapped tokens to cover the upfront buffer, amount equal to one hour worth flowrate.
-                You may also lose the buffer if you fail to close you stream before your balance reaches zero. The transaction will fail if the flowrate is too small or big.
+                You may also lose the buffer if you fail to close you stream before your balance reaches zero. The transaction will fail if the flowrate exceeds max limit or falls short of min limit.
                 <br/><br/>
                 You can learn more about CashStream from our <a href="/userguide" className="readMoreLink" target="_blank">user guide page</a>!
                 <span className="readMore" onClick={()=>{setRead(false)}}>hide</span>
