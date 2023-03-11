@@ -10,7 +10,16 @@ import ether from '../../img/ether.png';
 import dai from '../../img/dai.png';
 import { EditForm } from './EditForm';
 
-function Row(props) {
+/* Each row object has the following info:
+ * 1. row.name
+ * 2. row.balance
+ * 3. row.formattedInflow
+ * 4. row.formattedOutflow
+ * 5. row.formattedNetflow
+ * 6. row.history => a list of object for each active stream. 
+ * each stream object has the following keys: history.date (stream start date), history.id (wallet address), history.amount (flowrate)
+ */
+function Row (props) {
   const {row} = props; //row containing information for each token
   const [open, setOpen] = React.useState(false); //drop down for dashboard
 
@@ -30,7 +39,7 @@ function Row(props) {
     localStorage.setItem('fDAIx_contact', JSON.stringify([]));
   }
 
-  //Fetch stream name associated with the stream's wallet address
+  //Fetch stream name associated with the stream's wallet address from local storage 
   function search_contact(address){
     if (row.name == "ETHx"){
       var contact = localStorage.getItem('ETHx_contact');
@@ -57,7 +66,7 @@ function Row(props) {
     return undefined
   }
 
-  //copy wallet address to clipboard
+  //click copy wallet address to clipboard
   function copyAddress(address){
     navigator.clipboard.writeText(address);
     setTooltip("Copied!");
@@ -236,12 +245,13 @@ Row.propTypes = {
   }).isRequired,
 };
 
+// Dashboard wrapper
 export const DashboardTable = (props) => {
   return (
     <div>
       {
       props.tokensInfo.length == 0
-      ? <div className='dashboardLoading'><CircularProgress color="inherit"/></div>
+      ? <div className='dashboardLoading'><CircularProgress color="inherit"/></div> //dashboard loading while fetching data
       : <TableContainer component={Paper} class='dashboard'>
         <Table aria-label="collapsible table">
           <TableHead>

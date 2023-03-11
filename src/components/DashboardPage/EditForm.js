@@ -1,9 +1,5 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import { Form, FormGroup } from "react-bootstrap";
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Button, TextField, Modal, Typography, Box } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
@@ -21,6 +17,7 @@ const style = {
   p: 4,
 };
 
+//Pop up modal to set stream name from dashboard
 export const EditForm = (props) => {
   const [name, setName] = useState("");
 

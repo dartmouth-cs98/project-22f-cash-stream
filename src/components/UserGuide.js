@@ -1,5 +1,6 @@
 import "../css/userGuide.css";
 
+//FAQ Page
 export const UserGuide = () => {
   return (
     <div className="userGuidePage">

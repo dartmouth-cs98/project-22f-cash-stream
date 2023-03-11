@@ -15,6 +15,7 @@ export const WrapUnwrap = (props) => {
   return (
     <div className="wrapUnwrapPage">
       <div className="tokenBalance">
+        {/*ETHx Balance*/}
         <Card sx={{
                   minWidth: 200, 
                   marginRight: '10px', 
@@ -24,6 +25,8 @@ export const WrapUnwrap = (props) => {
                   display: 'inline-block'}}>
             <Typography sx={{fontSize: 15, fontWeight: '700'}}>{props.ETHxBalance} ETHx</Typography>
         </Card>
+
+        {/*fDAIx Balance*/}
         <Card sx={{
                   minWidth: 200, 
                   paddingTop: '12px', 

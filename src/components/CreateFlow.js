@@ -1,18 +1,12 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import TextField from '@mui/material/TextField';
-import { MenuItem } from "@mui/material";
-import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import { Card, CardContent, TextField, MenuItem, Button, Typography, InputAdornment } from '@mui/material';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import axios from 'axios';
 import { TxModal } from "./Modal";
 import { SnackBar } from "./Snackbar";
-import { InputAdornment } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import ether from '../img/ether.png';
@@ -171,6 +165,7 @@ async function createNewFlow(recipient, flowRate, token, setTxLoading, setTxComp
   }
 }
 
+//update local storage for new stream
 async function saveName(token, address, name){
   if (token == 'ETHx'){
     var contact = localStorage.getItem('ETHx_contact');
@@ -216,9 +211,13 @@ export const CreateFlow = (props) => {
   const [txLoading, setTxLoading] = useState(false); //transaction loading progress bar
   const [txCompleted, setTxCompleted] = useState(false); //confirmation message after transaction has been broadcasted.
   const [txMsg, setTxMsg] = useState("");
-  const [lowBalance, setLowBalance] = useState(false);
+  const [lowBalance, setLowBalance] = useState(false); //true if the user tries to open a stream greater than current balance
   const [name, setName] = useState("");
   
+  /*
+   * returns true if the user tries to open a stream greater than current balance.
+   * the balance is low when it cannot cover 1 hour flowrate (the buffer)
+   */
   function checkLowBalance(token, amount, period){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       return;
@@ -246,6 +245,7 @@ export const CreateFlow = (props) => {
     }
   }
 
+  //convert token/interval flowrate to wei/sec
   function calculateFlowRate(amount, period){
     if (typeof Number(amount) !== "number" || isNaN(Number(amount)) === true) {
       alert("You can only calculate a flowRate based on a number");
@@ -323,6 +323,9 @@ export const CreateFlow = (props) => {
   
   const handleTokenChange = (e) => {
     setToken(() => ([e.target.name] = e.target.value));
+    setName('');
+    setRecipient('');
+    setFlowRate('');
   };
 
   const handleIntervalChange = (e) => {
@@ -343,7 +346,15 @@ export const CreateFlow = (props) => {
           }}>
           <CardContent>
             <div className="titleContainer">
-              <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Send Stream</h5> : <h5>Send Stream</h5>}</div>
+              <div className="flowTitle">
+                {
+                  txLoading 
+                  ? <h5 sx={{color: "#424242"}}>Send Stream</h5> 
+                  : <h5>Send Stream</h5>
+                }
+              </div>
+              
+              {/*========== TOKEN TOGGLE ============*/}
               <Form className="token">
                 <FormGroup>
                   <TextField
@@ -367,8 +378,9 @@ export const CreateFlow = (props) => {
                 </FormGroup>
               </Form>
             </div>
-
+            
             <Form className="flowForm">
+              {/*========== STREAM NAME ============*/}
               <FormGroup>
                 <TextField
                   label="stream name"
@@ -380,7 +392,8 @@ export const CreateFlow = (props) => {
                   sx={{width: "100%", marginBottom: '3%'}}
                 /> 
               </FormGroup>
-
+              
+              {/*========== RECIPIENT ============*/}
               <FormGroup>
                 <TextField
                   label="recipient wallet address"
@@ -392,8 +405,9 @@ export const CreateFlow = (props) => {
                   sx={{width: "100%"}}
                 /> 
               </FormGroup>
-
+              
               <div className="flowRateForm">
+                {/*========== FLOW RATE ============*/}
                 <FormGroup className="flowAmount">
                   <TextField
                     label="amount"
@@ -405,7 +419,8 @@ export const CreateFlow = (props) => {
                     sx={{width: "100%"}}
                   />
                 </FormGroup>
-
+                
+                {/*========== FLOW INTERVAL ============*/}
                 <FormGroup className="flowInterval">
                   <TextField 
                     select
@@ -464,7 +479,7 @@ export const CreateFlow = (props) => {
 
       {
         txLoading
-        ? <TxModal txMsg={txMsg}/>
+        ? <TxModal txMsg={txMsg}/> /* Loading screen while transaction is being broadcasted */
         : <div className="displayNone"/>
       }
       

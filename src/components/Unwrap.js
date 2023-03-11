@@ -1,24 +1,15 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
-import { customHttpProvider } from "../config";
+//import { customHttpProvider } from "../config";
 import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { Form, FormGroup } from "react-bootstrap";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
-import { InputAdornment } from '@mui/material';
-import { Typography } from '@mui/material';
-import { MenuItem } from "@mui/material";
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { Card, CardContent, TextField, Button, InputAdornment, Typography, MenuItem, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import "../css/wrapUnwrap.css";
 import "../css/stream.css";
 import ether from '../img/ether.png';
@@ -220,6 +211,7 @@ export const Unwrap = (props) => {
 
   const handleTokenChange = (e) => {
     setToken(() => ([e.target.name] = e.target.value));
+    setAmount("");
   };
 
   return (

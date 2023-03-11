@@ -1,6 +1,5 @@
-//The component and functions on this file are from: 
+//The component and functions are adapted from: 
 //https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
-
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -10,9 +9,10 @@ import "../css/connectWallet.css";
 import store from "../app/store";
 
 export const ConnectWallet = (props) => {
-  
   const [currentAccount, setCurrentAccount] = useState("");
   let accounts = null;
+
+  //connect to metamask wallet when the user clicks connect wallet button
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -21,6 +21,7 @@ export const ConnectWallet = (props) => {
         alert("Get MetaMask!");
         return;
       }
+
       // const accounts = await ethereum.request({
       accounts = await ethereum.request({
 
@@ -29,19 +30,24 @@ export const ConnectWallet = (props) => {
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
       props.setConnected(true);
-      // let account = currentAccount;
-      // Setup listener! This is for the case where a user comes to our site
-      // and connected their wallet for the first time.
-      // setupEventListener()
+
+      /* let account = currentAccount;
+       * Setup listener! This is for the case where a user comes to our site
+       * and connected their wallet for the first time.
+       * setupEventListener()
+       */
+
       updateReduxState(accounts);
     } catch (error) {
       console.log(error);
-    } 
-    // finally {
-    //   if (accounts != null) {
-    //     updateReduxState(accounts);
-    //   }
-    // }
+    }
+
+    /* finally {
+     *   if (accounts != null) {
+     *     updateReduxState(accounts);
+     *   }
+     * }
+     */
   };
   
   const checkIfWalletIsConnected = async () => {
@@ -55,22 +61,26 @@ export const ConnectWallet = (props) => {
     }
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
-    // const chain = await window.ethereum.request({ method: "eth_chainId" });
+    //const chain = await window.ethereum.request({ method: "eth_chainId" });
 
     if (accounts.length !== 0) {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
       setCurrentAccount(account);
       props.setConnected(true);
-      // Setup listener! This is for the case where a user comes to our site
-      // and ALREADY had their wallet connected + authorized.
-      // setupEventListener()
+     
+      /*
+       * Setup listener! This is for the case where a user comes to our site
+       * and ALREADY had their wallet connected + authorized.
+       * setupEventListener()
+       */
     } else {
       props.setConnected(false);
       console.log("No authorized account found");
     }
   };
 
+  //The profile identicon on navbar
   const generateIdenticon = () => {
     const identicon = require('identicon')
 
@@ -79,30 +89,29 @@ export const ConnectWallet = (props) => {
     return identiconImageBuffer;
   };
 
+  //update wallet connect state
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [props.connected]);
 
-  /*
-   * Function to update Redux state with our now-connected wallet info.
-   */ 
+  //Function to update Redux state with our now-connected wallet info. 
   const updateReduxState = async(accounts) => {
   // const updateReduxState = async() => {
-
+    
     /* 
      * Assign provider and signer to globally-scoped variables. This is done since
      * Redux does not support non-immutable type storage.
      */
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);     // This only work on Local Dev Server, NOT on Hosting Server [HAROLD]
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     /*
-    // USE DEFAULT PROVIDERS WITH API KEYS INSTEAD [HAROLD]
-    // (https://docs.ethers.org/v5/api-keys/)
+    USE DEFAULT PROVIDERS WITH API KEYS INSTEAD [HAROLD]
+    (https://docs.ethers.org/v5/api-keys/)
     const provider = ethers.getDefaultProvider(network, {
-      // etherscan: YOUR_ETHERSCAN_API_KEY,
-      infura: "2FTMzOge17hhTwy3mfVXN4T7L3j", // YOUR_INFURA_PROJECT_ID,
-      alchemy: "Eje_Y-pqB-HZwxVWpOYEUQoB44DhjZGO",//YOUR_ALCHEMY_API_KEY,
+      etherscan: YOUR_ETHERSCAN_API_KEY,
+      infura: YOUR_INFURA_PROJECT_ID,
+      alchemy: YOUR_ALCHEMY_API_KEY,
     });
     */
 

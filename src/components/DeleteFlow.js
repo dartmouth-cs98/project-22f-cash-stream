@@ -1,15 +1,11 @@
 //Modified code from: https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
 import React, { useState } from "react";
 import { Framework } from "@superfluid-finance/sdk-core";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import {Card, CardContent, TextField, Button, InputAdornment, } from '@mui/material';
 import { Form, FormGroup } from "react-bootstrap";
 import { ethers } from "ethers";
 import { SnackBar } from "./Snackbar";
 import { TxModal } from "./Modal";
-import { InputAdornment } from '@mui/material';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -170,20 +166,6 @@ export const DeleteFlow = (props) => {
   return (
     <>
       <div className="streamContainer">
-        {/*
-        <div className="streamToggle">
-          <ToggleButtonGroup
-            color="primary"
-            value={props.alignment}
-            exclusive
-            onChange={props.handleToggleChange}
-            aria-label="Platform"
-          
-            <ToggleButton value="create" sx={{fontFamily: 'Lato', textTransform: "none"}}>Send</ToggleButton>
-            <ToggleButton value="delete" sx={{fontFamily: 'Lato', textTransform: "none"}}>Close</ToggleButton>
-          </ToggleButtonGroup>
-        </div>
-        */}
         <div className="back">
           <Button variant="outlined" sx={{textTransform:"none", borderRadius:"10px"}} onClick={()=>{props.openDashboard()}}>
             <FontAwesomeIcon icon={faCircleArrowLeft}/> 
@@ -198,7 +180,14 @@ export const DeleteFlow = (props) => {
           }}>
           <CardContent>
             <div className="titleContainer">          
-              <div className="flowTitle">{txLoading ? <h5 sx={{color: "#424242"}}>Close Stream</h5> : <h5>Close Stream</h5>}</div>
+              <div className="flowTitle">
+                {
+                  txLoading 
+                  ? <h5 sx={{color: "#424242"}}>Close Stream</h5> 
+                  : <h5>Close Stream</h5>
+                }
+              </div>
+              
               <Form className="token">
                 <FormGroup>
                   <TextField

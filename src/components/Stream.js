@@ -19,6 +19,8 @@ export const Stream = (props) => {
   return (
     <div className="streamPage">
       <div className="tokenBalance">
+        
+        {/*Click copy dummy address at the top of the send stream page*/}
         <div className="dummy">
           <Button variant="contained" onClick={copyAddress} onMouseOut={()=>{setCopy("Click to copy dummy address!")}}
             sx={{
@@ -35,6 +37,8 @@ export const Stream = (props) => {
               <Typography sx={{fontSize: 15, fontWeight: '700'}}>{copy}</Typography>
           </Button>
         </div>
+
+        {/*ETHx Balance*/}
         <Card sx={{
                 minWidth: 200, 
                 marginRight: '10px', 
@@ -44,6 +48,8 @@ export const Stream = (props) => {
                 display: 'inline-block'}}>
             <Typography sx={{fontSize: 15, fontWeight: '700'}}>{props.ETHxBalance} ETHx</Typography>
         </Card>
+
+        {/*fDAIx Balance*/}
         <Card sx={{
                 minWidth: 200, 
                 paddingTop: '12px', 
