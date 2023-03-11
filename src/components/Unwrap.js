@@ -148,7 +148,8 @@ export const Unwrap = (props) => {
   const [txHash, setTxHash] = useState(""); //transaction hash for broadcasted transactions
   const [txMsg, setTxMsg] = useState("");
   const [token, setToken] = useState("ETHx");
-  const [lowBalance, setLowBalance] = useState(false)
+  const [lowBalance, setLowBalance] = useState(false);
+  const [read, setRead] = useState(false); //read more
 
   function checkLowBalance(token, amount){
     if(token == 'ETHx' && amount > parseFloat(props.ETHxBalance)){
@@ -231,11 +232,23 @@ export const Unwrap = (props) => {
         </div>
         
         <Card className="wrapInfo" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>
-          <CardContent>
-            <div className="wrapInfoText">
-              Wrapped tokens are extensions of regular tokens that enable real-time transfer. They can be converted back to regular tokens at any time with a small gas fee.
-            </div>
-          </CardContent>
+          {
+            read
+            ? <div className="wrapInfoText">
+                Wrapped tokens are extensions of regular tokens that enable real-time transfer. 
+                They can be converted back to regular tokens at any time with a small gas fee. 
+                <br/><br/>
+                Users need wrapped tokens to initiate a stream. You can check your wrapped token balance on CashStream and other Web3Provider like Metamask.
+                <br/><br/>
+                You can learn more about CashStream from our <a href="/userguide" className="readMoreLink" target="_blank">user guide page</a>!
+                <span className="readMore" onClick={()=>{setRead(false)}}>hide</span>
+              </div>
+            : <div className="wrapInfoText">
+                Wrapped tokens are extensions of regular tokens that enable real-time transfer. 
+                They can be converted back to regular tokens at any time with a small gas fee.
+                <span className="readMore" onClick={()=>{setRead(true)}}>read more</span>
+              </div>
+          }
         </Card>
 
         <Card className="wrapCard" 

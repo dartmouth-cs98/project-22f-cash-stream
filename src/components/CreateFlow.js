@@ -213,6 +213,7 @@ export const CreateFlow = (props) => {
   const [txMsg, setTxMsg] = useState("");
   const [lowBalance, setLowBalance] = useState(false); //true if the user tries to open a stream greater than current balance
   const [name, setName] = useState("");
+  const [read, setRead] = useState(false); //read more
   
   /*
    * returns true if the user tries to open a stream greater than current balance.
@@ -326,6 +327,7 @@ export const CreateFlow = (props) => {
     setName('');
     setRecipient('');
     setFlowRate('');
+    setLowBalance(false)
   };
 
   const handleIntervalChange = (e) => {
@@ -339,6 +341,26 @@ export const CreateFlow = (props) => {
   return (
     <>
       <div className="streamContainer">
+        <Card className="createInfo" sx={{bgcolor: "secondary.dark", borderRadius: "20px"}}>
+          {
+            read
+            ? <div className="wrapInfoText">
+                Open a stream of wrapped tokens to another wallet address.
+                If you don't have enough wrapped tokens, first wrap your tokens.
+                <br/><br/>
+                In order to open a stream, you need enough wrapped tokens to cover the upfront buffer, amount equal to one hour worth flowrate.
+                You may also lose the buffer if you fail to close you stream before your balance reaches zero.
+                <br/><br/>
+                You can learn more about CashStream from our <a href="/userguide" className="readMoreLink" target="_blank">user guide page</a>!
+                <span className="readMore" onClick={()=>{setRead(false)}}>hide</span>
+              </div>
+            : <div className="wrapInfoText">
+                Open a stream of wrapped tokens to another wallet address.
+                If you don't have enough wrapped tokens, first wrap your tokens.
+                <span className="readMore" onClick={()=>{setRead(true)}}>read more</span>
+              </div>
+          }
+        </Card>
         <Card className="flowCard"
           sx={{
             bgcolor: "secondary.dark",

@@ -59,7 +59,7 @@ export const Stream = (props) => {
           <Typography sx={{fontSize: 15, fontWeight: '700'}}>{props.fDAIxBalance} fDAIx</Typography>
         </Card>
       </div>
-
+      
       <CreateFlow ETHxBalance={props.ETHxBalance} fDAIxBalance={props.fDAIxBalance}/>
     </div>
   );
