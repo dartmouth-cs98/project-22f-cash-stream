@@ -1,4 +1,4 @@
-# Cash Stream
+# CashStream
 
 ## The Problem 
 
@@ -12,45 +12,48 @@ Now, we’re looking to push the boundaries and take SaaS one step further. Intr
 
 CashStream is a blockchain-based web application for initiating recurring SaaS payments, paid out by the second. Using a payment “stream”, you can send and receive incremental payment distributions paid out every second. The funds are constantly streamed between the senders and recipients crypto wallets in Ethereum or DAI, a stablecoin pegged to the US dollar ($1 DAI ≈ $1 USD). 
 
-![image](https://user-images.githubusercontent.com/66996976/224801937-565c8473-0d6b-44eb-9e72-ca52620a8aa4.png) ![image](https://user-images.githubusercontent.com/66996976/224801972-1a1bc90f-72ff-4063-afe8-a4a6eb8b0ae3.png)
+| ![image](https://user-images.githubusercontent.com/66996976/224801937-565c8473-0d6b-44eb-9e72-ca52620a8aa4.png)| 
+|:--:| 
 
-Check out our[website](http://cashstreamcrypto.com/) to learn more. Or, if you’re ready to get started, go directly to our [browser-based application](https://cash-stream.surge.sh/). Alternatively, watch a [demo video](https://www.youtube.com/watch?v=vuUaWLgXx30&t=64s) of our project!
+| ![image](https://user-images.githubusercontent.com/66996976/224801972-1a1bc90f-72ff-4063-afe8-a4a6eb8b0ae3.png)| 
+|:--:| 
+
+Check out our [website](http://cashstreamcrypto.com/) to learn more. Or, if you’re ready to get started, go directly to our [browser-based application](https://cash-stream.surge.sh/). Alternatively, watch a [demo](https://www.youtube.com/watch?v=vuUaWLgXx30&t=64s) of our project!
 
 CashStream was born out of a capstone project by 4 undergraduate seniors studying computer science at Dartmouth College. It arose out of an organic need when they tried to set up recurring payments for crypto-native applications. Surprisingly, they found no real platforms available. Even after incessantly trying their best to work with any alternatives, they came across tools that were ineffective, lacked functionality, and failed at the universality of payment abstraction. Failing to find a solution, they decided to create their own.
 
 ## How do I use CashStream?
-Using our platform, you can initiate recurring payment streams in ETH or DAI in 3 easy steps. For a more comprehensive guide on how to get connected and interact with CashStream, check out our [in-depth guide](https://medium.com/@sunint.s.bindra.22/cashstream-quickstart-and-technical-guide-4ddf59baca15).
+Using our platform, you can initiate recurring payment streams in ETH or DAI in 3 easy steps. Check out our [Medium article](https://medium.com/dartmouth-cs98/recurring-payments-by-the-second-da7173080cee) to learn more about the project. For a more comprehensive guide on how to get connected and interact with CashStream, check out our [in-depth guide](https://medium.com/@sunint.s.bindra.22/cashstream-quickstart-and-technical-guide-4ddf59baca15).
 
 Step 1: Connect Wallet 
 
-![Connecting to CashStream using MetaMask. Once you connect, you will be automatically directed to our dashboard.](https://user-images.githubusercontent.com/66996976/224797982-4b387215-0dc0-4858-8c29-12039f05448c.png)
+| ![Connect Wallet](https://user-images.githubusercontent.com/66996976/224797982-4b387215-0dc0-4858-8c29-12039f05448c.png)| 
+|:--:| 
+| *Connecting to CashStream using MetaMask. Once you connect, you will be automatically directed to our dashboard.* |
 
 Step 2: Wrap Tokens
 
-![image](https://user-images.githubusercontent.com/66996976/224798017-f0d5f34f-52b8-4d96-9430-b1ff174b69cc.png)
+| ![image](https://user-images.githubusercontent.com/66996976/224798017-f0d5f34f-52b8-4d96-9430-b1ff174b69cc.png)| 
+|:--:| 
+| *Wrap tokens from ETH -> ETHx. After confirming in your wallet and paying the gas fee, you will be notified when the transaction has been broadcast and can see the transaction on Etherscan.* |
 
 Step 3: Send Stream
 
-![image](https://user-images.githubusercontent.com/66996976/224798069-ea64f385-02f0-4b4b-9449-dfec7b8697eb.png)
+| ![image](https://user-images.githubusercontent.com/66996976/224798069-ea64f385-02f0-4b4b-9449-dfec7b8697eb.png)| 
+|:--:| 
+| *Send your stream to your recipients wallet address. You can add a stream name for easy reference, and select the time interval (hour, day, or month). Here, we’re paying for a guitar lesson during the hour-long session.* |
 
-![image](https://user-images.githubusercontent.com/66996976/224798094-406d1209-1971-4ee9-b500-b71b57d39afe.png)
+| ![image](https://user-images.githubusercontent.com/66996976/224798094-406d1209-1971-4ee9-b500-b71b57d39afe.png)| 
+|:--:| 
+| *View your stream (guitar lesson) on our dashboard. You can see all active streams for ETH and DAI, as well as net inflows and outflows.* |
 
-That’s it! In less than a minute you can start streaming payments to friends, family, and businesses. We’ve provided one easy-to-navigate dashboard to wrap tokens, send streams, and manage recurring crypto payments. Check out our demo below:
+That’s it! In less than a minute you can start streaming payments to friends, family, and businesses. We’ve provided one easy-to-navigate dashboard to wrap tokens, send streams, and manage recurring crypto payments. You can watch our demo above, as well as a Proof-of-Concept for watching content like YouTube or Twitch using a payment stream below: 
 
-https://youtu.be/vuUaWLgXx30
-
-CashStream was born out of a capstone project by 4 undergraduate seniors studying computer science at Dartmouth College. It arose out of an organic need when they tried to set up recurring payments for crypto-native applications. Surprisingly, they found no real platforms available. Even after incessantly trying their best to work with any alternatives, they came across tools that were ineffective, lacked functionality, and failed at the universality of payment abstraction. Failing to find a solution, they decided to create their own. 
+https://www.youtube.com/watch?v=Znfs5OiGxk0
 
 By hosting and managing all your recurring crypto payments on one platform, you can save time and resources that would otherwise be spent on maintenance and support. CashStream is designed to scale with your payment needs when you’re ready, so you can easily accommodate more users and customers as your payment needs grow. We’re compatible with the leading crypto platforms and software, including most major crypto wallets (MetaMask, WalletConnect, etc.) and presently support payments in ETH and DAI. If there’s an integration missing that you need, let us know and we’ll happily add support. You can reach us through our website. Below, we’ve given a guide on getting started intended for crypto-novice and first time users.
 
 It includes a [mock subscription service](https://spotify-3-0.onrender.com/) to demo "pay as you go" proof of concept. The service will be available only if the user opens a stream to the designated recipient address (0x45c01ceb87dbe6807ebecb9161408fc5c6acb5d1).
-
-
-Read more about our project from our Medium Articles!
-
-[CashStream: Recurring Payments by the Second](https://medium.com/dartmouth-cs98/recurring-payments-by-the-second-da7173080cee)
-
-[CashStream Quickstart and Technical Guide](https://medium.com/@sunint.s.bindra.22/cashstream-quickstart-and-technical-guide-4ddf59baca15)
 
 ## Architecture
 
