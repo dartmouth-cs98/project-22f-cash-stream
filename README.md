@@ -8,6 +8,8 @@ It includes a [mock subscription service](https://spotify-3-0.onrender.com/) to 
 
 CashStream uses the Superfluid Protocol. [Superfluid](https://www.superfluid.finance/) is a De-Fi company working to enable money streaming in subscriptions, investment, etc.
 
+Checkout a [short video demo](https://www.youtube.com/watch?v=vuUaWLgXx30&t=64s) of our project!
+
 Read more about our project from our Medium Articles!
 
 [CashStream: Recurring Payments by the Second](https://medium.com/dartmouth-cs98/recurring-payments-by-the-second-da7173080cee)
