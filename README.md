@@ -68,6 +68,11 @@ yarn start
 
 [Devfolio](https://devfolio.co/projects/cashstream-16e9)
 
+[Content Livestream Demo](https://youtu.be/c1Is6b1py7A) 
+
+[Content Livestream Github](https://github.com/sunintb/streaming). 
+
+
 ## Authors
 
 Tai Wan Kim, Harold Than, Jason Wang, Sunint Bindra
