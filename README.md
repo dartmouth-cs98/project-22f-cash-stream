@@ -5,10 +5,11 @@
 **Our application is built for Goerli Testnet. It works for two Ethereum-based tokens, ETH and fDAI (stablecoin).**
 
 It includes [a mock subscription service](https://spotify-3-0.onrender.com/) to demo "pay as you go" proof of concept. The service will be available only if the user opens a stream to the designated recipient address (0x45c01ceb87dbe6807ebecb9161408fc5c6acb5d1). ([github repo](https://github.com/thanvinhbaohoang/Spotify-3.0))
+We also have a proof of concept for livestreaming content, like YouTube Live, Twitch, OBS, etc., which a viewer gains access to by initiating a payment stream. [Video Demo](https://youtu.be/c1Is6b1py7A). 
 
 CashStream uses the [Superfluid](https://www.superfluid.finance/) Protocol. Superfluid is a De-Fi company working to enable money streaming in subscriptions, investment, etc.
 
-Checkout [a short video demo](https://www.youtube.com/watch?v=vuUaWLgXx30&t=64s) of our project!
+Checkout [a short video demo](https://www.youtube.com/watch?v=vuUaWLgXx30&t=64s) of our project! 
 
 Read more about our project from our Medium article!
 
