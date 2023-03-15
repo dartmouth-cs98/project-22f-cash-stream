@@ -70,7 +70,7 @@ yarn start
 
 [Content Livestream Demo](https://youtu.be/c1Is6b1py7A) 
 
-[Content Livestream Github](https://github.com/sunintb/streaming). 
+[Content Livestream Github](https://github.com/sunintb/streaming)
 
 
 ## Authors
