@@ -1,0 +1,71 @@
+/* 
+ * The styling on this file is adapted from: 
+ * https://docs.superfluid.finance/superfluid/developers/constant-flow-agreement-cfa/money-streaming-1
+ */
+ 
+ .connectWallet {
+  border-radius: 12px;
+  padding: 16px 35px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+  background-color: #10bb35;
+  color: white;
+}
+
+.connectWallet:hover{
+  transition: 0.1s;
+  transition: 0.1s ease-in;
+  background-color: rgba(255, 255, 255, 0.065);
+  color: rgb(124,252,0);
+  z-index: 999;
+}
+
+.icon {
+  margin-right: 15px;
+}
+
+.connectedWallet {
+  color: wheat;
+  width: 100%;
+}
+
+.connectedWalletInfo{
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  width: 100%;
+  color: white;
+  justify-content: space-around;
+  align-items: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.connectedWalletInfo:hover {
+  transition: 0.2s ease-in;
+  background-color: black;
+  border: solid white 1px;
+  display: flex;
+}
+
+.identicon{
+  object-fit: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  border: solid white 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: black; */
+}
+
+.walletInfo *{
+  color: greenyellow;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

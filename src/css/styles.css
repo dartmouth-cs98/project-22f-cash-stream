@@ -1,0 +1,9 @@
+.App {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+}
